@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Zeroberto — Organograma</title>
+<script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+        background: #0d1117;
+        color: #c9d1d9;
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 260px;
+    }
+    
+    /* LEFT — Org */
+    .org-side {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 24px;
+        overflow-y: auto;
+        min-width: 0;
+    }
+    
+    /* Header */
+    .page-title {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .page-title h1 {
+        font-size: 1.4em;
+        color: #f0f6fc;
+    }
+    .page-title .sub {
+        font-size: 0.75em;
+        color: #484f58;
+    }
+    
+    /* Leadership */
+    .leadership {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+    .leader {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid #21262d;
+    }
+    .leader.rafael {
+        background: linear-gradient(135deg, #1a1a0e, #1a1a2e);
+        border-color: #e6b80033;
+    }
+    .leader.zero {
+        background: linear-gradient(135deg, #0d1a2e, #16213e);
+        border-color: #58a6ff33;
+        box-shadow: 0 0 12px rgba(88,166,255,0.08);
+    }
+    .leader .l-emoji { font-size: 1.6em; line-height: 1; }
+    img.emoji { height: 1em; width: 1em; margin: 0 .05em 0 .1em; vertical-align: -0.1em; }
+    .leader .l-name { font-size: 0.95em; font-weight: 600; color: #f0f6fc; }
+    .leader .l-role { font-size: 0.72em; color: #8b949e; }
+    .leader-connector { color: #30363d; font-size: 1.2em; }
+    
+    /* Connector line */
+    .vline {
+        width: 2px;
+        height: 16px;
+        background: #21262d;
+        margin: 0 auto;
+    }
+    
+    /* Stats row */
+    .stats-row {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 16px;
+    }
+    .stat { text-align: center; }
+    .stat .num { font-size: 1.3em; font-weight: 700; color: #f0f6fc; }
+    .stat .lbl { font-size: 0.65em; color: #6e7681; text-transform: uppercase; letter-spacing: 1px; }
+    
+    /* Section */
+    .section-label {
+        font-size: 0.7em;
+        color: #6e7681;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin: 12px 0 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .section-label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #21262d;
+    }
+    
+    /* Agents — 2 columns, vertical */
+    .agents-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .agents-grid.three-col {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    
+    .agent {
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: 12px 14px;
+        transition: all 0.15s;
+    }
+    .agent:hover {
+        border-color: #30363d;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .agent-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+    .a-emoji { font-size: 1.5em; }
+    .a-info { flex: 1; min-width: 0; }
+    .a-info strong { color: #f0f6fc; font-size: 0.9em; display: flex; align-items: center; gap: 6px; }
+    .kb-badge {
+        font-size: 0.7em;
+        font-weight: 400;
+        color: #ffffff;
+        background: rgba(255,255,255,0.1);
+        padding: 1px 6px;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+    .a-role { color: #8b949e; font-size: 0.72em; }
+    .a-desc { color: #6e7681; font-size: 0.78em; line-height: 1.35; margin-bottom: 6px; }
+    .badge { font-size: 0.8em; flex-shrink: 0; }
+    
+    details { margin-top: 4px; }
+    details summary {
+        cursor: pointer;
+        color: #58a6ff;
+        font-size: 0.75em;
+        padding: 2px 0;
+    }
+    details ul {
+        list-style: none;
+        padding: 4px 0 2px 12px;
+    }
+    details li {
+        color: #6e7681;
+        font-size: 0.78em;
+        padding: 2px 0;
+        border-left: 1px solid #21262d;
+        padding-left: 8px;
+    }
+    
+    /* Bottom action buttons */
+    .bottom-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: auto;
+        padding: 10px 0 4px;
+    }
+    .action-btn {
+        padding: 6px 14px;
+        border: 1px solid #21262d;
+        border-radius: 8px;
+        background: #161b22;
+        color: #c9d1d9;
+        cursor: pointer;
+        font-size: 0.75em;
+        transition: all 0.15s;
+    }
+    .action-btn:hover { background: #1c2333; border-color: #30363d; }
+    .action-btn.entregas { border-color: #1f6feb33; }
+    .action-btn.eotm { border-color: #d2992233; }
+    .action-btn.tokens { border-color: #3fb95033; }
+    
+    .footer-bar {
+        padding: 4px 0;
+        font-size: 0.6em;
+        color: #21262d;
+        text-align: center;
+    }
+    
+    /* Entregas overlay */
+    .entregas-box {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        width: 90vw;
+        max-width: 900px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .entregas-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 12px;
+    }
+    .entrega-card {
+        background: #0d1117;
+        border: 1px solid #21262d;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .entrega-card h4 {
+        color: #f0f6fc;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .entrega-card ul {
+        list-style: none;
+        padding: 0;
+    }
+    .entrega-card li {
+        color: #8b949e;
+        font-size: 0.78em;
+        padding: 3px 0;
+        border-left: 2px solid #21262d;
+        padding-left: 8px;
+        margin-bottom: 2px;
+    }
+    .entrega-count {
+        font-size: 0.7em;
+        color: #58a6ff;
+        background: #1f6feb22;
+        padding: 1px 6px;
+        border-radius: 4px;
+        margin-left: auto;
+    }
+    
+    /* Employee of the Month */
+    .eotm-box {
+        background: linear-gradient(135deg, #161b22, #1a1a2e);
+        border: 2px solid #d29922;
+        border-radius: 16px;
+        padding: 32px;
+        text-align: center;
+        min-width: 360px;
+        max-width: 480px;
+        box-shadow: 0 0 40px rgba(210,153,34,0.15);
+    }
+    .eotm-trophy { font-size: 3em; margin-bottom: 8px; }
+    .eotm-title { font-size: 1.2em; font-weight: 700; color: #d29922; }
+    .eotm-month { font-size: 0.8em; color: #8b949e; margin-bottom: 16px; }
+    .eotm-winner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 16px 0;
+        padding: 12px;
+        background: rgba(210,153,34,0.1);
+        border-radius: 10px;
+    }
+    .eotm-emoji { font-size: 2em; }
+    .eotm-name { font-size: 1.3em; font-weight: 700; color: #f0f6fc; }
+    .eotm-reason {
+        font-size: 0.85em;
+        color: #8b949e;
+        line-height: 1.5;
+        text-align: left;
+        padding: 12px;
+        background: #0d1117;
+        border-radius: 8px;
+        border-left: 3px solid #d29922;
+    }
+    
+    /* Tokens overlay */
+    .tokens-box {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        min-width: 400px;
+        max-width: 600px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .tokens-content { margin-top: 12px; }
+    .token-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        border-bottom: 1px solid #0d1117;
+        font-size: 0.85em;
+    }
+    .token-label { color: #8b949e; }
+    .token-value { color: #f0f6fc; font-weight: 600; }
+    
+    /* RIGHT — Cron sidebar */
+    .cron-side {
+        background: #161b22;
+        border-left: 1px solid #21262d;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    .cron-header {
+        padding: 16px 16px 10px;
+        font-size: 0.85em;
+        font-weight: 600;
+        color: #f0f6fc;
+        border-bottom: 1px solid #21262d;
+    }
+    .cron-list { flex: 1; padding: 4px 0; }
+    .cron-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-bottom: 1px solid #0d1117;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+    .cron-item:hover { background: #1c2333; }
+    
+    /* Cron popup */
+    .cron-popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.7);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+    .cron-popup-overlay.show { display: flex !important; }
+    .cron-popup {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px 24px;
+        min-width: 360px;
+        max-width: 520px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .cron-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #21262d;
+    }
+    .cron-popup-header h3 {
+        color: #f0f6fc;
+        font-size: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .cron-popup-close {
+        background: none;
+        border: none;
+        color: #8b949e;
+        cursor: pointer;
+        font-size: 1.2em;
+        padding: 4px 8px;
+    }
+    .cron-popup-close:hover { color: #f0f6fc; }
+    .cron-popup-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #0d1117;
+        font-size: 0.85em;
+    }
+    .cron-popup-label { color: #8b949e; }
+    .cron-popup-value { color: #c9d1d9; font-weight: 500; text-align: right; max-width: 60%; }
+    .cron-popup-desc {
+        margin-top: 12px;
+        padding: 10px 12px;
+        background: #0d1117;
+        border-radius: 8px;
+        border-left: 3px solid #58a6ff;
+        font-size: 0.82em;
+        color: #8b949e;
+        line-height: 1.5;
+    }
+    .cron-popup-status {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        font-weight: 600;
+    }
+    .cron-popup-status.active { background: #1a3a2a; color: #3fb950; }
+    .cron-popup-status.disabled { background: #3a1a1a; color: #f85149; }
+    .cron-emoji { font-size: 1.2em; flex-shrink: 0; }
+    .cron-info { flex: 1; min-width: 0; }
+    .cron-info strong {
+        display: block;
+        font-size: 0.82em;
+        color: #c9d1d9;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .cron-schedule { font-size: 0.7em; color: #6e7681; }
+    .cron-next {
+        font-size: 0.72em;
+        color: #58a6ff;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .cal-btn-wrap {
+        padding: 12px 16px;
+        border-top: 1px solid #21262d;
+    }
+    .cal-btn {
+        width: 100%;
+        padding: 10px;
+        background: #1f6feb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+    .cal-btn:hover { background: #388bfd; }
+    
+    /* Calendar popup */
+    .calendar-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+    }
+    .calendar-overlay.show { display: flex; }
+    .calendar-box {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 12px;
+        padding: 20px;
+        min-width: 340px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .cal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .cal-header h3 { color: #f0f6fc; font-size: 1.05em; }
+    .cal-nav { background:none; border:none; color:#58a6ff; cursor:pointer; font-size:1.2em; padding: 4px 8px; }
+    .cal-nav:hover { color: #79c0ff; }
+    .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 3px;
+        text-align: center;
+    }
+    .cal-day-name { font-size: 0.72em; color: #484f58; padding: 4px; font-weight: 600; }
+    .cal-day { font-size: 0.82em; color: #8b949e; padding: 7px 2px; border-radius: 6px; }
+    .cal-day.today { background: #1f6feb; color: #fff; font-weight: 600; }
+    .cal-day.has-job { background: #1a3a2a; color: #3fb950; font-weight: 600; cursor: pointer; }
+    .cal-day.has-job:hover { background: #245a3a; }
+    .cal-day.empty { color: transparent; }
+    .cal-legend {
+        margin-top: 12px;
+        display: flex;
+        gap: 16px;
+        font-size: 0.75em;
+        color: #8b949e;
+    }
+    .cal-legend span { display: flex; align-items: center; gap: 4px; }
+    .cal-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .cal-dot.today-dot { background: #1f6feb; }
+    .cal-dot.job-dot { background: #3fb950; }
+    .cal-jobs-detail {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #21262d;
+        font-size: 0.82em;
+        color: #8b949e;
+        min-height: 24px;
+    }
+</style>
+</head>
+<body>
+
+<!-- LEFT — Org chart -->
+<div class="org-side">
+    <div class="page-title">
+        <h1>🤖 Time Zeroberto</h1>
+        <div class="sub">BAP Administradora · Atualizado 16/02/2026 12:49</div>
+    </div>
+    
+    <div class="leadership">
+        <div class="leader rafael">
+            <span class="l-emoji"><img class="emoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@17.0.2/assets/svg/1f43b.svg" alt="🐻" style="width:1.4em;height:1.4em;"></span>
+            <div>
+                <div class="l-name">Rafael Thomé</div>
+                <div class="l-role">Diretor</div>
+            </div>
+        </div>
+        <span class="leader-connector">⟷</span>
+        <div class="leader zero">
+            <span class="l-emoji">🤖</span>
+            <div>
+                <div class="l-name">Zeroberto</div>
+                <div class="l-role">Braço Direito · Coordenador</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stats-row">
+        <div class="stat"><div class="num">7</div><div class="lbl">Agentes</div></div>
+        <div class="stat"><div class="num">6</div><div class="lbl">Ativos</div></div>
+        <div class="stat"><div class="num">1</div><div class="lbl">Formação</div></div>
+        <div class="stat"><div class="num">0</div><div class="lbl">Futuro</div></div>
+        <div class="stat"><div class="num">13</div><div class="lbl">Crons</div></div>
+    </div>
+    
+    <div class="vline"></div>
+    
+    <div class="section-label">🎯 Especialistas</div>
+    <div class="agents-grid">
+        
+        <div class="agent active" style="--accent: #e94560">
+            <div class="agent-top">
+                <span class="a-emoji">⚖️</span>
+                <div class="a-info">
+                    <strong>Advogado<span class="kb-badge">190KB</span></strong>
+                    <span class="a-role">Jurídico Condominial</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Conheço direito condominial, trabalhista e tributário por dentro. Minha função é proteger a BAP juridicamente.</p>
+            <details><summary>Tarefas</summary><ul><li>Pareceres jurídicos</li><li>Legislação e jurisprudência</li><li>Consultas assembleias/obras/cobrança</li></ul></details>
+        </div>
+
+        <div class="agent active" style="--accent: #0a9396">
+            <div class="agent-top">
+                <span class="a-emoji">💰</span>
+                <div class="a-info">
+                    <strong>Financeiro<span class="kb-badge">231KB</span></strong>
+                    <span class="a-role">Análise & API Live</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Falo direto com a API do LiveFacilities. Analiso receitas, inadimplência e cruzo dados financeiros.</p>
+            <details><summary>Tarefas</summary><ul><li>Consultas API LiveFacilities</li><li>Cross-reference planilhas x API</li><li>Relatórios financeiros</li></ul></details>
+        </div>
+
+        <div class="agent active" style="--accent: #005f73">
+            <div class="agent-top">
+                <span class="a-emoji">📜</span>
+                <div class="a-info">
+                    <strong>Despachante<span class="kb-badge">66KB</span></strong>
+                    <span class="a-role">Automação CNDT/CRF/CND</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Despacho certidões automatizadas pra ~395 CNPJs da BAP. CNDT, CRF/FGTS, CND Federal — tudo comigo.</p>
+            <details><summary>Tarefas</summary><ul><li>CNDT (Playwright + Gemini)</li><li>CRF/FGTS + CND Federal (stealth)</li><li>Relatório trimestral consolidado</li></ul></details>
+        </div>
+
+        <div class="agent forming" style="--accent: #bb3e03">
+            <div class="agent-top">
+                <span class="a-emoji">📱</span>
+                <div class="a-info">
+                    <strong>Marketing<span class="kb-badge">58KB</span></strong>
+                    <span class="a-role">Marketing Digital</span>
+                </div>
+                <span class="badge forming" title="Em formação">🟡</span>
+            </div>
+            <p class="a-desc">Tô aprendendo sobre redes sociais, Canva, Veo e presença online. Em breve, cuido da imagem da BAP.</p>
+            <details><summary>Tarefas</summary><ul><li>Estratégia de conteúdo</li><li>Análise de concorrência</li><li>Criação visual</li></ul></details>
+        </div>
+    </div>
+    
+    <div class="section-label">🔧 Suporte a todo o time</div>
+    <div class="agents-grid three-col">
+        
+        <div class="agent active" style="--accent: #7c3aed">
+            <div class="agent-top">
+                <span class="a-emoji">🐶</span>
+                <div class="a-info">
+                    <strong>Violeta Search<span class="kb-badge">196KB</span></strong>
+                    <span class="a-role">Pesquisa & Inteligência</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Farejo informações pra capacitar todo o time. Se alguém precisa saber algo, eu acho. 🐾</p>
+            <details><summary>Tarefas</summary><ul><li>Deep research (web, APIs, docs)</li><li>Knowledge bases</li><li>Inteligência competitiva</li><li>Busca para todos os agentes</li></ul></details>
+        </div>
+
+        <div class="agent active" style="--accent: #0f3460">
+            <div class="agent-top">
+                <span class="a-emoji">📝</span>
+                <div class="a-info">
+                    <strong>Comunicação</strong>
+                    <span class="a-role">Reports & AI-Proof</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Cuido de tudo que sai pra fora. Relatórios, textos, documentos — nada sai sem passar por mim.</p>
+            <details><summary>Tarefas</summary><ul><li>Relatórios HTML/PDF</li><li>Framework AI-proof</li><li>Revisão de documentos externos</li><li>Templates otimizados</li></ul></details>
+        </div>
+
+        <div class="agent active" style="--accent: #533483">
+            <div class="agent-top">
+                <span class="a-emoji">🛠️</span>
+                <div class="a-info">
+                    <strong>Developer<span class="kb-badge">38KB</span></strong>
+                    <span class="a-role">Dev & Segurança</span>
+                </div>
+                <span class="badge active" title="Ativo">🟢</span>
+            </div>
+            <p class="a-desc">Desenvolvo os sistemas, mantenho o Mac seguro e faço deploy de tudo que sai pra internet.</p>
+            <details><summary>Tarefas</summary><ul><li>Sistemas e automações</li><li>Deploy seguro (Git)</li><li>Hardening Mac mini</li><li>Audit OpenClaw (10 dias)</li></ul></details>
+        </div>
+    </div>
+    
+    <!-- Bottom buttons -->
+    <div class="bottom-actions">
+        <button class="action-btn entregas" onclick="openEntregas()">📦 Entregas</button>
+        <button class="action-btn eotm" onclick="openEOTM()">🏆 Funcionário do Mês</button>
+        <button class="action-btn tokens" onclick="openTokens()">💰 Tokens & Custos</button>
+    </div>
+    
+    <div class="footer-bar">Gerado por <code>scripts/team_orgchart.py</code></div>
+</div>
+
+<!-- RIGHT — Cron Jobs -->
+<div class="cron-side">
+    <div class="cron-header">⏰ Cron Jobs Agendados</div>
+    <div class="cron-list" id="cronList"></div>
+    <div class="cal-btn-wrap">
+        <button class="cal-btn" onclick="openCalendar()">📅 Ver Calendário</button>
+    </div>
+</div>
+
+<!-- ENTREGAS OVERLAY -->
+<div class="calendar-overlay" id="entregasOverlay" onclick="if(event.target===this)closeEntregas()">
+    <div class="entregas-box">
+        <div class="cal-header">
+            <h3>📦 Entregas por Agente</h3>
+            <button onclick="closeEntregas()" class="cal-nav">✕</button>
+        </div>
+        <div class="entregas-grid">
+            
+        <div class="entrega-card" style="border-left: 3px solid #e94560">
+            <h4>⚖️ Advogado <span class="entrega-count">4</span></h4>
+            <ul><li>✓ Knowledge base jurídica completa (190KB, 18 arquivos)</li><li>✓ Legislação: Código Civil, Lei 4.591/64, Lei 14.309/22</li><li>✓ Ritos processuais mapeados (1ª, 2ª, 3ª instância)</li><li>✓ Trabalhista condominial via Gemini Deep Research</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #0a9396">
+            <h4>💰 Financeiro <span class="entrega-count">5</span></h4>
+            <ul><li>✓ API LiveFacilities: 26 endpoints documentados (231KB)</li><li>✓ Relatório Consultores (mensal, automatizado)</li><li>✓ Relatório Roadmap BAP Live 2026 (semanal)</li><li>✓ Relatório CDMP Priorização (quinzenal)</li><li>✓ CDMP Acordos cross-reference API x Planilha</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #005f73">
+            <h4>📜 Despachante <span class="entrega-count">5</span></h4>
+            <ul><li>✓ CNDT: 394/394 concluídas (5 positivas)</li><li>✓ CRF/FGTS: 339/394 concluídas</li><li>✓ CND Federal: script v3 pronto, rodando esta semana</li><li>✓ Manual de certidões automatizadas (12KB)</li><li>✓ 3 scripts Playwright + stealth</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #bb3e03">
+            <h4>📱 Marketing <span class="entrega-count">5</span></h4>
+            <ul><li>✓ Marketing redes sociais (10.7KB)</li><li>✓ Algoritmos de plataformas detalhado (7.7KB)</li><li>✓ Mapeamento 20+ concorrentes BAP</li><li>✓ Monitor semanal Reclame Aqui (automatizado)</li><li>✓ Manual Veo & Flow (12KB)</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #7c3aed">
+            <h4>🐶 Violeta Search <span class="entrega-count">5</span></h4>
+            <ul><li>✓ 15+ knowledge bases produzidas (~300KB total)</li><li>✓ Análise competitiva completa</li><li>✓ Pesquisa ferramentas marketing</li><li>✓ Filosofia, retórica e pensamento profundo</li><li>✓ Inteligência para todos os agentes</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #0f3460">
+            <h4>📝 Comunicação <span class="entrega-count">4</span></h4>
+            <ul><li>✓ 4 relatórios automatizados (cron)</li><li>✓ Framework AI-proof (em construção)</li><li>✓ Templates de reports HTML/PDF</li><li>✓ Monitor semanal concorrentes</li></ul>
+        </div>
+        <div class="entrega-card" style="border-left: 3px solid #533483">
+            <h4>🛠️ Developer <span class="entrega-count">5</span></h4>
+            <ul><li>✓ Security audit automático (cron 10 dias)</li><li>✓ Knowledge base segurança OpenClaw</li><li>✓ Dev best practices bible (34KB)</li><li>✓ Organograma interativo do time</li><li>✓ Scripts de certidão v2/v3 com stealth</li></ul>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- EMPLOYEE OF THE MONTH OVERLAY -->
+<div class="calendar-overlay" id="eotmOverlay" onclick="if(event.target===this)closeEOTM()">
+    <div class="eotm-box">
+        <div class="eotm-trophy">🏆</div>
+        <div class="eotm-title">Funcionário do Mês</div>
+        <div class="eotm-month">Fevereiro 2026</div>
+        <div class="eotm-winner">
+            <span class="eotm-emoji">🐶</span>
+            <span class="eotm-name">Violeta Search</span>
+        </div>
+        <div class="eotm-reason">Produziu 15+ knowledge bases (~300KB), alimentou todos os especialistas com conhecimento, farejou tudo sobre concorrentes, filosofia, retórica e mais. Em homenagem à cachorrinha do Rafael. 🐾</div>
+        <button onclick="closeEOTM()" class="cal-btn" style="margin-top:16px;">Fechar</button>
+    </div>
+</div>
+
+<!-- TOKENS OVERLAY -->
+<div class="calendar-overlay" id="tokensOverlay" onclick="if(event.target===this)closeTokens()">
+    <div class="tokens-box">
+        <div class="cal-header">
+            <h3>💰 Tokens & Custos</h3>
+            <button onclick="closeTokens()" class="cal-nav">✕</button>
+        </div>
+        <div class="tokens-content" id="tokensContent">
+            <p style="color:#8b949e;font-size:0.85em;">Carregando dados do OpenClaw...</p>
+        </div>
+    </div>
+</div>
+
+<!-- CRON POPUP OVERLAY -->
+<div class="cron-popup-overlay" id="cronPopupOverlay" onclick="if(event.target===this)closeCronPopup()">
+    <div class="cron-popup">
+        <div class="cron-popup-header">
+            <h3 id="cronPopupTitle">⏰ Cron Job</h3>
+            <button class="cron-popup-close" onclick="closeCronPopup()">✕</button>
+        </div>
+        <div id="cronPopupBody"></div>
+    </div>
+</div>
+
+<!-- CALENDAR OVERLAY -->
+<div class="calendar-overlay" id="calOverlay" onclick="if(event.target===this)closeCalendar()">
+    <div class="calendar-box">
+        <div class="cal-header">
+            <button onclick="changeMonth(-1)" style="background:none;border:none;color:#58a6ff;cursor:pointer;font-size:1.2em;">◀</button>
+            <h3 id="calTitle">Fevereiro 2026</h3>
+            <button onclick="changeMonth(1)" style="background:none;border:none;color:#58a6ff;cursor:pointer;font-size:1.2em;">▶</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+            <span><span class="cal-dot today-dot"></span> Hoje</span>
+            <span><span class="cal-dot job-dot"></span> Cron Job</span>
+        </div>
+        <div class="cal-jobs-detail" id="calDetail">Clique em um dia verde para ver os jobs.</div>
+    </div>
+</div>
+
+<script>
+// Parse all emojis to Twemoji images
+if (typeof twemoji !== 'undefined') twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+
+// Entregas
+function openEntregas() { document.getElementById('entregasOverlay').classList.add('show'); }
+function closeEntregas() { document.getElementById('entregasOverlay').classList.remove('show'); }
+
+// Employee of the Month
+function openEOTM() { document.getElementById('eotmOverlay').classList.add('show'); }
+function closeEOTM() { document.getElementById('eotmOverlay').classList.remove('show'); }
+
+// Tokens
+function openTokens() {
+    document.getElementById('tokensOverlay').classList.add('show');
+    // Try to fetch session status via status file if exists
+    const content = document.getElementById('tokensContent');
+    content.innerHTML = `
+        <div class="token-row"><span class="token-label">Modelo atual</span><span class="token-value">Claude Opus 4</span></div>
+        <div class="token-row"><span class="token-label">Canal</span><span class="token-value">stable</span></div>
+        <div class="token-row"><span class="token-label">Sessões ativas</span><span class="token-value">main + sub-agents</span></div>
+        <div class="token-row"><span class="token-label">Cron jobs</span><span class="token-value">13 agendados</span></div>
+        <div style="margin-top:12px;padding:10px;background:#0d1117;border-radius:8px;font-size:0.8em;color:#6e7681;">
+            <p>⚠️ Dados detalhados de tokens/custo por sessão estão disponíveis via <code>/status</code> no Telegram.</p>
+            <p style="margin-top:6px;">Para ver custo acumulado, peça ao Zeroberto: "me mostra o uso de tokens"</p>
+        </div>
+    `;
+}
+function closeTokens() { document.getElementById('tokensOverlay').classList.remove('show'); }
+
+const cronJobs = [
+    {
+        "name": "CND Federal Noite 1 (1-100)",
+        "fullName": "CND Federal Noite 1 (CNPJs 1-100)",
+        "schedule": "Uma vez",
+        "next": "17/02/2026",
+        "emoji": "📜",
+        "status": "disabled",
+        "agent": "📜 Despachante",
+        "desc": "Emissão automática de Certidões Negativas de Débitos Federais (Receita Federal) para os primeiros 100 CNPJs da BAP. Usa Playwright com stealth para acessar o portal da Receita. DESABILITADO: fingerprint Chromium bloqueado pela Receita (erro 023/108). Investigando alternativas (Infosimples/SERPRO).",
+        "script": "cnd_federal_bulk.py"
+    },
+    {
+        "name": "Monitor Reclame Aqui — Concorrentes",
+        "fullName": "Monitor Reclame Aqui — Concorrentes BAP",
+        "schedule": "Toda terça, 5h",
+        "next": "17/02/2026",
+        "emoji": "🏢",
+        "status": "active",
+        "agent": "📱 Marketing + 🐶 Violeta",
+        "desc": "Scraping semanal do Reclame Aqui para 20+ concorrentes da BAP. Coleta reclamações da última semana, gera relatório HTML/PDF e envia por email para rafael.thome@bap.com.br. Apenas dados brutos, sem interpretação.",
+        "script": "sub-agent (Playwright browser)"
+    },
+    {
+        "name": "Previsão do tempo diária",
+        "fullName": "Previsão do Tempo Diária — Durham + Rio",
+        "schedule": "Diário, 7h",
+        "next": "17/02/2026",
+        "emoji": "⏰",
+        "status": "active",
+        "agent": "🤖 Zeroberto",
+        "desc": "Consulta previsão do tempo para Durham, NC (onde o Rafael mora) e Rio de Janeiro (escritório BAP). Envia resumo matinal via Telegram com temperaturas, condições e alertas relevantes.",
+        "script": "weather skill"
+    },
+    {
+        "name": "Monitor Semanal Concorrentes",
+        "fullName": "Monitor Semanal Concorrentes — RA + Google Reviews",
+        "schedule": "Toda terça, 7h",
+        "next": "17/02/2026",
+        "emoji": "🏢",
+        "status": "active",
+        "agent": "📱 Marketing + 📝 Comunicação",
+        "desc": "Relatório consolidado semanal: combina dados do Reclame Aqui (scraping das 5h) com Google Reviews. Gera PDF com ranking de reclamações, notas, e comparativo com a BAP. Envia email + resumo Telegram.",
+        "script": "sub-agent (consolidação)"
+    },
+    {
+        "name": "CND Federal Noite 2 (101-200)",
+        "fullName": "CND Federal Noite 2 (CNPJs 101-200)",
+        "schedule": "Uma vez",
+        "next": "18/02/2026",
+        "emoji": "📜",
+        "status": "disabled",
+        "agent": "📜 Despachante",
+        "desc": "Segunda noite do ciclo CND Federal. Processa CNPJs 101 a 200. DESABILITADO pelo mesmo motivo da Noite 1.",
+        "script": "cnd_federal_bulk.py"
+    },
+    {
+        "name": "CND Federal Noite 3 (201-300)",
+        "fullName": "CND Federal Noite 3 (CNPJs 201-300)",
+        "schedule": "Uma vez",
+        "next": "19/02/2026",
+        "emoji": "📜",
+        "status": "disabled",
+        "agent": "📜 Despachante",
+        "desc": "Terceira noite do ciclo CND Federal. Processa CNPJs 201 a 300. DESABILITADO.",
+        "script": "cnd_federal_bulk.py"
+    },
+    {
+        "name": "CDMP Priorização — Relatório Quinzenal",
+        "fullName": "CDMP Priorização — Relatório Quinzenal",
+        "schedule": "Dias 5 e 19, 3h",
+        "next": "19/02/2026",
+        "emoji": "📋",
+        "status": "active",
+        "agent": "💰 Financeiro + 📝 Comunicação",
+        "desc": "Relatório de priorização da cobrança extrajudicial CDMP. Baixa planilha Google Sheets, cruza com API LiveFacilities (receitas do mês), identifica quem pagou e quem não pagou. Gera HTML/PDF e envia por email.",
+        "script": "scripts/cdmp_report.py"
+    },
+    {
+        "name": "CND Federal Noite 4 CLEANUP",
+        "fullName": "CND Federal Noite 4 — Cleanup e Retries",
+        "schedule": "Uma vez",
+        "next": "20/02/2026",
+        "emoji": "📜",
+        "status": "disabled",
+        "agent": "📜 Despachante",
+        "desc": "Quarta e última noite: reprocessa todos os CNPJs que falharam nas noites 1-3. DESABILITADO.",
+        "script": "cnd_federal_bulk.py"
+    },
+    {
+        "name": "CND Federal Relatório Final",
+        "fullName": "CND Federal — Relatório Final Consolidado",
+        "schedule": "Uma vez",
+        "next": "20/02/2026",
+        "emoji": "📜",
+        "status": "disabled",
+        "agent": "📜 Despachante + 📝 Comunicação",
+        "desc": "Gera relatório consolidado de todas as CND Federais emitidas no ciclo. Envia PDF para rafael.thome@bap.com.br e pedro.kurpan@bap.com.br. DESABILITADO (depende das noites 1-4).",
+        "script": "sub-agent"
+    },
+    {
+        "name": "Roadmap BAP Live 2026",
+        "fullName": "Roadmap BAP Live 2026 — Relatório Semanal",
+        "schedule": "Toda segunda, 3h",
+        "next": "23/02/2026",
+        "emoji": "📈",
+        "status": "active",
+        "agent": "💰 Financeiro + 📝 Comunicação",
+        "desc": "Relatório semanal do Roadmap BAP Live 2026. Puxa dados da planilha de acompanhamento, conta atividades por status (concluídas, em andamento, pendentes, não iniciadas), compara com semana anterior e destaca avanços. Envia PDF para Rafael, Guilherme, Pedro e Gui (Suportti).",
+        "script": "scripts/roadmap_report.py"
+    },
+    {
+        "name": "Security Audit",
+        "fullName": "Security Audit — Hardening Mac Mini",
+        "schedule": "A cada 10 dias",
+        "next": "26/02/2026",
+        "emoji": "🔒",
+        "status": "active",
+        "agent": "🛠️ Developer",
+        "desc": "Auditoria de segurança automatizada do Mac mini. Verifica: firewall ativo, SSH config, atualizações pendentes, OpenClaw config, portas expostas, permissões de arquivos sensíveis. Gera relatório com critical/warn/info e notifica se encontrar problemas.",
+        "script": "healthcheck skill"
+    },
+    {
+        "name": "Relatório Consultores BAP",
+        "fullName": "Relatório Consultores BAP — Mensal",
+        "schedule": "Dia 14, 7h",
+        "next": "14/03/2026",
+        "emoji": "📊",
+        "status": "active",
+        "agent": "💰 Financeiro",
+        "desc": "Pipeline do relatório mensal de consultores da BAP. Extrai dados financeiros da API LiveFacilities (receitas, inadimplência, performance por consultor), gera dashboard HTML com 9 seções analíticas. Projeto original do Rafael, agora automatizado via OpenClaw.",
+        "script": "projects/relatorio_consultores/"
+    },
+    {
+        "name": "CNDT Bulk — Certidões Trabalhistas",
+        "fullName": "CNDT Bulk — Certidões Negativas Trabalhistas",
+        "schedule": "Trimestral (Fev/Mai/Ago/Nov)",
+        "next": "15/05/2026",
+        "emoji": "📜",
+        "status": "active",
+        "agent": "📜 Despachante",
+        "desc": "Emissão em massa de CNDTs (Certidão Negativa de Débitos Trabalhistas) para todos os ~395 CNPJs da BAP. Usa Playwright + Gemini Flash Lite para resolver captchas do TST. ~30s por CNPJ. Última execução: 394/394 em 15/02/2026 (5 positivas encontradas).",
+        "script": "cndt_bulk_auto.py"
+    }
+];
+// Render cron sidebar from data
+function renderCronList() {
+    const list = document.getElementById('cronList');
+    list.innerHTML = cronJobs.map((j, i) => `
+        <div class="cron-item" onclick="openCronPopup(${i})">
+            <span class="cron-emoji">${j.emoji}</span>
+            <div class="cron-info">
+                <strong>${j.name}</strong>
+                <span class="cron-schedule">${j.schedule}</span>
+            </div>
+            <span class="cron-next">${j.next}</span>
+        </div>
+    `).join('');
+}
+
+function openCronPopup(index) {
+    const j = cronJobs[index];
+    document.getElementById('cronPopupTitle').innerHTML = j.emoji + ' ' + j.fullName;
+    const statusClass = j.status === 'active' ? 'active' : 'disabled';
+    const statusLabel = j.status === 'active' ? '🟢 Ativo' : '🔴 Desabilitado';
+    document.getElementById('cronPopupBody').innerHTML = `
+        <div class="cron-popup-row">
+            <span class="cron-popup-label">Status</span>
+            <span class="cron-popup-value"><span class="cron-popup-status ${statusClass}">${statusLabel}</span></span>
+        </div>
+        <div class="cron-popup-row">
+            <span class="cron-popup-label">Frequência</span>
+            <span class="cron-popup-value">${j.schedule}</span>
+        </div>
+        <div class="cron-popup-row">
+            <span class="cron-popup-label">Próxima execução</span>
+            <span class="cron-popup-value">${j.next}</span>
+        </div>
+        <div class="cron-popup-row">
+            <span class="cron-popup-label">Agente responsável</span>
+            <span class="cron-popup-value">${j.agent}</span>
+        </div>
+        <div class="cron-popup-row">
+            <span class="cron-popup-label">Script/Ferramenta</span>
+            <span class="cron-popup-value" style="font-family:monospace;font-size:0.85em;">${j.script}</span>
+        </div>
+        <div class="cron-popup-desc">${j.desc}</div>
+    `;
+    document.getElementById('cronPopupOverlay').classList.add('show');
+}
+
+function closeCronPopup() {
+    document.getElementById('cronPopupOverlay').classList.remove('show');
+}
+
+renderCronList();
+
+let calMonth = new Date().getMonth();
+let calYear = new Date().getFullYear();
+const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+// Parse cron jobs into day-of-month markers
+function getJobsForMonth(m, y) {
+    const jobs = {};
+    cronJobs.forEach(j => {
+        // Simple parsing of "next" field
+        const name = j.name || '';
+        const schedule = j.schedule || '';
+        const next = j.next || '';
+        
+        // Try to find day numbers in schedule
+        const dayMatch = schedule.match(/Dia (\d+)/);
+        const daysMatch = schedule.match(/Dias (\d+) e (\d+)/);
+        
+        if (daysMatch) {
+            [parseInt(daysMatch[1]), parseInt(daysMatch[2])].forEach(d => {
+                if (!jobs[d]) jobs[d] = [];
+                jobs[d].push(j);
+            });
+        } else if (dayMatch) {
+            const d = parseInt(dayMatch[1]);
+            if (!jobs[d]) jobs[d] = [];
+            jobs[d].push(j);
+        }
+        
+        // Weekly jobs - find all matching weekdays
+        const weekdays = {'Segunda':1,'Terça':2,'Quarta':3,'Quinta':4,'Sexta':5,'Sábado':6,'Domingo':0};
+        for (const [wn, wd] of Object.entries(weekdays)) {
+            if (schedule.includes(wn)) {
+                const first = new Date(y, m, 1);
+                for (let d = 1; d <= 31; d++) {
+                    const dt = new Date(y, m, d);
+                    if (dt.getMonth() !== m) break;
+                    if (dt.getDay() === wd) {
+                        if (!jobs[d]) jobs[d] = [];
+                        jobs[d].push(j);
+                    }
+                }
+            }
+        }
+        
+        // Daily
+        if (schedule === 'Diário') {
+            for (let d = 1; d <= 31; d++) {
+                const dt = new Date(y, m, d);
+                if (dt.getMonth() !== m) break;
+                if (!jobs[d]) jobs[d] = [];
+                jobs[d].push(j);
+            }
+        }
+        
+        // "A cada 10 dias" 
+        if (schedule.includes('cada 10')) {
+            for (let d = 6; d <= 31; d += 10) {
+                const dt = new Date(y, m, d);
+                if (dt.getMonth() !== m) break;
+                if (!jobs[d]) jobs[d] = [];
+                jobs[d].push(j);
+            }
+        }
+    });
+    return jobs;
+}
+
+function renderCalendar() {
+    const grid = document.getElementById('calGrid');
+    const title = document.getElementById('calTitle');
+    title.textContent = months[calMonth] + ' ' + calYear;
+    
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const today = new Date();
+    const jobsMap = getJobsForMonth(calMonth, calYear);
+    
+    let html = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(d => 
+        `<div class="cal-day-name">${d}</div>`
+    ).join('');
+    
+    for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty">.</div>';
+    
+    for (let d = 1; d <= daysInMonth; d++) {
+        const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+        const hasJob = jobsMap[d] && jobsMap[d].length > 0;
+        let cls = 'cal-day';
+        if (isToday) cls += ' today';
+        if (hasJob) cls += ' has-job';
+        const onclick = hasJob ? `onclick="showDayJobs(${d})"` : '';
+        html += `<div class="${cls}" ${onclick}>${d}</div>`;
+    }
+    
+    grid.innerHTML = html;
+}
+
+function showDayJobs(day) {
+    const jobsMap = getJobsForMonth(calMonth, calYear);
+    const detail = document.getElementById('calDetail');
+    if (jobsMap[day]) {
+        detail.innerHTML = '<strong>' + day + '/' + (calMonth+1) + ':</strong> ' + 
+            jobsMap[day].map(j => j.emoji + ' ' + j.name).join(', ');
+    }
+}
+
+function changeMonth(delta) {
+    calMonth += delta;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+    document.getElementById('calDetail').textContent = 'Clique em um dia verde para ver os jobs.';
+}
+
+function openCalendar() {
+    document.getElementById('calOverlay').classList.add('show');
+    renderCalendar();
+}
+function closeCalendar() {
+    document.getElementById('calOverlay').classList.remove('show');
+}
+</script>
+
+</body>
+</html>
