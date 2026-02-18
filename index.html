@@ -337,79 +337,6 @@
         transition: background 0.15s;
     }
     .cron-item:hover { background: #1c2333; }
-    
-    /* Cron popup */
-    .cron-popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-    }
-    .cron-popup-overlay.show { display: flex !important; }
-    .cron-popup {
-        background: #161b22;
-        border: 1px solid #30363d;
-        border-radius: 12px;
-        padding: 20px 24px;
-        min-width: 360px;
-        max-width: 520px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    }
-    .cron-popup-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 14px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #21262d;
-    }
-    .cron-popup-header h3 {
-        color: #f0f6fc;
-        font-size: 1em;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .cron-popup-close {
-        background: none;
-        border: none;
-        color: #8b949e;
-        cursor: pointer;
-        font-size: 1.2em;
-        padding: 4px 8px;
-    }
-    .cron-popup-close:hover { color: #f0f6fc; }
-    .cron-popup-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px solid #0d1117;
-        font-size: 0.85em;
-    }
-    .cron-popup-label { color: #8b949e; }
-    .cron-popup-value { color: #c9d1d9; font-weight: 500; text-align: right; max-width: 60%; }
-    .cron-popup-desc {
-        margin-top: 12px;
-        padding: 10px 12px;
-        background: #0d1117;
-        border-radius: 8px;
-        border-left: 3px solid #58a6ff;
-        font-size: 0.82em;
-        color: #8b949e;
-        line-height: 1.5;
-    }
-    .cron-popup-status {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 4px;
-        font-size: 0.8em;
-        font-weight: 600;
-    }
-    .cron-popup-status.active { background: #1a3a2a; color: #3fb950; }
-    .cron-popup-status.disabled { background: #3a1a1a; color: #f85149; }
     .cron-emoji { font-size: 1.2em; flex-shrink: 0; }
     .cron-info { flex: 1; min-width: 0; }
     .cron-info strong {
@@ -511,7 +438,7 @@
 <div class="org-side">
     <div class="page-title">
         <h1>🤖 Time Zeroberto</h1>
-        <div class="sub">BAP Administradora · Atualizado 16/02/2026 12:49</div>
+        <div class="sub">BAP Administradora · Atualizado 18/02/2026 13:46</div>
     </div>
     
     <div class="leadership">
@@ -534,8 +461,8 @@
     
     <div class="stats-row">
         <div class="stat"><div class="num">7</div><div class="lbl">Agentes</div></div>
-        <div class="stat"><div class="num">6</div><div class="lbl">Ativos</div></div>
-        <div class="stat"><div class="num">1</div><div class="lbl">Formação</div></div>
+        <div class="stat"><div class="num">7</div><div class="lbl">Ativos</div></div>
+        <div class="stat"><div class="num">0</div><div class="lbl">Formação</div></div>
         <div class="stat"><div class="num">0</div><div class="lbl">Futuro</div></div>
         <div class="stat"><div class="num">13</div><div class="lbl">Crons</div></div>
     </div>
@@ -576,25 +503,25 @@
                 <span class="a-emoji">📜</span>
                 <div class="a-info">
                     <strong>Despachante<span class="kb-badge">66KB</span></strong>
-                    <span class="a-role">Automação CNDT/CRF/CND</span>
+                    <span class="a-role">Automação Certidões</span>
                 </div>
                 <span class="badge active" title="Ativo">🟢</span>
             </div>
-            <p class="a-desc">Despacho certidões automatizadas pra ~395 CNPJs da BAP. CNDT, CRF/FGTS, CND Federal — tudo comigo.</p>
-            <details><summary>Tarefas</summary><ul><li>CNDT (Playwright + Gemini)</li><li>CRF/FGTS + CND Federal (stealth)</li><li>Relatório trimestral consolidado</li></ul></details>
+            <p class="a-desc">Despacho certidões automatizadas pra ~395 CNPJs da BAP. Aguardando API SERPRO para retomar.</p>
+            <details><summary>Tarefas</summary><ul><li>CNDT 394/394 concluído</li><li>CRF/FGTS 339/394 concluído</li><li>CND Federal: aguardando SERPRO API</li></ul></details>
         </div>
 
-        <div class="agent forming" style="--accent: #bb3e03">
+        <div class="agent active" style="--accent: #bb3e03">
             <div class="agent-top">
                 <span class="a-emoji">📱</span>
                 <div class="a-info">
-                    <strong>Marketing<span class="kb-badge">58KB</span></strong>
+                    <strong>Gary<span class="kb-badge">172KB</span></strong>
                     <span class="a-role">Marketing Digital</span>
                 </div>
-                <span class="badge forming" title="Em formação">🟡</span>
+                <span class="badge active" title="Ativo">🟢</span>
             </div>
-            <p class="a-desc">Tô aprendendo sobre redes sociais, Canva, Veo e presença online. Em breve, cuido da imagem da BAP.</p>
-            <details><summary>Tarefas</summary><ul><li>Estratégia de conteúdo</li><li>Análise de concorrência</li><li>Criação visual</li></ul></details>
+            <p class="a-desc">Personalidade Gary Vee. Pitch Anything + marketing moderno. Analiso, critico e proponho sem filtro.</p>
+            <details><summary>Tarefas</summary><ul><li>Estratégia de conteúdo BAP</li><li>Análise de proposta comercial</li><li>Monitor semanal concorrentes</li></ul></details>
         </div>
     </div>
     
@@ -654,7 +581,113 @@
 <!-- RIGHT — Cron Jobs -->
 <div class="cron-side">
     <div class="cron-header">⏰ Cron Jobs Agendados</div>
-    <div class="cron-list" id="cronList"></div>
+    <div class="cron-list" id="cronList">
+        
+            <div class="cron-item">
+                <span class="cron-emoji">📋</span>
+                <div class="cron-info">
+                    <strong>CDMP Priorização — Relatório Q</strong>
+                    <span class="cron-schedule">0 3 5,19 * *</span>
+                </div>
+                <span class="cron-next">19/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">⏰</span>
+                <div class="cron-info">
+                    <strong>Backup Noturno Drive</strong>
+                    <span class="cron-schedule">0 3 * * *</span>
+                </div>
+                <span class="cron-next">19/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">⏰</span>
+                <div class="cron-info">
+                    <strong>Previsão do tempo diária - Dur</strong>
+                    <span class="cron-schedule">0 7 * * *</span>
+                </div>
+                <span class="cron-next">19/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">🔒</span>
+                <div class="cron-info">
+                    <strong>Security: Gateway Weekly Check</strong>
+                    <span class="cron-schedule">0 2 * * 1</span>
+                </div>
+                <span class="cron-next">23/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">📈</span>
+                <div class="cron-info">
+                    <strong>Roadmap BAP Live 2026 — Relató</strong>
+                    <span class="cron-schedule">0 3 * * 1</span>
+                </div>
+                <span class="cron-next">23/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">⏰</span>
+                <div class="cron-info">
+                    <strong>Multi Seguros — Quick Update S</strong>
+                    <span class="cron-schedule">30 3 * * 1</span>
+                </div>
+                <span class="cron-next">23/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">🏢</span>
+                <div class="cron-info">
+                    <strong>Monitor Reclame Aqui — Concorr</strong>
+                    <span class="cron-schedule">0 5 * * 2</span>
+                </div>
+                <span class="cron-next">24/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">🏢</span>
+                <div class="cron-info">
+                    <strong>Monitor Semanal Concorrentes</strong>
+                    <span class="cron-schedule">0 7 * * 2</span>
+                </div>
+                <span class="cron-next">24/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">🔒</span>
+                <div class="cron-info">
+                    <strong>healthcheck:security-audit</strong>
+                    <span class="cron-schedule">A cada 10 dias</span>
+                </div>
+                <span class="cron-next">26/02/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">🔒</span>
+                <div class="cron-info">
+                    <strong>Security: Monthly Memory & Rep</strong>
+                    <span class="cron-schedule">0 4 1 * *</span>
+                </div>
+                <span class="cron-next">01/03/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">⏰</span>
+                <div class="cron-info">
+                    <strong>Multi Seguros — Relatório Mens</strong>
+                    <span class="cron-schedule">0 4 10 * *</span>
+                </div>
+                <span class="cron-next">10/03/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">📊</span>
+                <div class="cron-info">
+                    <strong>Relatório Consultores BAP</strong>
+                    <span class="cron-schedule">0 7 14 * *</span>
+                </div>
+                <span class="cron-next">14/03/2026</span>
+            </div>
+            <div class="cron-item">
+                <span class="cron-emoji">⏰</span>
+                <div class="cron-info">
+                    <strong>Lembrete: Firewall + FileVault</strong>
+                    <span class="cron-schedule">0 9 18 2 *</span>
+                </div>
+                <span class="cron-next">18/02/2027</span>
+            </div>
+    </div>
     <div class="cal-btn-wrap">
         <button class="cal-btn" onclick="openCalendar()">📅 Ver Calendário</button>
     </div>
@@ -682,8 +715,8 @@
             <ul><li>✓ CNDT: 394/394 concluídas (5 positivas)</li><li>✓ CRF/FGTS: 339/394 concluídas</li><li>✓ CND Federal: script v3 pronto, rodando esta semana</li><li>✓ Manual de certidões automatizadas (12KB)</li><li>✓ 3 scripts Playwright + stealth</li></ul>
         </div>
         <div class="entrega-card" style="border-left: 3px solid #bb3e03">
-            <h4>📱 Marketing <span class="entrega-count">5</span></h4>
-            <ul><li>✓ Marketing redes sociais (10.7KB)</li><li>✓ Algoritmos de plataformas detalhado (7.7KB)</li><li>✓ Mapeamento 20+ concorrentes BAP</li><li>✓ Monitor semanal Reclame Aqui (automatizado)</li><li>✓ Manual Veo & Flow (12KB)</li></ul>
+            <h4>📱 Gary <span class="entrega-count">5</span></h4>
+            <ul><li>✓ Pitch Anything + Gary Vee + Marketing Moderno (50KB)</li><li>✓ Avaliação da proposta comercial BAP</li><li>✓ Apresentação ideal BAP (versão longa + curta)</li><li>✓ Mapeamento 20+ concorrentes BAP</li><li>✓ Monitor semanal Reclame Aqui (automatizado)</li></ul>
         </div>
         <div class="entrega-card" style="border-left: 3px solid #7c3aed">
             <h4>🐶 Violeta Search <span class="entrega-count">5</span></h4>
@@ -691,11 +724,11 @@
         </div>
         <div class="entrega-card" style="border-left: 3px solid #0f3460">
             <h4>📝 Comunicação <span class="entrega-count">4</span></h4>
-            <ul><li>✓ 4 relatórios automatizados (cron)</li><li>✓ Framework AI-proof (em construção)</li><li>✓ Templates de reports HTML/PDF</li><li>✓ Monitor semanal concorrentes</li></ul>
+            <ul><li>✓ Framework AI-Proof completo (44KB, 781 linhas)</li><li>✓ 4 relatórios automatizados (cron)</li><li>✓ Templates de reports HTML/PDF</li><li>✓ Dono do processo editorial externo</li></ul>
         </div>
         <div class="entrega-card" style="border-left: 3px solid #533483">
             <h4>🛠️ Developer <span class="entrega-count">5</span></h4>
-            <ul><li>✓ Security audit automático (cron 10 dias)</li><li>✓ Knowledge base segurança OpenClaw</li><li>✓ Dev best practices bible (34KB)</li><li>✓ Organograma interativo do time</li><li>✓ Scripts de certidão v2/v3 com stealth</li></ul>
+            <ul><li>✓ GitHub: github.com/zeroberto-bap</li><li>✓ Team page no ar: zeroberto-bap.github.io/team</li><li>✓ Security audit automático (cron 10 dias)</li><li>✓ Dev best practices bible (34KB)</li><li>✓ Guia segurança GitHub (31KB)</li></ul>
         </div>
         </div>
     </div>
@@ -726,17 +759,6 @@
         <div class="tokens-content" id="tokensContent">
             <p style="color:#8b949e;font-size:0.85em;">Carregando dados do OpenClaw...</p>
         </div>
-    </div>
-</div>
-
-<!-- CRON POPUP OVERLAY -->
-<div class="cron-popup-overlay" id="cronPopupOverlay" onclick="if(event.target===this)closeCronPopup()">
-    <div class="cron-popup">
-        <div class="cron-popup-header">
-            <h3 id="cronPopupTitle">⏰ Cron Job</h3>
-            <button class="cron-popup-close" onclick="closeCronPopup()">✕</button>
-        </div>
-        <div id="cronPopupBody"></div>
     </div>
 </div>
 
@@ -787,203 +809,7 @@ function openTokens() {
 }
 function closeTokens() { document.getElementById('tokensOverlay').classList.remove('show'); }
 
-const cronJobs = [
-    {
-        "name": "CND Federal Noite 1 (1-100)",
-        "fullName": "CND Federal Noite 1 (CNPJs 1-100)",
-        "schedule": "Uma vez",
-        "next": "17/02/2026",
-        "emoji": "📜",
-        "status": "disabled",
-        "agent": "📜 Despachante",
-        "desc": "Emissão automática de Certidões Negativas de Débitos Federais (Receita Federal) para os primeiros 100 CNPJs da BAP. Usa Playwright com stealth para acessar o portal da Receita. DESABILITADO: fingerprint Chromium bloqueado pela Receita (erro 023/108). Investigando alternativas (Infosimples/SERPRO).",
-        "script": "cnd_federal_bulk.py"
-    },
-    {
-        "name": "Monitor Reclame Aqui — Concorrentes",
-        "fullName": "Monitor Reclame Aqui — Concorrentes BAP",
-        "schedule": "Toda terça, 5h",
-        "next": "17/02/2026",
-        "emoji": "🏢",
-        "status": "active",
-        "agent": "📱 Marketing + 🐶 Violeta",
-        "desc": "Scraping semanal do Reclame Aqui para 20+ concorrentes da BAP. Coleta reclamações da última semana, gera relatório HTML/PDF e envia por email para rafael.thome@bap.com.br. Apenas dados brutos, sem interpretação.",
-        "script": "sub-agent (Playwright browser)"
-    },
-    {
-        "name": "Previsão do tempo diária",
-        "fullName": "Previsão do Tempo Diária — Durham + Rio",
-        "schedule": "Diário, 7h",
-        "next": "17/02/2026",
-        "emoji": "⏰",
-        "status": "active",
-        "agent": "🤖 Zeroberto",
-        "desc": "Consulta previsão do tempo para Durham, NC (onde o Rafael mora) e Rio de Janeiro (escritório BAP). Envia resumo matinal via Telegram com temperaturas, condições e alertas relevantes.",
-        "script": "weather skill"
-    },
-    {
-        "name": "Monitor Semanal Concorrentes",
-        "fullName": "Monitor Semanal Concorrentes — RA + Google Reviews",
-        "schedule": "Toda terça, 7h",
-        "next": "17/02/2026",
-        "emoji": "🏢",
-        "status": "active",
-        "agent": "📱 Marketing + 📝 Comunicação",
-        "desc": "Relatório consolidado semanal: combina dados do Reclame Aqui (scraping das 5h) com Google Reviews. Gera PDF com ranking de reclamações, notas, e comparativo com a BAP. Envia email + resumo Telegram.",
-        "script": "sub-agent (consolidação)"
-    },
-    {
-        "name": "CND Federal Noite 2 (101-200)",
-        "fullName": "CND Federal Noite 2 (CNPJs 101-200)",
-        "schedule": "Uma vez",
-        "next": "18/02/2026",
-        "emoji": "📜",
-        "status": "disabled",
-        "agent": "📜 Despachante",
-        "desc": "Segunda noite do ciclo CND Federal. Processa CNPJs 101 a 200. DESABILITADO pelo mesmo motivo da Noite 1.",
-        "script": "cnd_federal_bulk.py"
-    },
-    {
-        "name": "CND Federal Noite 3 (201-300)",
-        "fullName": "CND Federal Noite 3 (CNPJs 201-300)",
-        "schedule": "Uma vez",
-        "next": "19/02/2026",
-        "emoji": "📜",
-        "status": "disabled",
-        "agent": "📜 Despachante",
-        "desc": "Terceira noite do ciclo CND Federal. Processa CNPJs 201 a 300. DESABILITADO.",
-        "script": "cnd_federal_bulk.py"
-    },
-    {
-        "name": "CDMP Priorização — Relatório Quinzenal",
-        "fullName": "CDMP Priorização — Relatório Quinzenal",
-        "schedule": "Dias 5 e 19, 3h",
-        "next": "19/02/2026",
-        "emoji": "📋",
-        "status": "active",
-        "agent": "💰 Financeiro + 📝 Comunicação",
-        "desc": "Relatório de priorização da cobrança extrajudicial CDMP. Baixa planilha Google Sheets, cruza com API LiveFacilities (receitas do mês), identifica quem pagou e quem não pagou. Gera HTML/PDF e envia por email.",
-        "script": "scripts/cdmp_report.py"
-    },
-    {
-        "name": "CND Federal Noite 4 CLEANUP",
-        "fullName": "CND Federal Noite 4 — Cleanup e Retries",
-        "schedule": "Uma vez",
-        "next": "20/02/2026",
-        "emoji": "📜",
-        "status": "disabled",
-        "agent": "📜 Despachante",
-        "desc": "Quarta e última noite: reprocessa todos os CNPJs que falharam nas noites 1-3. DESABILITADO.",
-        "script": "cnd_federal_bulk.py"
-    },
-    {
-        "name": "CND Federal Relatório Final",
-        "fullName": "CND Federal — Relatório Final Consolidado",
-        "schedule": "Uma vez",
-        "next": "20/02/2026",
-        "emoji": "📜",
-        "status": "disabled",
-        "agent": "📜 Despachante + 📝 Comunicação",
-        "desc": "Gera relatório consolidado de todas as CND Federais emitidas no ciclo. Envia PDF para rafael.thome@bap.com.br e pedro.kurpan@bap.com.br. DESABILITADO (depende das noites 1-4).",
-        "script": "sub-agent"
-    },
-    {
-        "name": "Roadmap BAP Live 2026",
-        "fullName": "Roadmap BAP Live 2026 — Relatório Semanal",
-        "schedule": "Toda segunda, 3h",
-        "next": "23/02/2026",
-        "emoji": "📈",
-        "status": "active",
-        "agent": "💰 Financeiro + 📝 Comunicação",
-        "desc": "Relatório semanal do Roadmap BAP Live 2026. Puxa dados da planilha de acompanhamento, conta atividades por status (concluídas, em andamento, pendentes, não iniciadas), compara com semana anterior e destaca avanços. Envia PDF para Rafael, Guilherme, Pedro e Gui (Suportti).",
-        "script": "scripts/roadmap_report.py"
-    },
-    {
-        "name": "Security Audit",
-        "fullName": "Security Audit — Hardening Mac Mini",
-        "schedule": "A cada 10 dias",
-        "next": "26/02/2026",
-        "emoji": "🔒",
-        "status": "active",
-        "agent": "🛠️ Developer",
-        "desc": "Auditoria de segurança automatizada do Mac mini. Verifica: firewall ativo, SSH config, atualizações pendentes, OpenClaw config, portas expostas, permissões de arquivos sensíveis. Gera relatório com critical/warn/info e notifica se encontrar problemas.",
-        "script": "healthcheck skill"
-    },
-    {
-        "name": "Relatório Consultores BAP",
-        "fullName": "Relatório Consultores BAP — Mensal",
-        "schedule": "Dia 14, 7h",
-        "next": "14/03/2026",
-        "emoji": "📊",
-        "status": "active",
-        "agent": "💰 Financeiro",
-        "desc": "Pipeline do relatório mensal de consultores da BAP. Extrai dados financeiros da API LiveFacilities (receitas, inadimplência, performance por consultor), gera dashboard HTML com 9 seções analíticas. Projeto original do Rafael, agora automatizado via OpenClaw.",
-        "script": "projects/relatorio_consultores/"
-    },
-    {
-        "name": "CNDT Bulk — Certidões Trabalhistas",
-        "fullName": "CNDT Bulk — Certidões Negativas Trabalhistas",
-        "schedule": "Trimestral (Fev/Mai/Ago/Nov)",
-        "next": "15/05/2026",
-        "emoji": "📜",
-        "status": "active",
-        "agent": "📜 Despachante",
-        "desc": "Emissão em massa de CNDTs (Certidão Negativa de Débitos Trabalhistas) para todos os ~395 CNPJs da BAP. Usa Playwright + Gemini Flash Lite para resolver captchas do TST. ~30s por CNPJ. Última execução: 394/394 em 15/02/2026 (5 positivas encontradas).",
-        "script": "cndt_bulk_auto.py"
-    }
-];
-// Render cron sidebar from data
-function renderCronList() {
-    const list = document.getElementById('cronList');
-    list.innerHTML = cronJobs.map((j, i) => `
-        <div class="cron-item" onclick="openCronPopup(${i})">
-            <span class="cron-emoji">${j.emoji}</span>
-            <div class="cron-info">
-                <strong>${j.name}</strong>
-                <span class="cron-schedule">${j.schedule}</span>
-            </div>
-            <span class="cron-next">${j.next}</span>
-        </div>
-    `).join('');
-}
-
-function openCronPopup(index) {
-    const j = cronJobs[index];
-    document.getElementById('cronPopupTitle').innerHTML = j.emoji + ' ' + j.fullName;
-    const statusClass = j.status === 'active' ? 'active' : 'disabled';
-    const statusLabel = j.status === 'active' ? '🟢 Ativo' : '🔴 Desabilitado';
-    document.getElementById('cronPopupBody').innerHTML = `
-        <div class="cron-popup-row">
-            <span class="cron-popup-label">Status</span>
-            <span class="cron-popup-value"><span class="cron-popup-status ${statusClass}">${statusLabel}</span></span>
-        </div>
-        <div class="cron-popup-row">
-            <span class="cron-popup-label">Frequência</span>
-            <span class="cron-popup-value">${j.schedule}</span>
-        </div>
-        <div class="cron-popup-row">
-            <span class="cron-popup-label">Próxima execução</span>
-            <span class="cron-popup-value">${j.next}</span>
-        </div>
-        <div class="cron-popup-row">
-            <span class="cron-popup-label">Agente responsável</span>
-            <span class="cron-popup-value">${j.agent}</span>
-        </div>
-        <div class="cron-popup-row">
-            <span class="cron-popup-label">Script/Ferramenta</span>
-            <span class="cron-popup-value" style="font-family:monospace;font-size:0.85em;">${j.script}</span>
-        </div>
-        <div class="cron-popup-desc">${j.desc}</div>
-    `;
-    document.getElementById('cronPopupOverlay').classList.add('show');
-}
-
-function closeCronPopup() {
-    document.getElementById('cronPopupOverlay').classList.remove('show');
-}
-
-renderCronList();
-
+const cronJobs = [{"name": "CDMP Priorização — Relatório Q", "schedule": "0 3 5,19 * *", "next": "19/02/2026", "emoji": "📋"}, {"name": "Backup Noturno Drive", "schedule": "0 3 * * *", "next": "19/02/2026", "emoji": "⏰"}, {"name": "Previsão do tempo diária - Dur", "schedule": "0 7 * * *", "next": "19/02/2026", "emoji": "⏰"}, {"name": "Security: Gateway Weekly Check", "schedule": "0 2 * * 1", "next": "23/02/2026", "emoji": "🔒"}, {"name": "Roadmap BAP Live 2026 — Relató", "schedule": "0 3 * * 1", "next": "23/02/2026", "emoji": "📈"}, {"name": "Multi Seguros — Quick Update S", "schedule": "30 3 * * 1", "next": "23/02/2026", "emoji": "⏰"}, {"name": "Monitor Reclame Aqui — Concorr", "schedule": "0 5 * * 2", "next": "24/02/2026", "emoji": "🏢"}, {"name": "Monitor Semanal Concorrentes", "schedule": "0 7 * * 2", "next": "24/02/2026", "emoji": "🏢"}, {"name": "healthcheck:security-audit", "schedule": "A cada 10 dias", "next": "26/02/2026", "emoji": "🔒"}, {"name": "Security: Monthly Memory & Rep", "schedule": "0 4 1 * *", "next": "01/03/2026", "emoji": "🔒"}, {"name": "Multi Seguros — Relatório Mens", "schedule": "0 4 10 * *", "next": "10/03/2026", "emoji": "⏰"}, {"name": "Relatório Consultores BAP", "schedule": "0 7 14 * *", "next": "14/03/2026", "emoji": "📊"}, {"name": "Lembrete: Firewall + FileVault", "schedule": "0 9 18 2 *", "next": "18/02/2027", "emoji": "⏰"}];
 let calMonth = new Date().getMonth();
 let calYear = new Date().getFullYear();
 const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
