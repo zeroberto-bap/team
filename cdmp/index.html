@@ -6,147 +6,159 @@
 <title>CDMP — Controle de Parcelas</title>
 <style>
   :root {
-    --bg: #0f1117; --surface: #1a1d2e; --surface2: #242840;
-    --border: #2e3250; --text: #e2e8f0; --muted: #8892b0;
-    --green: #27ae60; --yellow: #f39c12; --red: #e74c3c;
-    --purple: #9b59b6; --blue: #3498db; --gold: #e8a838;
+    --bg: #f0f5fb;
+    --surface: #ffffff;
+    --surface2: #f4f7fc;
+    --border: #ccd9e8;
+    --text: #1a2d4a;
+    --muted: #5a7090;
+    --primary: #1e3a6e;
+    --primary-mid: #2155a3;
+    --green: #16a34a;
+    --yellow: #d97706;
+    --red: #dc2626;
+    --purple: #7c3aed;
+    --blue: #1d4ed8;
+    --shadow: rgba(30,58,110,.08);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
 
   /* Header */
-  .top-bar { background: linear-gradient(135deg, #1a3a5c, #0d2137); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); }
-  .top-bar h1 { font-size: 18px; font-weight: 700; color: white; }
-  .top-bar .sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
-  .updated { font-size: 11px; color: var(--muted); }
+  .top-bar { background: linear-gradient(135deg, #1a3a6e 0%, #0d2147 100%); padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #d97706; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  .top-bar h1 { font-size: 19px; font-weight: 700; color: #fff; letter-spacing: .3px; }
+  .top-bar .sub { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 3px; letter-spacing: .2px; }
+  .updated { font-size: 11px; color: rgba(255,255,255,.5); }
 
   /* Stats */
-  .stats { display: flex; gap: 12px; padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .stat { text-align: center; padding: 10px 20px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); min-width: 90px; }
-  .stat .n { font-size: 24px; font-weight: 700; color: var(--gold); }
-  .stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .stats { display: flex; gap: 12px; padding: 16px 28px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; box-shadow: 0 1px 4px var(--shadow); }
+  .stat { text-align: center; padding: 12px 22px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); min-width: 90px; }
+  .stat .n { font-size: 26px; font-weight: 700; color: var(--primary); }
+  .stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-top: 3px; }
   .stat.green .n { color: var(--green); }
   .stat.yellow .n { color: var(--yellow); }
   .stat.red .n { color: var(--red); }
   .stat.purple .n { color: var(--purple); }
 
   /* Filters */
-  .filters { padding: 12px 24px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .filter-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; font-size: 12px; transition: all .15s; }
-  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(232,168,56,.1); }
-  .search-box { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12px; outline: none; min-width: 180px; }
+  .filters { padding: 12px 28px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .filter-btn { padding: 5px 15px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; font-size: 12px; font-weight: 500; transition: all .15s; }
+  .filter-btn:hover { border-color: var(--primary-mid); color: var(--primary-mid); background: rgba(33,85,163,.06); }
+  .filter-btn.active { border-color: var(--primary); color: var(--primary); background: rgba(30,58,110,.08); font-weight: 600; }
+  .search-box { padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12px; outline: none; min-width: 200px; transition: border-color .15s; }
   .search-box::placeholder { color: var(--muted); }
+  .search-box:focus { border-color: var(--primary); background: var(--surface); }
 
   /* Cards */
-  .cards { padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
-  .card:hover { border-color: rgba(232,168,56,.4); }
-  .card-done { border-left: 3px solid var(--green); }
-  .card-ok { border-left: 3px solid var(--blue); }
-  .card-vencido { border-left: 3px solid var(--red); }
-  .card-juridico { border-left: 3px solid var(--purple); }
+  .cards { padding: 20px 28px; display: flex; flex-direction: column; gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: box-shadow .2s, transform .15s; box-shadow: 0 1px 5px var(--shadow); }
+  .card:hover { box-shadow: 0 4px 18px rgba(30,58,110,.13); transform: translateY(-1px); }
+  .card-done    { border-left: 4px solid var(--green); }
+  .card-ok      { border-left: 4px solid var(--blue); }
+  .card-vencido { border-left: 4px solid var(--red); }
+  .card-juridico{ border-left: 4px solid var(--purple); }
 
-  .card-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--surface2); flex-wrap: wrap; gap: 6px; }
-  .card-title { display: flex; align-items: center; gap: 8px; }
-  .card-title strong { font-size: 14px; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; padding: 11px 16px; background: var(--surface2); flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--border); }
+  .card-title { display: flex; align-items: center; gap: 9px; }
+  .card-title strong { font-size: 14px; color: var(--primary); font-weight: 600; }
   .card-meta { display: flex; align-items: center; gap: 8px; }
 
-  .cd-badge { background: rgba(232,168,56,.15); color: var(--gold); padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
-  .unid-badge { background: rgba(52,152,219,.15); color: var(--blue); padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .cd-badge { background: rgba(30,58,110,.1); color: var(--primary); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; border: 1px solid rgba(30,58,110,.18); }
+  .unid-badge { background: rgba(29,78,216,.09); color: var(--blue); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid rgba(29,78,216,.2); }
   .acordo-num { font-size: 11px; color: var(--muted); }
-  .resp-badge { font-size: 11px; color: var(--muted); background: var(--surface); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); }
+  .resp-badge { font-size: 11px; color: var(--muted); background: var(--surface); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
 
-  .card-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
-  .row-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; min-width: 100px; }
+  .card-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 9px; }
+  .row-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; min-width: 100px; }
   .parcelas-row, .boletos-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .badges-wrap, .boletos-wrap { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
-  .prog-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .prog-label { font-size: 12px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   /* Parcela badges */
   .parc-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 11px; font-weight: 700; cursor: default; transition: transform .1s; }
-  .parc-badge:hover { transform: scale(1.15); }
-  .p-pago     { background: rgba(39,174,96,.2);  color: var(--green);  border: 1px solid rgba(39,174,96,.4); }
-  .p-pendente { background: rgba(243,156,18,.15); color: var(--yellow); border: 1px solid rgba(243,156,18,.4); }
-  .p-vencido  { background: rgba(231,76,60,.2);  color: var(--red);    border: 1px solid rgba(231,76,60,.5); }
-  .p-juridico { background: rgba(155,89,182,.2); color: var(--purple); border: 1px solid rgba(155,89,182,.4); }
+  .parc-badge:hover { transform: scale(1.2); }
+  .p-pago     { background: rgba(22,163,74,.12);  color: #15803d;  border: 1px solid rgba(22,163,74,.3); }
+  .p-pendente { background: rgba(217,119,6,.1);   color: #b45309;  border: 1px solid rgba(217,119,6,.3); }
+  .p-vencido  { background: rgba(220,38,38,.1);   color: #b91c1c;  border: 1px solid rgba(220,38,38,.35); }
+  .p-juridico { background: rgba(124,58,237,.1);  color: #6d28d9;  border: 1px solid rgba(124,58,237,.3); }
   .p-futuro   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
 
   /* Progress bar */
-  .progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+  .progress-bar { height: 5px; background: #e8edf5; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
   .prog-done { background: var(--green); }
   .prog-ok   { background: var(--blue); }
   .prog-low  { background: var(--yellow); }
 
   /* Boleto tags */
-  .boleto-tag { font-size: 11px; padding: 3px 9px; border-radius: 4px; font-family: monospace; }
-  .vcto-ok     { background: rgba(52,152,219,.15); color: var(--blue); border: 1px solid rgba(52,152,219,.3); }
-  .vcto-vencido{ background: rgba(231,76,60,.15);  color: var(--red);  border: 1px solid rgba(231,76,60,.3); }
+  .boleto-tag { font-size: 11px; padding: 3px 10px; border-radius: 4px; font-family: monospace; font-weight: 500; }
+  .vcto-ok     { background: rgba(29,78,216,.07);  color: #1e4fc7;  border: 1px solid rgba(29,78,216,.22); }
+  .vcto-vencido{ background: rgba(220,38,38,.08);  color: #b91c1c;  border: 1px solid rgba(220,38,38,.28); }
   .boleto-none { font-size: 11px; color: var(--muted); font-style: italic; }
 
   /* Card footer */
-  .card-footer { padding: 6px 14px; background: var(--surface2); display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
-  .card-footer strong { color: var(--text); }
+  .card-footer { padding: 7px 16px; background: var(--surface2); display: flex; gap: 18px; flex-wrap: wrap; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
+  .card-footer strong { color: var(--text); font-weight: 600; }
 
-  /* Expand icon */
+  /* Expand */
   .card-header.clickable { cursor: pointer; user-select: none; }
-  .card-header.clickable:hover { background: #2a2e48; }
+  .card-header.clickable:hover { background: #eaf1fa; }
   .expand-icon { font-size: 10px; color: var(--muted); transition: transform .25s; margin-left: 4px; }
   .card-header.expanded .expand-icon { transform: rotate(180deg); }
   .ver-mais { font-size: 11px; color: var(--muted); font-style: italic; margin-left: auto; }
 
   /* Analytics panel */
-  .card-analytics { display: none; border-top: 1px solid var(--border); }
+  .card-analytics { display: none; border-top: 1px solid var(--border); background: #f7faff; }
   .card-analytics.open { display: block; }
-  .analytics-section { padding: 16px; }
-  .analytics-title { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .analytics-section { padding: 18px; }
+  .analytics-title { font-size: 10px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .9px; margin-bottom: 10px; border-bottom: 2px solid rgba(30,58,110,.12); padding-bottom: 5px; }
   .analytics-cols { display: flex; gap: 16px; flex-wrap: wrap; }
   .analytics-col { flex: 1; min-width: 220px; }
   .fin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .fin-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; border: 1px solid var(--border); }
-  .fin-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 2px; }
-  .fin-val { font-size: 14px; font-weight: 700; color: var(--text); }
+  .fin-item { background: var(--surface); border-radius: 6px; padding: 9px 11px; border: 1px solid var(--border); box-shadow: 0 1px 3px var(--shadow); }
+  .fin-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; display: block; margin-bottom: 3px; }
+  .fin-val { font-size: 15px; font-weight: 700; color: var(--text); }
   .fin-val.green { color: var(--green); }
   .fin-val.red { color: var(--red); }
 
   /* Analytics tables */
   .an-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .an-table th { text-align: left; padding: 5px 8px; background: var(--surface2); color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
-  .an-table td { padding: 5px 8px; border-bottom: 1px solid rgba(46,50,80,.5); }
+  .an-table th { text-align: left; padding: 6px 9px; background: rgba(30,58,110,.05); color: var(--primary); font-size: 10px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid rgba(30,58,110,.12); font-weight: 700; }
+  .an-table td { padding: 6px 9px; border-bottom: 1px solid var(--border); color: var(--text); }
   .an-table tr:last-child td { border-bottom: none; }
-  .an-table tr:hover td { background: rgba(36,40,64,.5); }
+  .an-table tr:hover td { background: rgba(30,58,110,.03); }
   .tc { text-align: center; }
   .tr { text-align: right; }
-  .mono { font-family: monospace; }
+  .mono { font-family: 'SFMono-Regular', Consolas, monospace; }
   .hist { color: var(--muted); font-size: 11px; max-width: 280px; }
-  .empty-row { text-align: center; color: var(--muted); font-style: italic; padding: 12px !important; }
+  .empty-row { text-align: center; color: var(--muted); font-style: italic; padding: 14px !important; }
 
-  /* Status badges (analytics) */
-  .st-badge { font-size: 10px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
-  .st-pago     { background: rgba(39,174,96,.15);  color: var(--green);  border: 1px solid rgba(39,174,96,.3); }
-  .st-pendente { background: rgba(243,156,18,.15); color: var(--yellow); border: 1px solid rgba(243,156,18,.3); }
-  .st-vencido  { background: rgba(231,76,60,.15);  color: var(--red);    border: 1px solid rgba(231,76,60,.3); }
-  .st-juridico { background: rgba(155,89,182,.15); color: var(--purple); border: 1px solid rgba(155,89,182,.3); }
+  /* Status badges */
+  .st-badge { font-size: 10px; padding: 2px 8px; border-radius: 4px; white-space: nowrap; font-weight: 600; }
+  .st-pago     { background: rgba(22,163,74,.1);   color: #15803d;  border: 1px solid rgba(22,163,74,.28); }
+  .st-pendente { background: rgba(217,119,6,.1);   color: #b45309;  border: 1px solid rgba(217,119,6,.28); }
+  .st-vencido  { background: rgba(220,38,38,.1);   color: #b91c1c;  border: 1px solid rgba(220,38,38,.3); }
+  .st-juridico { background: rgba(124,58,237,.1);  color: #6d28d9;  border: 1px solid rgba(124,58,237,.28); }
   .st-futuro   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
 
   /* Password gate */
-  #auth-overlay { position: fixed; inset: 0; background: #0a0c14; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 36px 40px; width: 340px; text-align: center; }
-  .auth-box h2 { font-size: 16px; color: var(--gold); margin-bottom: 6px; }
-  .auth-box p { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
-  .auth-input { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 14px; outline: none; text-align: center; letter-spacing: 2px; margin-bottom: 12px; }
-  .auth-input:focus { border-color: var(--gold); }
-  .auth-btn { width: 100%; padding: 10px; background: var(--gold); color: #000; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-  .auth-btn:hover { opacity: 0.9; }
+  #auth-overlay { position: fixed; inset: 0; background: rgba(10,20,45,.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 38px 44px; width: 340px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,.22); }
+  .auth-box h2 { font-size: 16px; color: var(--primary); margin-bottom: 6px; font-weight: 700; }
+  .auth-box p { font-size: 12px; color: var(--muted); margin-bottom: 22px; }
+  .auth-input { width: 100%; padding: 11px 14px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 7px; color: var(--text); font-size: 14px; outline: none; text-align: center; letter-spacing: 3px; margin-bottom: 13px; transition: border-color .15s; }
+  .auth-input:focus { border-color: var(--primary); background: var(--surface); }
+  .auth-btn { width: 100%; padding: 11px; background: var(--primary); color: #fff; font-weight: 700; border: none; border-radius: 7px; cursor: pointer; font-size: 14px; letter-spacing: .5px; transition: background .15s; }
+  .auth-btn:hover { background: #152e5a; }
   .auth-error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
 
   /* Empty state */
-  .empty { text-align: center; padding: 48px; color: var(--muted); }
+  .empty { text-align: center; padding: 52px; color: var(--muted); }
 
   /* Legend */
-  .legend { padding: 8px 24px; display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--border); background: var(--surface); }
+  .legend { padding: 10px 28px; display: flex; gap: 18px; flex-wrap: wrap; border-top: 1px solid var(--border); background: var(--surface); align-items: center; }
   .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
-  .leg-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .leg-dot { width: 11px; height: 11px; border-radius: 50%; }
 </style>
 </head>
 <body>
@@ -166,7 +178,7 @@
     <h1>CDMP — Controle de Parcelas</h1>
     <div class="sub">BAP Administradora de Condomínios · Cobrança Extrajudicial</div>
   </div>
-  <div class="updated">Atualizado: 19/02/2026 10:49</div>
+  <div class="updated">Atualizado: 19/02/2026 11:02</div>
 </div>
 
 <div class="stats">
@@ -328,7 +340,7 @@
   </div>
   <div class="card-footer">
     <span>Total acordo: <strong>R$ 1.967,73</strong></span>
-    <span>Valor/parcela: <strong>R$ 983,86</strong></span>
+    <span>Valor/parcela: <strong>R$ 983,87</strong></span>
     <span>Período: 23/09/2025 a 28/10/2025</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
@@ -339,8 +351,8 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.967,73</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 1.967,72</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,01</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 1.967,74</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
         <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
