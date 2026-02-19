@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDMP — Controle de Parcelas</title>
+<style>
+  :root {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #242840;
+    --border: #2e3250; --text: #e2e8f0; --muted: #8892b0;
+    --green: #27ae60; --yellow: #f39c12; --red: #e74c3c;
+    --purple: #9b59b6; --blue: #3498db; --gold: #e8a838;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+
+  /* Header */
+  .top-bar { background: linear-gradient(135deg, #1a3a5c, #0d2137); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); }
+  .top-bar h1 { font-size: 18px; font-weight: 700; color: white; }
+  .top-bar .sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .updated { font-size: 11px; color: var(--muted); }
+
+  /* Stats */
+  .stats { display: flex; gap: 12px; padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .stat { text-align: center; padding: 10px 20px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border); min-width: 90px; }
+  .stat .n { font-size: 24px; font-weight: 700; color: var(--gold); }
+  .stat .l { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .stat.green .n { color: var(--green); }
+  .stat.yellow .n { color: var(--yellow); }
+  .stat.red .n { color: var(--red); }
+  .stat.purple .n { color: var(--purple); }
+
+  /* Filters */
+  .filters { padding: 12px 24px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .filter-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; font-size: 12px; transition: all .15s; }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(232,168,56,.1); }
+  .search-box { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 12px; outline: none; min-width: 180px; }
+  .search-box::placeholder { color: var(--muted); }
+
+  /* Cards */
+  .cards { padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color .2s; }
+  .card:hover { border-color: rgba(232,168,56,.4); }
+  .card-done { border-left: 3px solid var(--green); }
+  .card-ok { border-left: 3px solid var(--blue); }
+  .card-vencido { border-left: 3px solid var(--red); }
+  .card-juridico { border-left: 3px solid var(--purple); }
+
+  .card-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--surface2); flex-wrap: wrap; gap: 6px; }
+  .card-title { display: flex; align-items: center; gap: 8px; }
+  .card-title strong { font-size: 14px; }
+  .card-meta { display: flex; align-items: center; gap: 8px; }
+
+  .cd-badge { background: rgba(232,168,56,.15); color: var(--gold); padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 700; font-family: monospace; }
+  .unid-badge { background: rgba(52,152,219,.15); color: var(--blue); padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .acordo-num { font-size: 11px; color: var(--muted); }
+  .resp-badge { font-size: 11px; color: var(--muted); background: var(--surface); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); }
+
+  .card-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .row-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; min-width: 100px; }
+  .parcelas-row, .boletos-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badges-wrap, .boletos-wrap { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+  .prog-label { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  /* Parcela badges */
+  .parc-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 11px; font-weight: 700; cursor: default; transition: transform .1s; }
+  .parc-badge:hover { transform: scale(1.15); }
+  .p-pago     { background: rgba(39,174,96,.2);  color: var(--green);  border: 1px solid rgba(39,174,96,.4); }
+  .p-pendente { background: rgba(243,156,18,.15); color: var(--yellow); border: 1px solid rgba(243,156,18,.4); }
+  .p-vencido  { background: rgba(231,76,60,.2);  color: var(--red);    border: 1px solid rgba(231,76,60,.5); }
+  .p-juridico { background: rgba(155,89,182,.2); color: var(--purple); border: 1px solid rgba(155,89,182,.4); }
+  .p-futuro   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+  /* Progress bar */
+  .progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+  .prog-done { background: var(--green); }
+  .prog-ok   { background: var(--blue); }
+  .prog-low  { background: var(--yellow); }
+
+  /* Boleto tags */
+  .boleto-tag { font-size: 11px; padding: 3px 9px; border-radius: 4px; font-family: monospace; }
+  .vcto-ok     { background: rgba(52,152,219,.15); color: var(--blue); border: 1px solid rgba(52,152,219,.3); }
+  .vcto-vencido{ background: rgba(231,76,60,.15);  color: var(--red);  border: 1px solid rgba(231,76,60,.3); }
+  .boleto-none { font-size: 11px; color: var(--muted); font-style: italic; }
+
+  /* Card footer */
+  .card-footer { padding: 6px 14px; background: var(--surface2); display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
+  .card-footer strong { color: var(--text); }
+
+  /* Expand icon */
+  .card-header.clickable { cursor: pointer; user-select: none; }
+  .card-header.clickable:hover { background: #2a2e48; }
+  .expand-icon { font-size: 10px; color: var(--muted); transition: transform .25s; margin-left: 4px; }
+  .card-header.expanded .expand-icon { transform: rotate(180deg); }
+  .ver-mais { font-size: 11px; color: var(--muted); font-style: italic; margin-left: auto; }
+
+  /* Analytics panel */
+  .card-analytics { display: none; border-top: 1px solid var(--border); }
+  .card-analytics.open { display: block; }
+  .analytics-section { padding: 16px; }
+  .analytics-title { font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .analytics-cols { display: flex; gap: 16px; flex-wrap: wrap; }
+  .analytics-col { flex: 1; min-width: 220px; }
+  .fin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fin-item { background: var(--surface2); border-radius: 6px; padding: 8px 10px; border: 1px solid var(--border); }
+  .fin-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 2px; }
+  .fin-val { font-size: 14px; font-weight: 700; color: var(--text); }
+  .fin-val.green { color: var(--green); }
+  .fin-val.red { color: var(--red); }
+
+  /* Analytics tables */
+  .an-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .an-table th { text-align: left; padding: 5px 8px; background: var(--surface2); color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; border-bottom: 1px solid var(--border); }
+  .an-table td { padding: 5px 8px; border-bottom: 1px solid rgba(46,50,80,.5); }
+  .an-table tr:last-child td { border-bottom: none; }
+  .an-table tr:hover td { background: rgba(36,40,64,.5); }
+  .tc { text-align: center; }
+  .tr { text-align: right; }
+  .mono { font-family: monospace; }
+  .hist { color: var(--muted); font-size: 11px; max-width: 280px; }
+  .empty-row { text-align: center; color: var(--muted); font-style: italic; padding: 12px !important; }
+
+  /* Status badges (analytics) */
+  .st-badge { font-size: 10px; padding: 2px 7px; border-radius: 4px; white-space: nowrap; }
+  .st-pago     { background: rgba(39,174,96,.15);  color: var(--green);  border: 1px solid rgba(39,174,96,.3); }
+  .st-pendente { background: rgba(243,156,18,.15); color: var(--yellow); border: 1px solid rgba(243,156,18,.3); }
+  .st-vencido  { background: rgba(231,76,60,.15);  color: var(--red);    border: 1px solid rgba(231,76,60,.3); }
+  .st-juridico { background: rgba(155,89,182,.15); color: var(--purple); border: 1px solid rgba(155,89,182,.3); }
+  .st-futuro   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+  /* Password gate */
+  #auth-overlay { position: fixed; inset: 0; background: #0a0c14; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+  .auth-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 36px 40px; width: 340px; text-align: center; }
+  .auth-box h2 { font-size: 16px; color: var(--gold); margin-bottom: 6px; }
+  .auth-box p { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .auth-input { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 14px; outline: none; text-align: center; letter-spacing: 2px; margin-bottom: 12px; }
+  .auth-input:focus { border-color: var(--gold); }
+  .auth-btn { width: 100%; padding: 10px; background: var(--gold); color: #000; font-weight: 700; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  .auth-btn:hover { opacity: 0.9; }
+  .auth-error { font-size: 12px; color: var(--red); margin-top: 8px; display: none; }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 48px; color: var(--muted); }
+
+  /* Legend */
+  .legend { padding: 8px 24px; display: flex; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--border); background: var(--surface); }
+  .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .leg-dot { width: 12px; height: 12px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div id="auth-overlay">
+  <div class="auth-box">
+    <h2>🔒 CDMP — BAP</h2>
+    <p>Controle de Parcelas · Uso interno</p>
+    <input class="auth-input" type="password" id="auth-pwd" placeholder="Senha" onkeydown="if(event.key==='Enter')checkAuth()">
+    <button class="auth-btn" onclick="checkAuth()">Entrar</button>
+    <div class="auth-error" id="auth-err">Senha incorreta</div>
+  </div>
+</div>
+
+<div class="top-bar">
+  <div>
+    <h1>CDMP — Controle de Parcelas</h1>
+    <div class="sub">BAP Administradora de Condomínios · Cobrança Extrajudicial</div>
+  </div>
+  <div class="updated">Atualizado: 19/02/2026 09:26</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="n">23</div><div class="l">Acordos</div></div>
+  <div class="stat green"><div class="n">1</div><div class="l">Concluídos</div></div>
+  <div class="stat yellow"><div class="n">18</div><div class="l">Em Aberto</div></div>
+  <div class="stat red"><div class="n">2</div><div class="l">Vencidos</div></div>
+  <div class="stat purple"><div class="n">2</div><div class="l">Jurídico</div></div>
+  <div class="stat"><div class="n">R$ 242,072</div><div class="l">Valor Total</div></div>
+</div>
+
+<div class="filters">
+  <input class="search-box" type="text" id="search" placeholder="Buscar condomínio ou unidade..." onkeyup="filterCards()">
+  <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+  <button class="filter-btn" onclick="setFilter('card-vencido',this)">⚠ Vencidos</button>
+  <button class="filter-btn" onclick="setFilter('card-ok',this)">Em Aberto</button>
+  <button class="filter-btn" onclick="setFilter('card-juridico',this)">⚖ Jurídico</button>
+  <button class="filter-btn" onclick="setFilter('card-done',this)">✓ Concluídos</button>
+</div>
+
+<div class="cards" id="cards-container">
+
+<div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0072</span>
+      <strong>Pacaembu</strong>
+      <span class="unid-badge">APTO 0108</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #10700</span>
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 25/09/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 27/10/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 26/11/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 06/01/2026">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 26/01/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 25/02/2026">6</span></div>
+      <span class="prog-label">5/6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:83%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-tag vcto-vencido">Vcto 08/02/2026 · R$ 809,38</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 3.423,66</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 25/09/2025 a 25/02/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 3.423,66</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (5 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.423,66</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">83%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>25/09/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>27/10/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#4</td><td>06/01/2026</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#5</td><td>26/01/2026</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#6</td><td>25/02/2026</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td>08/02/2026</td><td class="tr mono">R$ 419,21</td><td class="hist">CONDOMÍNIO 02/2026</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>08/02/2026</td><td class="tr mono">R$ 41,92</td><td class="hist">FUNDO DE RESERVA 02/2026</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>08/02/2026</td><td class="tr mono">R$ 200,73</td><td class="hist">ÁGUA E ESGOTO VCTO 02/02/2026 12/2025</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>08/02/2026</td><td class="tr mono">R$ 137,14</td><td class="hist">FÉRIAS EDELZIO</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>08/02/2026</td><td class="tr mono">R$ 10,38</td><td class="hist">SEGURO DO CONDOMÍNIO - PC: 1/6</td><td><span class="st-badge st-vencido">Vencido</span></td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-done" data-emp="0072 - PACAEMBU" data-status="card-done">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0072</span>
+      <strong>Pacaembu</strong>
+      <span class="unid-badge">APTO 0201</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 10/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 10/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 10/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 10/01/2026">4</span></div>
+      <span class="prog-label">4/4</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 3.376,36</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 10/10/2025 a 10/01/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 3.376,36</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.376,36</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>10/10/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>10/11/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#3</td><td>10/12/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#4</td><td>10/01/2026</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0201 - SOLAR DA VILA" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0201</span>
+      <strong>Solar Da Vila</strong>
+      <span class="unid-badge">APTO 408</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span></div>
+      <span class="prog-label">1/2</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:50%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 2.197,02</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 20/09/2025 a 20/10/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.197,02</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 2.197,02</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">50%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-vencido" data-emp="0315 - MORADAS DO MAR" data-status="card-vencido">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0315</span>
+      <strong>Moradas Do Mar</strong>
+      <span class="unid-badge">CASA 1</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 26/09/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 26/10/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 26/11/2025">3</span><span class="parc-badge p-vencido" title="Parcela 4 — VENCIDO em 26/12/2025">4</span></div>
+      <span class="prog-label">3/4</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:75%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 2.189,52</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 26/09/2025 a 26/12/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.189,52</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 2.189,52</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">75%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>26/09/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>26/10/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#4</td><td>26/12/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (55d)</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-vencido" data-emp="0379 - CATORZE DE JULHO" data-status="card-vencido">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0379</span>
+      <strong>Catorze De Julho</strong>
+      <span class="unid-badge">APTO 905</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #11335</span>
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 01/11/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 01/12/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 01/01/2025">3</span><span class="parc-badge p-vencido" title="Parcela 4 — VENCIDO em 13/02/2025">4</span><span class="parc-badge p-vencido" title="Parcela 5 — VENCIDO em 01/03/2025">5</span><span class="parc-badge p-vencido" title="Parcela 6 — VENCIDO em 01/04/2025">6</span><span class="parc-badge p-vencido" title="Parcela 7 — VENCIDO em 01/05/2025">7</span><span class="parc-badge p-vencido" title="Parcela 8 — VENCIDO em 01/06/2025">8</span></div>
+      <span class="prog-label">3/8</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:37%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 9.557,28</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 01/11/2025 a 01/07/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 9.557,28</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 9.557,28</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">37%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (8 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>01/11/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>01/12/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#3</td><td>01/01/2025</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#4</td><td>13/02/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (371d)</span></td></tr><tr><td class="tc">#5</td><td>01/03/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (355d)</span></td></tr><tr><td class="tc">#6</td><td>01/04/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (324d)</span></td></tr><tr><td class="tc">#7</td><td>01/05/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (294d)</span></td></tr><tr><td class="tc">#8</td><td>01/06/2025</td><td class="tr mono">—</td><td><span class="st-badge st-vencido">! Vencido (263d)</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0383</span>
+      <strong>Jardim Botafogo</strong>
+      <span class="unid-badge">APTO 202</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span></div>
+      <span class="prog-label">1/2</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:50%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>3.331,26</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 04/11/2025 a 04/12/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">3.331,26</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.331,26</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">50%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0420</span>
+      <strong>Parnasus</strong>
+      <span class="unid-badge">APTO 404</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pendente" title="Parcela 1 — Pendente · Vcto: —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: —">7</span></div>
+      <span class="prog-label">0/6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 13.498,56</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 12/12/2025 a 29/04/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 13.498,56</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 13.498,56</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (7 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0420</span>
+      <strong>Parnasus</strong>
+      <span class="unid-badge">APTO 702</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span></div>
+      <span class="prog-label">1/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:33%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 2.618,01</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 15/10/2025 a 15/12/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.618,01</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 2.618,01</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">33%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0517 - VIA APIA" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0517</span>
+      <strong>Via Apia</strong>
+      <span class="unid-badge">APTO 201</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span></div>
+      <span class="prog-label">1/2</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:50%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 2.303,30</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 05/11/2025 a 05/12/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.303,30</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 2.303,30</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">50%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0519</span>
+      <strong>Spazio Del Mare Ii</strong>
+      <span class="unid-badge">CASA 2</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: —">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: —">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: —">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: —">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: —">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: —">12</span><span class="parc-badge p-pendente" title="Parcela 13 — Pendente · Vcto: —">13</span><span class="parc-badge p-pendente" title="Parcela 14 — Pendente · Vcto: —">14</span><span class="parc-badge p-pendente" title="Parcela 15 — Pendente · Vcto: —">15</span></div>
+      <span class="prog-label">1/15</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:6%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 9.116,70</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 12/12/2025 a 12/02/2027</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 9.116,70</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 9.116,70</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">6%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (15 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#13</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#14</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#15</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0519</span>
+      <strong>Spazio Del Mare Ii</strong>
+      <span class="unid-badge">CASA 4</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pendente" title="Parcela 1 — Pendente · Vcto: —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span></div>
+      <span class="prog-label">0/6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>6.989,88</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 02/02/2026 a 01/07/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">6.989,88</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 6.989,88</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0519</span>
+      <strong>Spazio Del Mare Ii</strong>
+      <span class="unid-badge">CASA 5</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span></div>
+      <span class="prog-label">2/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:66%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>—</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: — a —</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">66%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0562 - VILLA CONSTANZA" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0562</span>
+      <strong>Villa Constanza</strong>
+      <span class="unid-badge">APTO 0202</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: —">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: —">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: —">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: —">10</span></div>
+      <span class="prog-label">1/10</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:10%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 15.598,48</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 13/10/2025 a 13/07/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 15.598,48</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 15.598,48</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">10%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (10 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0569 - PENINSULA EVIDENCE" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0569</span>
+      <strong>Peninsula Evidence</strong>
+      <span class="unid-badge">APTO 705</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span></div>
+      <span class="prog-label">1/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:33%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 19.423,20</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 25/10/2025 a 25/12/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 19.423,20</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 19.423,20</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">33%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0743 - WATERWAYS WEST" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0743</span>
+      <strong>Waterways West</strong>
+      <span class="unid-badge">APTO 706</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span></div>
+      <span class="prog-label">1/5</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:20%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 23.579,00</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 18/10/2025 a 18/02/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 23.579,00</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 23.579,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">20%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (5 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-juridico" data-emp="0743 - WATERWAYS WEST" data-status="card-juridico">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0743</span>
+      <strong>Waterways West</strong>
+      <span class="unid-badge">APTO 701</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-juridico" title="Parcela 1 — Jurídico">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: —">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: —">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: —">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: —">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: —">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: —">12</span></div>
+      <span class="prog-label">0/12</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 86.897,52</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 05/11/2025 a 05/11/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 86.897,52</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 86.897,52</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (12 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-juridico">⚖ Jurídico</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0805 - MAR DE CORAL" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0805</span>
+      <strong>Mar De Coral</strong>
+      <span class="unid-badge">APTO 904</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span></div>
+      <span class="prog-label">1/2</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:50%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 5.295,30</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 10/10/2025 a 10/11/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 5.295,30</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 5.295,30</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">50%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0882 - SOLLAR RECREIO" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0882</span>
+      <strong>Sollar Recreio</strong>
+      <span class="unid-badge">APTO 204</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span></div>
+      <span class="prog-label">1/6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:16%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 7.913,58</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 16/10/2025 a 16/03/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 7.913,58</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 7.913,58</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">16%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-juridico" data-emp="0987 - UP SIDE ARAGUAIA" data-status="card-juridico">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0987</span>
+      <strong>Up Side Araguaia</strong>
+      <span class="unid-badge">SALA 538</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-juridico" title="Parcela 1 — Jurídico">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span></div>
+      <span class="prog-label">0/4</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 3.669,32</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 25/10/2025 a 25/01/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 3.669,32</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.669,32</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-juridico">⚖ Jurídico</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1047 - AS. VERDE VALE DO ITANHANGA" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1047</span>
+      <strong>As. Verde Vale Do Itanhanga</strong>
+      <span class="unid-badge">CASA 300 EA</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: —">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: —">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: —">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: —">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: —">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: —">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: —">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: —">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: —">12</span><span class="parc-badge p-pendente" title="Parcela 13 — Pendente · Vcto: —">13</span><span class="parc-badge p-pendente" title="Parcela 14 — Pendente · Vcto: —">14</span><span class="parc-badge p-pendente" title="Parcela 15 — Pendente · Vcto: —">15</span></div>
+      <span class="prog-label">1/15</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:6%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 5.714,78</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 05/12/2025 a 05/01/2027</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 5.714,78</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 5.714,78</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">6%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (15 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#13</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#14</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#15</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1093 - CUSTOM RESIDENCIAS" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1093</span>
+      <strong>Custom Residencias</strong>
+      <span class="unid-badge">APTO 101</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pendente" title="Parcela 1 — Pendente · Vcto: —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span></div>
+      <span class="prog-label">0/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 2.302,47</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 10/01/2026 a 10/03/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.302,47</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 2.302,47</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1122</span>
+      <strong>Chateau Chenonceaux</strong>
+      <span class="unid-badge">APTO 902</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pendente" title="Parcela 1 — Pendente · Vcto: —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span></div>
+      <span class="prog-label">0/2</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 1.537,58</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 30/10/2025 a 30/11/2025</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.537,58</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 1.537,58</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1134 - BOTAFOGO EASYWAY" data-status="card-ok">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1134</span>
+      <strong>Botafogo Easyway</strong>
+      <span class="unid-badge">APTO 306</span>
+    </div>
+    <div class="card-meta">
+      
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em —">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: —">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: —">3</span></div>
+      <span class="prog-label">1/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:33%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 11.538,93</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: 24/11/2025 a 24/01/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 11.538,93</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 11.538,93</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">33%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pago">✓ Pago</span></td></tr><tr><td class="tc">#2</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>—</td><td class="tr mono">—</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div> Pago</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--yellow)"></div> Pendente</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div> Vencido</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div> Jurídico</div>
+  <div class="leg-item"><div class="leg-dot" style="background:var(--muted)"></div> Futuro</div>
+  <div style="flex:1"></div>
+  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 19/02/2026</span>
+</div>
+
+<script>
+let currentFilter = 'all';
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() {
+  const q = document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const matchFilter = currentFilter === 'all' || card.classList.contains(currentFilter);
+    const matchSearch = !q || card.dataset.emp.toLowerCase().includes(q) ||
+                        card.textContent.toLowerCase().includes(q);
+    card.style.display = (matchFilter && matchSearch) ? '' : 'none';
+  });
+}
+
+// ── Auth gate ──────────────────────────────────────────────────
+const PWD_HASH = 'b9aaa8ac9a8f8bb32157797571f9259f480ff9c7fa5aa9f5c960a22032346dae';
+const SESSION_KEY = 'cdmp_bap_auth';
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkAuth() {
+  const pwd = document.getElementById('auth-pwd').value;
+  const hash = await sha256(pwd);
+  if (hash === PWD_HASH) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('auth-overlay').style.display = 'none';
+  } else {
+    document.getElementById('auth-err').style.display = 'block';
+    document.getElementById('auth-pwd').value = '';
+  }
+}
+
+(function() {
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('auth-overlay').style.display = 'none';
+  }
+})();
+
+function toggleCard(header) {
+  header.classList.toggle('expanded');
+  const analytics = header.closest('.card').querySelector('.card-analytics');
+  analytics.classList.toggle('open');
+  const footer = header.closest('.card').querySelector('.ver-mais');
+  if (footer) {
+    footer.textContent = analytics.classList.contains('open') ? 'fechar análise ↓' : 'clique para análise ↑';
+  }
+}
+</script>
+</body>
+</html>
