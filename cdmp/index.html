@@ -67,6 +67,8 @@
   .unid-badge { background: rgba(29,78,216,.09); color: var(--blue); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid rgba(29,78,216,.2); }
   .acordo-num { font-size: 11px; color: var(--muted); }
   .resp-badge { font-size: 11px; color: var(--muted); background: var(--surface); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
+  .filter-sep { color: var(--border); font-size: 16px; margin: 0 4px; user-select: none; }
+  .resp-btn.active { border-color: #7c3aed; color: #7c3aed; background: rgba(124,58,237,.08); font-weight: 600; }
 
   .card-body { padding: 12px 16px; display: flex; flex-direction: column; gap: 9px; }
   .row-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; font-weight: 600; min-width: 100px; }
@@ -178,16 +180,16 @@
     <h1>CDMP — Controle de Parcelas</h1>
     <div class="sub">BAP Administradora de Condomínios · Cobrança Extrajudicial</div>
   </div>
-  <div class="updated">Atualizado: 19/02/2026 11:02</div>
+  <div class="updated">Atualizado: 20/02/2026 05:10</div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="n">23</div><div class="l">Acordos</div></div>
+  <div class="stat"><div class="n">22</div><div class="l">Acordos</div></div>
   <div class="stat green"><div class="n">12</div><div class="l">Concluídos</div></div>
-  <div class="stat yellow"><div class="n">8</div><div class="l">Em Aberto</div></div>
+  <div class="stat yellow"><div class="n">7</div><div class="l">Em Aberto</div></div>
   <div class="stat red"><div class="n">3</div><div class="l">Vencidos</div></div>
   <div class="stat purple"><div class="n">0</div><div class="l">Jurídico</div></div>
-  <div class="stat"><div class="n">R$ 100,330</div><div class="l">Valor Total</div></div>
+  <div class="stat"><div class="n">R$ 87,735</div><div class="l">Valor Total</div></div>
 </div>
 
 <div class="filters">
@@ -197,11 +199,15 @@
   <button class="filter-btn" onclick="setFilter('card-ok',this)">Em Aberto</button>
   <button class="filter-btn" onclick="setFilter('card-juridico',this)">⚖ Jurídico</button>
   <button class="filter-btn" onclick="setFilter('card-done',this)">✓ Concluídos</button>
+  <span class="filter-sep">|</span> 👤 <button class="filter-btn resp-btn" onclick="setResp('GIULIA',this)">GIULIA</button>
+  <button class="filter-btn resp-btn" onclick="setResp('GIULIA NUNES',this)">GIULIA NUNES</button>
+  <button class="filter-btn resp-btn" onclick="setResp('KAROLINY',this)">KAROLINY</button>
+  
 </div>
 
 <div class="cards" id="cards-container">
 
-<div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok">
+<div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0072</span>
@@ -257,7 +263,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0072 - PACAEMBU" data-status="card-done">
+<div class="card card-done" data-emp="0072 - PACAEMBU" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0072</span>
@@ -313,7 +319,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0201 - SOLAR DA VILA" data-status="card-done">
+<div class="card card-done" data-emp="0201 - SOLAR DA VILA" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0201</span>
@@ -369,7 +375,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0315 - MORADAS DO MAR" data-status="card-vencido">
+<div class="card card-vencido" data-emp="0315 - MORADAS DO MAR" data-status="card-vencido" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0315</span>
@@ -416,7 +422,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>25/09/2025</td><td class="tr mono">R$ 299,55</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 25/09/2025</span></td></tr><tr><td class="tc">#2</td><td>28/10/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 28/10/2025</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/11/2025</span></td></tr><tr><td class="tc">#4</td><td>25/12/2025</td><td class="tr mono">R$ 348,58</td><td><span class="st-badge st-vencido">! Vencido (56d)</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>25/09/2025</td><td class="tr mono">R$ 299,55</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 25/09/2025</span></td></tr><tr><td class="tc">#2</td><td>28/10/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 28/10/2025</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/11/2025</span></td></tr><tr><td class="tc">#4</td><td>25/12/2025</td><td class="tr mono">R$ 348,58</td><td><span class="st-badge st-vencido">! Vencido (57d)</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -425,7 +431,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0379 - CATORZE DE JULHO" data-status="card-ok">
+<div class="card card-ok" data-emp="0379 - CATORZE DE JULHO" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0379</span>
@@ -481,7 +487,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok">
+<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok" data-resp="karoliny">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0383</span>
@@ -537,7 +543,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok">
+<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0420</span>
@@ -593,7 +599,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0420 - PARNASUS" data-status="card-done">
+<div class="card card-done" data-emp="0420 - PARNASUS" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0420</span>
@@ -649,7 +655,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0517 - VIA APIA" data-status="card-done">
+<div class="card card-done" data-emp="0517 - VIA APIA" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0517</span>
@@ -705,7 +711,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-vencido">
+<div class="card card-vencido" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-vencido" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
@@ -752,7 +758,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (11 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>10/02/2025</td><td class="tr mono">R$ 596,41</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2025</span></td></tr><tr><td class="tc">#2</td><td>03/04/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 03/04/2025</span></td></tr><tr><td class="tc">#3</td><td>05/06/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/06/2025</span></td></tr><tr><td class="tc">#4</td><td>18/08/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/08/2025</span></td></tr><tr><td class="tc">#5</td><td>11/09/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/09/2025</span></td></tr><tr><td class="tc">#6</td><td>07/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 07/11/2025</span></td></tr><tr><td class="tc">#7</td><td>13/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/11/2025</span></td></tr><tr><td class="tc">#8</td><td>10/12/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/12/2025</span></td></tr><tr><td class="tc">#9</td><td>09/01/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/01/2026</span></td></tr><tr><td class="tc">#10</td><td>10/02/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2026</span></td></tr><tr><td class="tc">#11</td><td>10/12/2025</td><td class="tr mono">R$ 542,22</td><td><span class="st-badge st-vencido">! Vencido (71d)</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>10/02/2025</td><td class="tr mono">R$ 596,41</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2025</span></td></tr><tr><td class="tc">#2</td><td>03/04/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 03/04/2025</span></td></tr><tr><td class="tc">#3</td><td>05/06/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/06/2025</span></td></tr><tr><td class="tc">#4</td><td>18/08/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/08/2025</span></td></tr><tr><td class="tc">#5</td><td>11/09/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/09/2025</span></td></tr><tr><td class="tc">#6</td><td>07/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 07/11/2025</span></td></tr><tr><td class="tc">#7</td><td>13/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/11/2025</span></td></tr><tr><td class="tc">#8</td><td>10/12/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/12/2025</span></td></tr><tr><td class="tc">#9</td><td>09/01/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/01/2026</span></td></tr><tr><td class="tc">#10</td><td>10/02/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2026</span></td></tr><tr><td class="tc">#11</td><td>10/12/2025</td><td class="tr mono">R$ 542,22</td><td><span class="st-badge st-vencido">! Vencido (72d)</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -761,7 +767,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="karoliny">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
@@ -817,7 +823,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-done">
+<div class="card card-done" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-done" data-resp="giulia">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
@@ -873,7 +879,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0562 - VILLA CONSTANZA" data-status="card-ok">
+<div class="card card-ok" data-emp="0562 - VILLA CONSTANZA" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0562</span>
@@ -929,63 +935,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0569 - PENINSULA EVIDENCE" data-status="card-done">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0569</span>
-      <strong>Peninsula Evidence</strong>
-      <span class="unid-badge">APTO 705</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #11366</span>
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 30/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 05/01/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 29/12/2025">3</span></div>
-      <span class="prog-label">3/3</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 17.310,12</strong></span>
-    <span>Valor/parcela: <strong>R$ 5.770,04</strong></span>
-    <span>Período: 30/10/2025 a 29/12/2025</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 17.310,12</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 17.310,12</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>30/10/2025</td><td class="tr mono">R$ 4.361,32</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 30/10/2025</span></td></tr><tr><td class="tc">#2</td><td>05/01/2026</td><td class="tr mono">R$ 6.474,40</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/01/2026</span></td></tr><tr><td class="tc">#3</td><td>29/12/2025</td><td class="tr mono">R$ 6.474,40</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 29/12/2025</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-ok" data-emp="0743 - WATERWAYS WEST" data-status="card-ok">
+<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0743</span>
@@ -1001,19 +951,19 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 20/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 18/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 23/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 20/01/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 20/02/2026">5</span></div>
-      <span class="prog-label">4/5</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 20/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 18/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 23/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 20/01/2026">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 19/02/2026">5</span></div>
+      <span class="prog-label">5/5</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:80%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 16.091,33</strong></span>
-    <span>Valor/parcela: <strong>R$ 3.218,27</strong></span>
-    <span>Período: 20/10/2025 a 20/02/2026</span>
+    <span>Total acordo: <strong>R$ 20.807,13</strong></span>
+    <span>Valor/parcela: <strong>R$ 4.161,43</strong></span>
+    <span>Período: 20/10/2025 a 19/02/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -1022,17 +972,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 16.091,33</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 12.873,08</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.218,25</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">80%</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 20.807,13</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (5 parcelas)</span><span class="fin-val green">R$ 20.807,15</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
   </div>
   <div class="analytics-title" style="margin-top:14px">Parcelas (5 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 1.943,93</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>18/11/2025</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/11/2025</span></td></tr><tr><td class="tc">#3</td><td>23/12/2025</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 23/12/2025</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/01/2026</span></td></tr><tr><td class="tc">#5</td><td>20/02/2026</td><td class="tr mono">R$ 3.218,27</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 1.943,93</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>18/11/2025</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/11/2025</span></td></tr><tr><td class="tc">#3</td><td>23/12/2025</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 23/12/2025</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/01/2026</span></td></tr><tr><td class="tc">#5</td><td>19/02/2026</td><td class="tr mono">R$ 4.715,80</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 19/02/2026</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1041,7 +991,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done">
+<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0743</span>
@@ -1097,7 +1047,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done">
+<div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0805</span>
@@ -1153,7 +1103,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0882 - SOLLAR RECREIO" data-status="card-vencido">
+<div class="card card-vencido" data-emp="0882 - SOLLAR RECREIO" data-status="card-vencido" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0882</span>
@@ -1200,7 +1150,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 354,28</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>20/11/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (91d)</span></td></tr><tr><td class="tc">#3</td><td>20/12/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (61d)</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (30d)</span></td></tr><tr><td class="tc">#5</td><td>20/02/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>20/03/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 354,28</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>20/11/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (92d)</span></td></tr><tr><td class="tc">#3</td><td>20/12/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (62d)</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (31d)</span></td></tr><tr><td class="tc">#5</td><td>20/02/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>20/03/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1209,7 +1159,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0987 - UP SIDE ARAGUAIA" data-status="card-ok">
+<div class="card card-ok" data-emp="0987 - UP SIDE ARAGUAIA" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0987</span>
@@ -1265,7 +1215,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1047 - AS. VERDE VALE DO ITANHANGA" data-status="card-ok">
+<div class="card card-ok" data-emp="1047 - AS. VERDE VALE DO ITANHANGA" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1047</span>
@@ -1321,7 +1271,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1093 - CUSTOM RESIDENCIAS" data-status="card-ok">
+<div class="card card-ok" data-emp="1093 - CUSTOM RESIDENCIAS" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1093</span>
@@ -1377,7 +1327,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-done">
+<div class="card card-done" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1122</span>
@@ -1433,7 +1383,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="1134 - BOTAFOGO EASYWAY" data-status="card-done">
+<div class="card card-done" data-emp="1134 - BOTAFOGO EASYWAY" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1134</span>
@@ -1498,16 +1448,29 @@
   <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div> Jurídico</div>
   <div class="leg-item"><div class="leg-dot" style="background:var(--muted)"></div> Futuro</div>
   <div style="flex:1"></div>
-  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 19/02/2026</span>
+  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 20/02/2026</span>
 </div>
 
 <script>
 let currentFilter = 'all';
+let currentResp = 'all';
 
 function setFilter(filter, btn) {
   currentFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn:not(.resp-btn)').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  filterCards();
+}
+
+function setResp(resp, btn) {
+  if (currentResp === resp) {
+    currentResp = 'all';
+    document.querySelectorAll('.resp-btn').forEach(b => b.classList.remove('active'));
+  } else {
+    currentResp = resp;
+    document.querySelectorAll('.resp-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
   filterCards();
 }
 
@@ -1515,9 +1478,10 @@ function filterCards() {
   const q = document.getElementById('search').value.toLowerCase();
   document.querySelectorAll('.card').forEach(card => {
     const matchFilter = currentFilter === 'all' || card.classList.contains(currentFilter);
+    const matchResp = currentResp === 'all' || card.dataset.resp === currentResp.toLowerCase();
     const matchSearch = !q || card.dataset.emp.toLowerCase().includes(q) ||
                         card.textContent.toLowerCase().includes(q);
-    card.style.display = (matchFilter && matchSearch) ? '' : 'none';
+    card.style.display = (matchFilter && matchResp && matchSearch) ? '' : 'none';
   });
 }
 
