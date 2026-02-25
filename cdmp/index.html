@@ -223,29 +223,24 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="btn-extrato" onclick="document.getElementById('extrato-overlay').classList.add('open')">📋 Extrato de Alterações</button>
-    <div class="updated">Atualizado: 25/02/2026 14:35</div>
+    <div class="updated">Atualizado: 25/02/2026 14:53</div>
   </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="n">36</div><div class="l">Total</div></div>
-  <div class="stat" style="border-left:3px solid #1e3a6e"><div class="n" style="color:#1e3a6e">26</div><div class="l">📋 Acordos Parcelados</div></div>
-  <div class="stat" style="border-left:3px solid #d97706"><div class="n" style="color:#92400e">10</div><div class="l">💼 Acordos</div></div>
-  <div class="stat green"><div class="n">22</div><div class="l">Concluídos</div></div>
+  <div class="stat"><div class="n">26</div><div class="l">Total</div></div>
+
+  <div class="stat green"><div class="n">12</div><div class="l">Concluídos</div></div>
   <div class="stat yellow"><div class="n">12</div><div class="l">Em Aberto</div></div>
   <div class="stat red"><div class="n">2</div><div class="l">Vencidos</div></div>
   <div class="stat purple"><div class="n">0</div><div class="l">Jurídico</div></div>
-  <div class="stat"><div class="n">R$ 101,559</div><div class="l">Valor Total</div></div>
+  <div class="stat"><div class="n">R$ 69,719</div><div class="l">Valor Total</div></div>
 </div>
 
 
 
 <div class="filters">
   <input class="search-box" type="text" id="search" placeholder="Buscar condomínio ou unidade..." onkeyup="filterCards()">
-  <button class="filter-btn tipo-btn active-parcelado active" id="tipo-todos" onclick="setTipo('all',this)">Todos</button>
-  <button class="filter-btn tipo-btn" id="tipo-parcelado" onclick="setTipo('acordo_parcelado',this)">📋 Acordos Parcelados</button>
-  <button class="filter-btn tipo-btn" id="tipo-avulso" onclick="setTipo('acordo',this)">💼 Acordos</button>
-  <span class="filter-sep">|</span>
   <button class="filter-btn active" onclick="setFilter('all',this)">Todos status</button>
   <button class="filter-btn" onclick="setFilter('card-vencido',this)">⚠ Vencidos</button>
   <button class="filter-btn" onclick="setFilter('card-ok',this)">Em Aberto</button>
@@ -253,126 +248,11 @@
   <button class="filter-btn" onclick="setFilter('card-done',this)">✓ Concluídos</button>
   <span class="filter-sep">|</span> 👤 <button class="filter-btn resp-btn" onclick="setResp('GIULIA NUNES',this)">GIULIA NUNES</button>
   <button class="filter-btn resp-btn" onclick="setResp('KAROLINY',this)">KAROLINY</button>
-  <button class="filter-btn resp-btn" onclick="setResp('KAROLINY LOPES',this)">KAROLINY LOPES</button>
   
 </div>
 
 <div class="cards" id="cards-container">
 
-<div class="card card-done" data-emp="0020 -  FLORIANO PEIXOTO" data-status="card-done" data-resp="giulia nunes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0020</span>
-      <strong>Floriano Peixoto</strong>
-      <span class="unid-badge">APTO 201</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #11013</span>
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 10/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 10/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 09/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 13/01/2026">4</span></div>
-      <span class="prog-label">4/4</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 2.994,18</strong></span>
-    <span>Valor/parcela: <strong>R$ 748,54</strong></span>
-    <span>Período: 10/10/2025 a 13/01/2026</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.994,18</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,16</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,02</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>10/10/2025</td><td class="tr mono">R$ 461,91</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/10/2025</span></td></tr><tr><td class="tc">#2</td><td>10/11/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/11/2025</span></td></tr><tr><td class="tc">#3</td><td>09/12/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/12/2025</span></td></tr><tr><td class="tc">#4</td><td>13/01/2026</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-done" data-emp="0020 -  FLORIANO PEIXOTO" data-status="card-done" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0020</span>
-      <strong>Floriano Peixoto</strong>
-      <span class="unid-badge">APTO 103</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #10347</span>
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 15/09/2025">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 592,19</strong></span>
-    <span>Valor/parcela: <strong>R$ 592,19</strong></span>
-    <span>Período: 15/09/2025 a 15/09/2025</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 592,19</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 592,19</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>15/09/2025</td><td class="tr mono">R$ 592,19</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/09/2025</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
 <div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok" data-resp="giulia nunes" data-tipo="acordo_parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
@@ -458,7 +338,7 @@
   </div>
   <div class="card-footer">
     <span>Total acordo: <strong>R$ 2.994,18</strong></span>
-    <span>Valor/parcela: <strong>R$ 748,54</strong></span>
+    <span>Valor/parcela: <strong>R$ 748,55</strong></span>
     <span>Período: 10/10/2025 a 13/01/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
@@ -469,8 +349,8 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.994,18</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,16</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,02</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,20</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
         <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
@@ -479,120 +359,6 @@
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
     <tbody><tr><td class="tc">#1</td><td>10/10/2025</td><td class="tr mono">R$ 461,91</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/10/2025</span></td></tr><tr><td class="tc">#2</td><td>10/11/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/11/2025</span></td></tr><tr><td class="tc">#3</td><td>09/12/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/12/2025</span></td></tr><tr><td class="tc">#4</td><td>13/01/2026</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-done" data-emp="0150 - PROMENADE SAO CLEMENTE" data-status="card-done" data-resp="giulia nunes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0150</span>
-      <strong>Promenade Sao Clemente</strong>
-      <span class="unid-badge">APTO 705</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #4440</span>
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 13/03/2025">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 1.306,00</strong></span>
-    <span>Valor/parcela: <strong>R$ 1.306,00</strong></span>
-    <span>Período: 13/03/2025 a 13/03/2025</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.306,00</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 1.306,00</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>13/03/2025</td><td class="tr mono">R$ 1.306,00</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/03/2025</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-done" data-emp="0150 - PROMENADE SAO CLEMENTE" data-status="card-done" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0150</span>
-      <strong>Promenade Sao Clemente</strong>
-      <span class="unid-badge">APTO 907</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #975</span>
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 11/12/2024">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 1.315,11</strong></span>
-    <span>Valor/parcela: <strong>R$ 1.315,11</strong></span>
-    <span>Período: 11/12/2024 a 11/12/2024</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.315,11</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 1.315,11</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>11/12/2024</td><td class="tr mono">R$ 1.315,11</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/12/2024</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -650,63 +416,6 @@
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
     <tbody><tr><td class="tc">#1</td><td>23/09/2025</td><td class="tr mono">R$ 869,22</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 23/09/2025</span></td></tr><tr><td class="tc">#2</td><td>28/10/2025</td><td class="tr mono">R$ 1.098,51</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 28/10/2025</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-done" data-emp="0310 - VIVENDAS DO GIRASSOL" data-status="card-done" data-resp="giulia nunes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0310</span>
-      <strong>Vivendas Do Girassol</strong>
-      <span class="unid-badge">APTO 401</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #6797</span>
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 16/05/2025">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 1.092,41</strong></span>
-    <span>Valor/parcela: <strong>R$ 1.092,41</strong></span>
-    <span>Período: 16/05/2025 a 16/05/2025</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.092,41</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 1.092,41</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>16/05/2025</td><td class="tr mono">R$ 1.092,41</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 16/05/2025</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1342,63 +1051,6 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0775 - SPAZIO VITA" data-status="card-done" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0775</span>
-      <strong>Spazio Vita</strong>
-      <span class="unid-badge">APTO 307</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #549</span>
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 01/09/2024">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 01/09/2024">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 01/09/2024">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 01/09/2024">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 01/09/2024">5</span><span class="parc-badge p-pago" title="Parcela 6 — Pago em 01/09/2024">6</span><span class="parc-badge p-pago" title="Parcela 7 — Pago em 01/09/2024">7</span><span class="parc-badge p-pago" title="Parcela 8 — Pago em 01/09/2024">8</span><span class="parc-badge p-pago" title="Parcela 9 — Pago em 05/11/2024">9</span><span class="parc-badge p-pago" title="Parcela 10 — Pago em 22/11/2024">10</span><span class="parc-badge p-pago" title="Parcela 11 — Pago em 23/12/2024">11</span><span class="parc-badge p-pago" title="Parcela 12 — Pago em 21/01/2025">12</span><span class="parc-badge p-pago" title="Parcela 13 — Pago em 21/02/2025">13</span><span class="parc-badge p-pago" title="Parcela 14 — Pago em 01/04/2025">14</span></div>
-      <span class="prog-label">14/14</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 13.724,89</strong></span>
-    <span>Valor/parcela: <strong>R$ 980,35</strong></span>
-    <span>Período: 01/09/2024 a 01/04/2025</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 13.724,89</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (14 parcelas)</span><span class="fin-val green">R$ 13.724,90</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (14 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>01/09/2024</td><td class="tr mono">R$ 2.294,95</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#2</td><td>01/09/2024</td><td class="tr mono">R$ 746,83</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#3</td><td>01/09/2024</td><td class="tr mono">R$ 746,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#4</td><td>01/09/2024</td><td class="tr mono">R$ 906,19</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#5</td><td>01/09/2024</td><td class="tr mono">R$ 746,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#6</td><td>01/09/2024</td><td class="tr mono">R$ 905,93</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#7</td><td>01/09/2024</td><td class="tr mono">R$ 746,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#8</td><td>01/09/2024</td><td class="tr mono">R$ 911,65</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/09/2024</span></td></tr><tr><td class="tc">#9</td><td>05/11/2024</td><td class="tr mono">R$ 696,46</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/11/2024</span></td></tr><tr><td class="tc">#10</td><td>22/11/2024</td><td class="tr mono">R$ 984,22</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 22/11/2024</span></td></tr><tr><td class="tc">#11</td><td>23/12/2024</td><td class="tr mono">R$ 994,37</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 23/12/2024</span></td></tr><tr><td class="tc">#12</td><td>21/01/2025</td><td class="tr mono">R$ 1.004,51</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 21/01/2025</span></td></tr><tr><td class="tc">#13</td><td>21/02/2025</td><td class="tr mono">R$ 1.014,65</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 21/02/2025</span></td></tr><tr><td class="tc">#14</td><td>01/04/2025</td><td class="tr mono">R$ 1.024,79</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/04/2025</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
 <div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done" data-resp="giulia nunes" data-tipo="acordo_parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
@@ -1969,234 +1621,6 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">1138</span>
-      <strong>Amapi</strong>
-      <span class="unid-badge">015 (F12)</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>—</strong></span>
-    <span>Valor/parcela: <strong>—</strong></span>
-    <span>Período: — a —</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">1138</span>
-      <strong>Amapi</strong>
-      <span class="unid-badge">100 (B13)</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>—</strong></span>
-    <span>Valor/parcela: <strong>—</strong></span>
-    <span>Período: — a —</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-done" data-emp="1138 - AMAPI" data-status="card-done" data-resp="karoliny lopes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">1138</span>
-      <strong>Amapi</strong>
-      <span class="unid-badge">045 (C02)</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #14043</span>
-      <span class="resp-badge">KAROLINY LOPES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 09/02/2026">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 10.814,64</strong></span>
-    <span>Valor/parcela: <strong>R$ 10.814,64</strong></span>
-    <span>Período: 09/02/2026 a 09/02/2026</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 10.814,64</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 10.814,64</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>09/02/2026</td><td class="tr mono">R$ 10.814,64</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/02/2026</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
-<div class="card card-ok" data-emp="1141 - SANTA CLARA" data-status="card-ok" data-resp="giulia nunes" data-tipo="acordo">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">1141</span>
-      <strong>Santa Clara</strong>
-      <span class="unid-badge">101</span>
-      <span class="tipo-badge tipo-avulso">💼 Acordo</span>
-    </div>
-    <div class="card-meta">
-      
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>—</strong></span>
-    <span>Valor/parcela: <strong>—</strong></span>
-    <span>Período: — a —</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
 <div class="card card-ok" data-emp="541 - MAISON DU SOLEIL" data-status="card-ok" data-resp="karoliny" data-tipo="acordo_parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
@@ -2416,11 +1840,11 @@ document.addEventListener('keydown', function(e) {
     <div class="extrato-header">
       <div>
         <h2>📋 Extrato de Alterações — CDMP</h2>
-        <span>1104 boletos · 0 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
+        <span>128 boletos · 0 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
       </div>
       <button class="extrato-close" onclick="closeExtrato()">✕</button>
     </div>
-    <div class="extrato-body"><table class="extrato-table"><thead><tr><th>Vencimento</th><th>Condomínio</th><th>Unidade</th><th>Responsável</th><th>Tipo</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody><tr><td>01/09/2024</td><td><strong>Loteum Barra</strong></td><td>APTO 601</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center"><span class="tipo-badge tipo-parcelado">📋 Acordo Parcelado</span></td><td style="text-align:center">8/10</td><td style="text-align:right;font-family:monospace">R$ 53.789,29</td><td>01/09/2024</td><td><span class="ex-badge ex-pago">✓ Pago</span></td></tr></tbody></table></div>
+    <div class="extrato-body"><table class="extrato-table"><thead><tr><th>Vencimento</th><th>Condomínio</th><th>Unidade</th><th>Responsável</th><th>Tipo</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody><tr><td>01/09/2024</td><td><strong>Spazio Vita</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY LOPES</td><td style="text-align:center"><span class="tipo-badge tipo-avulso">💼 Acordo</span></td><td style="text-align:center">8/14</td><td style="text-align:right;font-family:monospace">R$ 911,65</td><td>01/09/2024</td><td><span class="ex-badge ex-pago">✓ Pago</span></td></tr></tbody></table></div>
     <div class="extrato-footer">
       <div class="ex-legend">
         <span class="ex-leg"><span class="ex-badge ex-novo">🆕 Novo</span> apareceu nesta execução</span>
