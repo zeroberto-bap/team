@@ -167,6 +167,36 @@
   .legend { padding: 10px 28px; display: flex; gap: 18px; flex-wrap: wrap; border-top: 1px solid var(--border); background: var(--surface); align-items: center; }
   .leg-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
   .leg-dot { width: 11px; height: 11px; border-radius: 50%; }
+
+  /* Botão Extrato */
+  .btn-extrato { background: #d97706; color: #fff; border: none; padding: 8px 18px; border-radius: 7px; font-size: 13px; font-weight: 700; cursor: pointer; letter-spacing: .3px; transition: background .15s; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+  .btn-extrato:hover { background: #b45309; }
+
+  /* Modal Extrato */
+  #extrato-overlay { position: fixed; inset: 0; background: rgba(10,20,45,.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 8000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  #extrato-overlay.open { display: flex; }
+  .extrato-modal { background: var(--surface); border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 24px 64px rgba(0,0,0,.22); width: 100%; max-width: 900px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
+  .extrato-header { background: linear-gradient(135deg, #1a3a6e 0%, #0d2147 100%); border-bottom: 3px solid #d97706; padding: 16px 22px; display: flex; align-items: center; justify-content: space-between; }
+  .extrato-header h2 { color: #fff; font-size: 16px; font-weight: 700; }
+  .extrato-header span { color: rgba(255,255,255,.55); font-size: 11px; }
+  .extrato-close { background: rgba(255,255,255,.15); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 28px; text-align: center; transition: background .15s; }
+  .extrato-close:hover { background: rgba(255,255,255,.3); }
+  .extrato-body { overflow-y: auto; padding: 0; flex: 1; }
+  .extrato-empty { text-align: center; padding: 48px; color: var(--muted); font-size: 14px; }
+  .extrato-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .extrato-table th { position: sticky; top: 0; background: #f0f5fb; padding: 9px 12px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .6px; color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--border); z-index: 1; }
+  .extrato-table td { padding: 8px 12px; border-bottom: 1px solid #e8edf5; color: var(--text); vertical-align: middle; }
+  .extrato-table tr:last-child td { border-bottom: none; }
+  .extrato-table tr:hover td { background: rgba(30,58,110,.03); }
+  .ex-badge { display: inline-block; font-size: 10px; padding: 2px 9px; border-radius: 12px; font-weight: 700; white-space: nowrap; }
+  .ex-novo      { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .ex-recem_pago{ background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
+  .ex-pago      { background: rgba(22,163,74,.08); color: #15803d; border: 1px solid rgba(22,163,74,.25); }
+  .ex-aberto    { background: rgba(29,78,216,.08); color: #1e40af; border: 1px solid rgba(29,78,216,.22); }
+  .ex-vencido   { background: rgba(220,38,38,.08); color: #b91c1c; border: 1px solid rgba(220,38,38,.28); }
+  .extrato-footer { padding: 10px 22px; background: var(--surface2); border-top: 1px solid var(--border); font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+  .ex-legend { display: flex; gap: 12px; flex-wrap: wrap; }
+  .ex-leg { display: flex; align-items: center; gap: 4px; }
 </style>
 </head>
 <body>
@@ -186,19 +216,29 @@
     <h1>CDMP — Controle de Parcelas</h1>
     <div class="sub">BAP Administradora de Condomínios · Cobrança Extrajudicial</div>
   </div>
-  <div class="updated">Atualizado: 20/02/2026 05:54</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button class="btn-extrato" onclick="document.getElementById('extrato-overlay').classList.add('open')">📋 Extrato de Alterações</button>
+    <div class="updated">Atualizado: 25/02/2026 12:54</div>
+  </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="n">22</div><div class="l">Acordos</div></div>
+  <div class="stat"><div class="n">26</div><div class="l">Acordos</div></div>
   <div class="stat green"><div class="n">12</div><div class="l">Concluídos</div></div>
-  <div class="stat yellow"><div class="n">7</div><div class="l">Em Aberto</div></div>
-  <div class="stat red"><div class="n">3</div><div class="l">Vencidos</div></div>
+  <div class="stat yellow"><div class="n">12</div><div class="l">Em Aberto</div></div>
+  <div class="stat red"><div class="n">2</div><div class="l">Vencidos</div></div>
   <div class="stat purple"><div class="n">0</div><div class="l">Jurídico</div></div>
-  <div class="stat"><div class="n">R$ 87,735</div><div class="l">Valor Total</div></div>
+  <div class="stat"><div class="n">R$ 69,719</div><div class="l">Valor Total</div></div>
 </div>
 
 
+<div class="update-banner" id="update-banner">
+  <div class="update-header">
+    <span>🔔 Últimas atualizações (desde 20/02 05:54)</span>
+    <button class="update-close" onclick="document.getElementById('update-banner').style.display='none'">✕</button>
+  </div>
+  <ul class="update-list"><li>✅ Waterways West — APTO 701 quitado e baixado do controle</li><li>✅ Up Side Araguaia — SALA 538 quitado e baixado do controle</li><li>✅ Spazio Del Mare Ii — CASA 5 quitado e baixado do controle</li><li>🆕 Novo acordo: Golden Hills — APTO 106 (4 parcelas)</li><li>🆕 Novo acordo: Spazio Vita — APTO 208 (5 parcelas)</li><li>🆕 Novo acordo: Custom — APTO 101 (3 parcelas)</li><li>🆕 Novo acordo: Spazio Del Mare Ii — CASA 3 (4 parcelas)</li><li>🆕 Novo acordo: Maison Du Soleil — APTO 307 (4 parcelas)</li><li>🆕 Novo acordo: Amapi — 053 (I15) (0 parcelas)</li><li>🆕 Novo acordo: Amapi — 225 ( H24) (0 parcelas)</li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 4 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 5 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 6 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 7 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 8 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 9 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 10 mudou para </li></ul>
+</div>
 
 <div class="filters">
   <input class="search-box" type="text" id="search" placeholder="Buscar condomínio ou unidade..." onkeyup="filterCards()">
@@ -297,7 +337,7 @@
   </div>
   <div class="card-footer">
     <span>Total acordo: <strong>R$ 2.994,18</strong></span>
-    <span>Valor/parcela: <strong>R$ 748,55</strong></span>
+    <span>Valor/parcela: <strong>R$ 748,54</strong></span>
     <span>Período: 10/10/2025 a 13/01/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
@@ -308,8 +348,8 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.994,18</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,20</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,16</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,02</span></div>
         <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
@@ -429,7 +469,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>25/09/2025</td><td class="tr mono">R$ 299,55</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 25/09/2025</span></td></tr><tr><td class="tc">#2</td><td>28/10/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 28/10/2025</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/11/2025</span></td></tr><tr><td class="tc">#4</td><td>25/12/2025</td><td class="tr mono">R$ 348,58</td><td><span class="st-badge st-vencido">! Vencido (57d)</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>25/09/2025</td><td class="tr mono">R$ 299,55</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 25/09/2025</span></td></tr><tr><td class="tc">#2</td><td>28/10/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 28/10/2025</span></td></tr><tr><td class="tc">#3</td><td>26/11/2025</td><td class="tr mono">R$ 547,38</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/11/2025</span></td></tr><tr><td class="tc">#4</td><td>25/12/2025</td><td class="tr mono">R$ 348,58</td><td><span class="st-badge st-vencido">! Vencido (62d)</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -494,7 +534,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0383</span>
@@ -502,27 +542,27 @@
       <span class="unid-badge">APTO 202</span>
     </div>
     <div class="card-meta">
-      <span class="acordo-num">Acordo #10582</span>
-      <span class="resp-badge">KAROLINY</span>
+      <span class="acordo-num">Acordo #12984</span>
+      <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 07/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 05/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 15/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 14/01/2026">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 18/02/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 07/03/2026">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: 07/04/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 07/05/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 07/06/2026">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: 07/07/2026">10</span></div>
-      <span class="prog-label">5/10</span>
+      <div class="badges-wrap"></div>
+      <span class="prog-label">0/0</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:50%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 6.381,21</strong></span>
-    <span>Valor/parcela: <strong>R$ 638,12</strong></span>
-    <span>Período: 07/10/2025 a 07/07/2026</span>
+    <span>Total acordo: <strong>—</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: — a —</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -531,17 +571,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 6.381,21</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (5 parcelas)</span><span class="fin-val green">R$ 3.190,60</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 3.190,61</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">50%</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (10 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>07/10/2025</td><td class="tr mono">R$ 141,81</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 07/10/2025</span></td></tr><tr><td class="tc">#2</td><td>05/11/2025</td><td class="tr mono">R$ 1.559,85</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/11/2025</span></td></tr><tr><td class="tc">#3</td><td>15/12/2025</td><td class="tr mono">R$ 1.559,85</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/12/2025</span></td></tr><tr><td class="tc">#4</td><td>14/01/2026</td><td class="tr mono">R$ 1.559,85</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 14/01/2026</span></td></tr><tr><td class="tc">#5</td><td>18/02/2026</td><td class="tr mono">R$ 1.559,85</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/02/2026</span></td></tr><tr><td class="tc">#6</td><td>07/03/2026</td><td class="tr mono">R$ 638,12</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>07/04/2026</td><td class="tr mono">R$ 638,12</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>07/05/2026</td><td class="tr mono">R$ 638,12</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>07/06/2026</td><td class="tr mono">R$ 638,12</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>07/07/2026</td><td class="tr mono">R$ 638,12</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -670,7 +710,7 @@
       <span class="unid-badge">APTO 201</span>
     </div>
     <div class="card-meta">
-      <span class="acordo-num">Acordo #11013</span>
+      <span class="acordo-num">Acordo #11595</span>
       <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
@@ -678,8 +718,8 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 10/10/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 10/11/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 09/12/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 13/01/2026">4</span></div>
-      <span class="prog-label">4/4</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 06/11/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 08/12/2025">2</span></div>
+      <span class="prog-label">2/2</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
     <div class="boletos-row">
@@ -688,9 +728,9 @@
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 2.994,18</strong></span>
-    <span>Valor/parcela: <strong>R$ 748,55</strong></span>
-    <span>Período: 10/10/2025 a 13/01/2026</span>
+    <span>Total acordo: <strong>R$ 2.062,91</strong></span>
+    <span>Valor/parcela: <strong>R$ 1.031,45</strong></span>
+    <span>Período: 06/11/2025 a 08/12/2025</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -699,17 +739,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.994,18</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,20</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.062,91</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 2.062,90</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,01</span></div>
         <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (2 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>10/10/2025</td><td class="tr mono">R$ 461,91</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/10/2025</span></td></tr><tr><td class="tc">#2</td><td>10/11/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/11/2025</span></td></tr><tr><td class="tc">#3</td><td>09/12/2025</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/12/2025</span></td></tr><tr><td class="tc">#4</td><td>13/01/2026</td><td class="tr mono">R$ 844,09</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>06/11/2025</td><td class="tr mono">R$ 911,26</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 06/11/2025</span></td></tr><tr><td class="tc">#2</td><td>08/12/2025</td><td class="tr mono">R$ 1.151,65</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 08/12/2025</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -718,7 +758,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-vencido" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
@@ -726,7 +766,7 @@
       <span class="unid-badge">CASA 2</span>
     </div>
     <div class="card-meta">
-      <span class="acordo-num">Acordo #2671</span>
+      <span class="acordo-num">Acordo #12875</span>
       <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
@@ -734,19 +774,19 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 10/02/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 03/04/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 05/06/2025">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 18/08/2025">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 11/09/2025">5</span><span class="parc-badge p-pago" title="Parcela 6 — Pago em 07/11/2025">6</span><span class="parc-badge p-pago" title="Parcela 7 — Pago em 13/11/2025">7</span><span class="parc-badge p-pago" title="Parcela 8 — Pago em 10/12/2025">8</span><span class="parc-badge p-pago" title="Parcela 9 — Pago em 09/01/2026">9</span><span class="parc-badge p-pago" title="Parcela 10 — Pago em 10/02/2026">10</span><span class="parc-badge p-vencido" title="Parcela 11 — VENCIDO em 10/12/2025">11</span></div>
-      <span class="prog-label">10/11</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 15/12/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 13/01/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 13/02/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 15/03/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 15/04/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 15/05/2026">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: 15/06/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 15/07/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 15/08/2026">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: 15/09/2026">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: 15/10/2026">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: 15/11/2026">12</span><span class="parc-badge p-pendente" title="Parcela 13 — Pendente · Vcto: 15/12/2026">13</span><span class="parc-badge p-pendente" title="Parcela 14 — Pendente · Vcto: 15/01/2027">14</span><span class="parc-badge p-pendente" title="Parcela 15 — Pendente · Vcto: 15/02/2027">15</span></div>
+      <span class="prog-label">3/15</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:90%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:20%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 5.964,37</strong></span>
-    <span>Valor/parcela: <strong>R$ 542,22</strong></span>
-    <span>Período: 10/02/2025 a 10/12/2025</span>
+    <span>Total acordo: <strong>R$ 539,93</strong></span>
+    <span>Valor/parcela: <strong>R$ 36,00</strong></span>
+    <span>Período: 15/12/2025 a 15/02/2027</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -755,17 +795,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 5.964,37</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (10 parcelas)</span><span class="fin-val green">R$ 5.422,20</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 542,17</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">90%</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 539,93</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 108,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 431,93</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">20%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (11 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (15 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>10/02/2025</td><td class="tr mono">R$ 596,41</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2025</span></td></tr><tr><td class="tc">#2</td><td>03/04/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 03/04/2025</span></td></tr><tr><td class="tc">#3</td><td>05/06/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 05/06/2025</span></td></tr><tr><td class="tc">#4</td><td>18/08/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 18/08/2025</span></td></tr><tr><td class="tc">#5</td><td>11/09/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/09/2025</span></td></tr><tr><td class="tc">#6</td><td>07/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 07/11/2025</span></td></tr><tr><td class="tc">#7</td><td>13/11/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/11/2025</span></td></tr><tr><td class="tc">#8</td><td>10/12/2025</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/12/2025</span></td></tr><tr><td class="tc">#9</td><td>09/01/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/01/2026</span></td></tr><tr><td class="tc">#10</td><td>10/02/2026</td><td class="tr mono">R$ 596,44</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2026</span></td></tr><tr><td class="tc">#11</td><td>10/12/2025</td><td class="tr mono">R$ 542,22</td><td><span class="st-badge st-vencido">! Vencido (72d)</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>15/12/2025</td><td class="tr mono">R$ 52,29</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/12/2025</span></td></tr><tr><td class="tc">#2</td><td>13/01/2026</td><td class="tr mono">R$ 52,30</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr><tr><td class="tc">#3</td><td>13/02/2026</td><td class="tr mono">R$ 435,34</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/02/2026</span></td></tr><tr><td class="tc">#4</td><td>15/03/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>15/04/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>15/05/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>15/06/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>15/07/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>15/08/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>15/09/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>15/10/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>15/11/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#13</td><td>15/12/2026</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#14</td><td>15/01/2027</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#15</td><td>15/02/2027</td><td class="tr mono">R$ 36,00</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -774,7 +814,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
@@ -783,7 +823,7 @@
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #13907</span>
-      <span class="resp-badge">KAROLINY</span>
+      <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
   </div>
@@ -830,35 +870,35 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="karoliny">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
       <strong>Spazio Del Mare Ii</strong>
-      <span class="unid-badge">CASA 5</span>
+      <span class="unid-badge">CASA 3</span>
     </div>
     <div class="card-meta">
-      <span class="acordo-num">Acordo #12301</span>
-      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="acordo-num">Acordo #13782</span>
+      <span class="resp-badge">KAROLINY</span>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 24/11/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 23/12/2025">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 11/02/2026">3</span></div>
-      <span class="prog-label">3/3</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 11/02/2026">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: 11/03/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 11/04/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 11/05/2026">4</span></div>
+      <span class="prog-label">1/4</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:25%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 1.236,66</strong></span>
-    <span>Valor/parcela: <strong>R$ 412,22</strong></span>
-    <span>Período: 24/11/2025 a 11/02/2026</span>
+    <span>Total acordo: <strong>R$ 378,23</strong></span>
+    <span>Valor/parcela: <strong>R$ 94,56</strong></span>
+    <span>Período: 11/02/2026 a 11/05/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -867,17 +907,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.236,66</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 1.236,66</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 378,23</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 94,56</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 283,67</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">25%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>24/11/2025</td><td class="tr mono">R$ 311,58</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 24/11/2025</span></td></tr><tr><td class="tc">#2</td><td>23/12/2025</td><td class="tr mono">R$ 462,54</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 23/12/2025</span></td></tr><tr><td class="tc">#3</td><td>11/02/2026</td><td class="tr mono">R$ 462,54</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/02/2026</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>11/02/2026</td><td class="tr mono">R$ 378,23</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 11/02/2026</span></td></tr><tr><td class="tc">#2</td><td>11/03/2026</td><td class="tr mono">R$ 94,56</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>11/04/2026</td><td class="tr mono">R$ 94,56</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>11/05/2026</td><td class="tr mono">R$ 94,56</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -998,62 +1038,6 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done" data-resp="giulia nunes">
-  <div class="card-header clickable" onclick="toggleCard(this)">
-    <div class="card-title">
-      <span class="cd-badge">0743</span>
-      <strong>Waterways West</strong>
-      <span class="unid-badge">APTO 701</span>
-    </div>
-    <div class="card-meta">
-      <span class="acordo-num">Acordo #715</span>
-      <span class="resp-badge">GIULIA NUNES</span>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="parcelas-row">
-      <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 29/11/2024">1</span></div>
-      <span class="prog-label">1/1</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
-    <div class="boletos-row">
-      <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
-    </div>
-  </div>
-  <div class="card-footer">
-    <span>Total acordo: <strong>R$ 6.065,92</strong></span>
-    <span>Valor/parcela: <strong>R$ 6.065,92</strong></span>
-    <span>Período: 29/11/2024 a 29/11/2024</span>
-    <span class="ver-mais">clique para análise ↑</span>
-  </div>
-  <div class="card-analytics">
-<div class="analytics-section">
-  <div class="analytics-cols">
-    <div class="analytics-col">
-      <div class="analytics-title">Resumo Financeiro</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 6.065,92</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 6.065,92</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
-  <table class="an-table">
-    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>29/11/2024</td><td class="tr mono">R$ 6.065,92</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 29/11/2024</span></td></tr></tbody>
-  </table>
-  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
-  <table class="an-table">
-    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
-  </table>
-</div></div>
-</div>
 <div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
@@ -1126,7 +1110,7 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 20/10/2025">1</span><span class="parc-badge p-vencido" title="Parcela 2 — VENCIDO em 20/11/2025">2</span><span class="parc-badge p-vencido" title="Parcela 3 — VENCIDO em 20/12/2025">3</span><span class="parc-badge p-vencido" title="Parcela 4 — VENCIDO em 20/01/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 20/02/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 20/03/2026">6</span></div>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 20/10/2025">1</span><span class="parc-badge p-vencido" title="Parcela 2 — VENCIDO em 20/11/2025">2</span><span class="parc-badge p-vencido" title="Parcela 3 — VENCIDO em 20/12/2025">3</span><span class="parc-badge p-vencido" title="Parcela 4 — VENCIDO em 20/01/2026">4</span><span class="parc-badge p-vencido" title="Parcela 5 — VENCIDO em 20/02/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 20/03/2026">6</span></div>
       <span class="prog-label">1/6</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:16%"></div></div>
@@ -1157,7 +1141,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 354,28</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>20/11/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (92d)</span></td></tr><tr><td class="tc">#3</td><td>20/12/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (62d)</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (31d)</span></td></tr><tr><td class="tc">#5</td><td>20/02/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>20/03/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>20/10/2025</td><td class="tr mono">R$ 354,28</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/10/2025</span></td></tr><tr><td class="tc">#2</td><td>20/11/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (97d)</span></td></tr><tr><td class="tc">#3</td><td>20/12/2025</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (67d)</span></td></tr><tr><td class="tc">#4</td><td>20/01/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (36d)</span></td></tr><tr><td class="tc">#5</td><td>20/02/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-vencido">! Vencido (5d)</span></td></tr><tr><td class="tc">#6</td><td>20/03/2026</td><td class="tr mono">R$ 59,05</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1166,15 +1150,15 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0987 - UP SIDE ARAGUAIA" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1039 - GOLDEN HILLS" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
-      <span class="cd-badge">0987</span>
-      <strong>Up Side Araguaia</strong>
-      <span class="unid-badge">SALA 538</span>
+      <span class="cd-badge">1039</span>
+      <strong>Golden Hills</strong>
+      <span class="unid-badge">APTO 106</span>
     </div>
     <div class="card-meta">
-      
+      <span class="acordo-num">Acordo #13671</span>
       <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
@@ -1182,19 +1166,19 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 09/02/2026">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: 09/03/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 09/04/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 09/05/2026">4</span></div>
+      <span class="prog-label">1/4</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:25%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>—</strong></span>
-    <span>Valor/parcela: <strong>—</strong></span>
-    <span>Período: — a —</span>
+    <span>Total acordo: <strong>R$ 237,67</strong></span>
+    <span>Valor/parcela: <strong>R$ 59,42</strong></span>
+    <span>Período: 09/02/2026 a 09/05/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -1203,17 +1187,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 237,67</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 59,42</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 178,25</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">25%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody></tbody>
+    <tbody><tr><td class="tc">#1</td><td>09/02/2026</td><td class="tr mono">R$ 237,67</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/02/2026</span></td></tr><tr><td class="tc">#2</td><td>09/03/2026</td><td class="tr mono">R$ 59,42</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>09/04/2026</td><td class="tr mono">R$ 59,42</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>09/05/2026</td><td class="tr mono">R$ 59,42</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1230,7 +1214,7 @@
       <span class="unid-badge">CASA 300 EA</span>
     </div>
     <div class="card-meta">
-      
+      <span class="acordo-num">Acordo #11905</span>
       <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
@@ -1270,6 +1254,62 @@
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
     <tbody></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1093 - CUSTOM" data-status="card-ok" data-resp="giulia nunes">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1093</span>
+      <strong>Custom</strong>
+      <span class="unid-badge">APTO 101</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #12817</span>
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 20/01/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 09/02/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 20/03/2026">3</span></div>
+      <span class="prog-label">2/3</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:66%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 1.284,48</strong></span>
+    <span>Valor/parcela: <strong>R$ 428,16</strong></span>
+    <span>Período: 20/01/2026 a 20/03/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.284,48</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 856,32</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 428,16</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">66%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>20/01/2026</td><td class="tr mono">R$ 516,99</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 20/01/2026</span></td></tr><tr><td class="tc">#2</td><td>09/02/2026</td><td class="tr mono">R$ 767,49</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 09/02/2026</span></td></tr><tr><td class="tc">#3</td><td>20/03/2026</td><td class="tr mono">R$ 428,16</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1334,7 +1374,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-ok" data-resp="giulia nunes">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1122</span>
@@ -1342,7 +1382,7 @@
       <span class="unid-badge">APTO 902</span>
     </div>
     <div class="card-meta">
-      <span class="acordo-num">Acordo #13580</span>
+      <span class="acordo-num">Acordo #10787</span>
       <span class="resp-badge">GIULIA NUNES</span>
       <span class="expand-icon">▼</span>
     </div>
@@ -1350,19 +1390,19 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 13/01/2026">1</span></div>
-      <span class="prog-label">1/1</span>
+      <div class="badges-wrap"></div>
+      <span class="prog-label">0/0</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
       <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
-    <span>Total acordo: <strong>R$ 1.166,10</strong></span>
-    <span>Valor/parcela: <strong>R$ 1.166,10</strong></span>
-    <span>Período: 13/01/2026 a 13/01/2026</span>
+    <span>Total acordo: <strong>—</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: — a —</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
   <div class="card-analytics">
@@ -1371,17 +1411,17 @@
     <div class="analytics-col">
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
-        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 1.166,10</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 1.166,10</span></div>
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
         <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
       </div>
     </div>
   </div>
-  <div class="analytics-title" style="margin-top:14px">Parcelas (1 registros)</div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>13/01/2026</td><td class="tr mono">R$ 1.166,10</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr></tbody>
+    <tbody></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -1446,6 +1486,230 @@
   </table>
 </div></div>
 </div>
+<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1138</span>
+      <strong>Amapi</strong>
+      <span class="unid-badge">053 (I15)</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #14494</span>
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"></div>
+      <span class="prog-label">0/0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>—</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: — a —</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">1138</span>
+      <strong>Amapi</strong>
+      <span class="unid-badge">225 ( H24)</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #14187</span>
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"></div>
+      <span class="prog-label">0/0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>—</strong></span>
+    <span>Valor/parcela: <strong>—</strong></span>
+    <span>Período: — a —</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">—</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (0 parcelas)</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">0%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (0 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="541 - MAISON DU SOLEIL" data-status="card-ok" data-resp="karoliny">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0541</span>
+      <strong>Maison Du Soleil</strong>
+      <span class="unid-badge">APTO 307</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #13666</span>
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 10/02/2026">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: 10/03/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 10/04/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 10/05/2026">4</span></div>
+      <span class="prog-label">1/4</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:25%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 719,55</strong></span>
+    <span>Valor/parcela: <strong>R$ 179,89</strong></span>
+    <span>Período: 10/02/2026 a 10/05/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 719,55</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 179,89</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 539,66</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">25%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>10/02/2026</td><td class="tr mono">R$ 719,55</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 10/02/2026</span></td></tr><tr><td class="tc">#2</td><td>10/03/2026</td><td class="tr mono">R$ 179,89</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>10/04/2026</td><td class="tr mono">R$ 179,89</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>10/05/2026</td><td class="tr mono">R$ 179,89</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="775 - SPAZIO VITA" data-status="card-ok" data-resp="giulia nunes">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0775</span>
+      <strong>Spazio Vita</strong>
+      <span class="unid-badge">APTO 208</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #14236</span>
+      <span class="resp-badge">GIULIA NUNES</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 19/02/2026">1</span><span class="parc-badge p-pendente" title="Parcela 2 — Pendente · Vcto: 19/03/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 19/04/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 19/05/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 19/06/2026">5</span></div>
+      <span class="prog-label">1/5</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:20%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 569,79</strong></span>
+    <span>Valor/parcela: <strong>R$ 113,96</strong></span>
+    <span>Período: 19/02/2026 a 19/06/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 569,79</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (1 parcelas)</span><span class="fin-val green">R$ 113,96</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 455,83</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">20%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (5 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>19/02/2026</td><td class="tr mono">R$ 569,79</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 19/02/2026</span></td></tr><tr><td class="tc">#2</td><td>19/03/2026</td><td class="tr mono">R$ 113,96</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#3</td><td>19/04/2026</td><td class="tr mono">R$ 113,96</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>19/05/2026</td><td class="tr mono">R$ 113,96</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>19/06/2026</td><td class="tr mono">R$ 113,96</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
+  </table>
+</div></div>
+</div>
 </div>
 
 <div class="legend">
@@ -1455,7 +1719,7 @@
   <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div> Jurídico</div>
   <div class="leg-item"><div class="leg-dot" style="background:var(--muted)"></div> Futuro</div>
   <div style="flex:1"></div>
-  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 20/02/2026</span>
+  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 25/02/2026</span>
 </div>
 
 <script>
@@ -1528,6 +1792,35 @@ function toggleCard(header) {
     footer.textContent = analytics.classList.contains('open') ? 'fechar análise ↓' : 'clique para análise ↑';
   }
 }
+
+function closeExtrato() {
+  document.getElementById('extrato-overlay').classList.remove('open');
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeExtrato();
+});
 </script>
+
+<div id="extrato-overlay" onclick="if(event.target===this)closeExtrato()">
+  <div class="extrato-modal">
+    <div class="extrato-header">
+      <div>
+        <h2>📋 Extrato de Alterações — CDMP</h2>
+        <span>105 boletos · 105 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
+      </div>
+      <button class="extrato-close" onclick="closeExtrato()">✕</button>
+    </div>
+    <div class="extrato-body"><table class="extrato-table"><thead><tr><th>Vencimento</th><th>Condomínio</th><th>Unidade</th><th>Responsável</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody><tr><td>15/02/2027</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">15/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/01/2027</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">14/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">13/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/11/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">12/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/10/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">11/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/09/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">10/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/08/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">9/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/07/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/07/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">10/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/07/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/06/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/06/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/06/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">9/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/06/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/06/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/05/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/05/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/05/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/05/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/05/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/05/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/04/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/04/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/04/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/04/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/04/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/04/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 428,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 428,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/03/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/03/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/03/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/03/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/03/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/03/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/02/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 405,95</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/02/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/02/2026</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>19/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/02/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/5</td><td style="text-align:right;font-family:monospace">R$ 569,79</td><td>19/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/02/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>18/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/02/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>18/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/15</td><td style="text-align:right;font-family:monospace">R$ 435,34</td><td>13/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 378,23</td><td>11/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/02/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 719,55</td><td>10/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 767,49</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 237,67</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 767,49</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/02/2026</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 3.846,31</td><td>06/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/02/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 2.249,76</td><td>04/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 312,94</td><td>02/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>26/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 516,99</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 516,99</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>14/01/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>14/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>13/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/01/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/15</td><td style="text-align:right;font-family:monospace">R$ 52,30</td><td>13/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>06/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>05/01/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>05/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>31/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 2.249,76</td><td>31/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/12/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 348,58</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/12/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>23/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/12/2025</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 3.846,31</td><td>23/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/12/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>16/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 872,67</td><td>16/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>15/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2025</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/15</td><td style="text-align:right;font-family:monospace">R$ 52,29</td><td>15/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 604,35</td><td>12/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/12/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>09/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>08/12/2025</td><td><strong>Via Apia</strong></td><td>APTO 201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 1.151,65</td><td>08/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/12/2025</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>02/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/11/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>26/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/11/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 547,38</td><td>26/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/11/2025</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 2.590,97</td><td>25/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/11/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/11/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>18/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/11/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 872,67</td><td>18/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/11/2025</td><td><strong>Mar De Coral</strong></td><td>APTO 904</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 2.647,65</td><td>11/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/11/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>10/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/11/2025</td><td><strong>Via Apia</strong></td><td>APTO 201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 911,26</td><td>06/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>05/11/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>05/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/11/2025</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/8</td><td style="text-align:right;font-family:monospace">R$ -52,50</td><td>04/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 547,38</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Solar Da Vila</strong></td><td>APTO 408</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 1.098,51</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/10/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/5</td><td style="text-align:right;font-family:monospace">R$ 1.943,93</td><td>20/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/10/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 354,28</td><td>20/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>16/10/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 587,85</td><td>16/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/10/2025</td><td><strong>Mar De Coral</strong></td><td>APTO 904</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 2.095,01</td><td>13/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/10/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 461,91</td><td>10/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/10/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/10</td><td style="text-align:right;font-family:monospace">R$ 141,81</td><td>07/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/09/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 153,26</td><td>25/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/09/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 299,55</td><td>25/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/09/2025</td><td><strong>Solar Da Vila</strong></td><td>APTO 408</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 869,22</td><td>23/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr></tbody></table></div>
+    <div class="extrato-footer">
+      <div class="ex-legend">
+        <span class="ex-leg"><span class="ex-badge ex-novo">🆕 Novo</span> apareceu nesta execução</span>
+        <span class="ex-leg"><span class="ex-badge ex-recem_pago">💰 Recém Pago</span> pago desde última execução</span>
+        <span class="ex-leg"><span class="ex-badge ex-vencido">⚠️ Vencido</span> em atraso</span>
+        <span class="ex-leg"><span class="ex-badge ex-aberto">📄 Em Aberto</span> a vencer</span>
+      </div>
+      <span>Retenção: 30 dias</span>
+    </div>
+  </div>
+</div>
 </body>
 </html>
