@@ -69,6 +69,11 @@
   .resp-badge { font-size: 11px; color: var(--muted); background: var(--surface); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
   .filter-sep { color: var(--border); font-size: 16px; margin: 0 4px; user-select: none; }
   .resp-btn.active { border-color: #7c3aed; color: #7c3aed; background: rgba(124,58,237,.08); font-weight: 600; }
+  .tipo-btn.active-parcelado { border-color: #1e3a6e; color: #1e3a6e; background: rgba(30,58,110,.09); font-weight: 600; }
+  .tipo-btn.active-avulso    { border-color: #b45309; color: #b45309; background: rgba(217,119,6,.09);  font-weight: 600; }
+  .tipo-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 700; white-space: nowrap; }
+  .tipo-parcelado { background: rgba(30,58,110,.09);  color: #1e3a6e; border: 1px solid rgba(30,58,110,.22); }
+  .tipo-avulso    { background: rgba(217,119,6,.1);   color: #92400e; border: 1px solid rgba(217,119,6,.3); }
   /* Update banner */
   .update-banner { margin: 0; background: #fffbeb; border-left: 4px solid #f59e0b; border-bottom: 1px solid #fde68a; padding: 10px 20px 12px; }
   .update-header { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 13px; color: #92400e; margin-bottom: 6px; }
@@ -218,12 +223,14 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="btn-extrato" onclick="document.getElementById('extrato-overlay').classList.add('open')">📋 Extrato de Alterações</button>
-    <div class="updated">Atualizado: 25/02/2026 12:54</div>
+    <div class="updated">Atualizado: 25/02/2026 13:26</div>
   </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="n">26</div><div class="l">Acordos</div></div>
+  <div class="stat"><div class="n">26</div><div class="l">Total</div></div>
+  <div class="stat" style="border-left:3px solid #1e3a6e"><div class="n" style="color:#1e3a6e">26</div><div class="l">📋 Parcelados</div></div>
+  <div class="stat" style="border-left:3px solid #d97706"><div class="n" style="color:#92400e">0</div><div class="l">💼 Avulsos</div></div>
   <div class="stat green"><div class="n">12</div><div class="l">Concluídos</div></div>
   <div class="stat yellow"><div class="n">12</div><div class="l">Em Aberto</div></div>
   <div class="stat red"><div class="n">2</div><div class="l">Vencidos</div></div>
@@ -232,17 +239,14 @@
 </div>
 
 
-<div class="update-banner" id="update-banner">
-  <div class="update-header">
-    <span>🔔 Últimas atualizações (desde 20/02 05:54)</span>
-    <button class="update-close" onclick="document.getElementById('update-banner').style.display='none'">✕</button>
-  </div>
-  <ul class="update-list"><li>✅ Waterways West — APTO 701 quitado e baixado do controle</li><li>✅ Up Side Araguaia — SALA 538 quitado e baixado do controle</li><li>✅ Spazio Del Mare Ii — CASA 5 quitado e baixado do controle</li><li>🆕 Novo acordo: Golden Hills — APTO 106 (4 parcelas)</li><li>🆕 Novo acordo: Spazio Vita — APTO 208 (5 parcelas)</li><li>🆕 Novo acordo: Custom — APTO 101 (3 parcelas)</li><li>🆕 Novo acordo: Spazio Del Mare Ii — CASA 3 (4 parcelas)</li><li>🆕 Novo acordo: Maison Du Soleil — APTO 307 (4 parcelas)</li><li>🆕 Novo acordo: Amapi — 053 (I15) (0 parcelas)</li><li>🆕 Novo acordo: Amapi — 225 ( H24) (0 parcelas)</li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 4 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 5 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 6 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 7 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 8 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 9 mudou para </li><li>🔄 Spazio Del Mare Ii — CASA 2: Parcela 10 mudou para </li></ul>
-</div>
 
 <div class="filters">
   <input class="search-box" type="text" id="search" placeholder="Buscar condomínio ou unidade..." onkeyup="filterCards()">
-  <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+  <button class="filter-btn tipo-btn active-parcelado active" id="tipo-todos" onclick="setTipo('all',this)">Todos</button>
+  <button class="filter-btn tipo-btn" id="tipo-parcelado" onclick="setTipo('parcelado',this)">📋 Parcelados</button>
+  <button class="filter-btn tipo-btn" id="tipo-avulso" onclick="setTipo('avulso',this)">💼 Avulsos</button>
+  <span class="filter-sep">|</span>
+  <button class="filter-btn active" onclick="setFilter('all',this)">Todos status</button>
   <button class="filter-btn" onclick="setFilter('card-vencido',this)">⚠ Vencidos</button>
   <button class="filter-btn" onclick="setFilter('card-ok',this)">Em Aberto</button>
   <button class="filter-btn" onclick="setFilter('card-juridico',this)">⚖ Jurídico</button>
@@ -254,12 +258,13 @@
 
 <div class="cards" id="cards-container">
 
-<div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0072 - PACAEMBU" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0072</span>
       <strong>Pacaembu</strong>
       <span class="unid-badge">APTO 0108</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10700</span>
@@ -310,12 +315,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0072 - PACAEMBU" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0072 - PACAEMBU" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0072</span>
       <strong>Pacaembu</strong>
       <span class="unid-badge">APTO 0201</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11013</span>
@@ -337,7 +343,7 @@
   </div>
   <div class="card-footer">
     <span>Total acordo: <strong>R$ 2.994,18</strong></span>
-    <span>Valor/parcela: <strong>R$ 748,54</strong></span>
+    <span>Valor/parcela: <strong>R$ 748,55</strong></span>
     <span>Período: 10/10/2025 a 13/01/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
@@ -348,8 +354,8 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 2.994,18</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,16</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 0,02</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (4 parcelas)</span><span class="fin-val green">R$ 2.994,20</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
         <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
@@ -366,12 +372,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0201 - SOLAR DA VILA" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0201 - SOLAR DA VILA" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0201</span>
       <strong>Solar Da Vila</strong>
       <span class="unid-badge">APTO 408</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10533</span>
@@ -422,12 +429,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0315 - MORADAS DO MAR" data-status="card-vencido" data-resp="giulia nunes">
+<div class="card card-vencido" data-emp="0315 - MORADAS DO MAR" data-status="card-vencido" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0315</span>
       <strong>Moradas Do Mar</strong>
       <span class="unid-badge">CASA 1</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10634</span>
@@ -478,12 +486,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0379 - CATORZE DE JULHO" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0379 - CATORZE DE JULHO" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0379</span>
       <strong>Catorze De Julho</strong>
       <span class="unid-badge">APTO 905</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11335</span>
@@ -534,12 +543,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0383 - JARDIM BOTAFOGO" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0383</span>
       <strong>Jardim Botafogo</strong>
       <span class="unid-badge">APTO 202</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12984</span>
@@ -590,12 +600,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0420</span>
       <strong>Parnasus</strong>
       <span class="unid-badge">APTO 404</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12399</span>
@@ -646,12 +657,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0420 - PARNASUS" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0420 - PARNASUS" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0420</span>
       <strong>Parnasus</strong>
       <span class="unid-badge">APTO 702</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11014</span>
@@ -702,12 +714,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0517 - VIA APIA" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0517 - VIA APIA" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0517</span>
       <strong>Via Apia</strong>
       <span class="unid-badge">APTO 201</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11595</span>
@@ -758,12 +771,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
       <strong>Spazio Del Mare Ii</strong>
       <span class="unid-badge">CASA 2</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12875</span>
@@ -814,12 +828,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
       <strong>Spazio Del Mare Ii</strong>
       <span class="unid-badge">CASA 4</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #13907</span>
@@ -870,12 +885,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="0519 - SPAZIO DEL MARE II" data-status="card-ok" data-resp="karoliny" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0519</span>
       <strong>Spazio Del Mare Ii</strong>
       <span class="unid-badge">CASA 3</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #13782</span>
@@ -926,12 +942,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0562 - VILLA CONSTANZA" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="0562 - VILLA CONSTANZA" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0562</span>
       <strong>Villa Constanza</strong>
       <span class="unid-badge">APTO 0202</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10582</span>
@@ -982,12 +999,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0743 - WATERWAYS WEST" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0743</span>
       <strong>Waterways West</strong>
       <span class="unid-badge">APTO 706</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11122</span>
@@ -1038,12 +1056,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="0805 - MAR DE CORAL" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0805</span>
       <strong>Mar De Coral</strong>
       <span class="unid-badge">APTO 904</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10523</span>
@@ -1094,12 +1113,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-vencido" data-emp="0882 - SOLLAR RECREIO" data-status="card-vencido" data-resp="giulia nunes">
+<div class="card card-vencido" data-emp="0882 - SOLLAR RECREIO" data-status="card-vencido" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0882</span>
       <strong>Sollar Recreio</strong>
       <span class="unid-badge">APTO 204</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11431</span>
@@ -1150,12 +1170,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1039 - GOLDEN HILLS" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1039 - GOLDEN HILLS" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1039</span>
       <strong>Golden Hills</strong>
       <span class="unid-badge">APTO 106</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #13671</span>
@@ -1206,12 +1227,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1047 - AS. VERDE VALE DO ITANHANGA" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1047 - AS. VERDE VALE DO ITANHANGA" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1047</span>
       <strong>As. Verde Vale Do Itanhanga</strong>
       <span class="unid-badge">CASA 300 EA</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #11905</span>
@@ -1262,12 +1284,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1093 - CUSTOM" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1093 - CUSTOM" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1093</span>
       <strong>Custom</strong>
       <span class="unid-badge">APTO 101</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12817</span>
@@ -1318,12 +1341,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1093 - CUSTOM RESIDENCIAS" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1093 - CUSTOM RESIDENCIAS" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1093</span>
       <strong>Custom Residencias</strong>
       <span class="unid-badge">APTO 101</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12817</span>
@@ -1374,12 +1398,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="1122 - CHATEAU CHENONCEAUX" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1122</span>
       <strong>Chateau Chenonceaux</strong>
       <span class="unid-badge">APTO 902</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #10787</span>
@@ -1430,12 +1455,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-done" data-emp="1134 - BOTAFOGO EASYWAY" data-status="card-done" data-resp="giulia nunes">
+<div class="card card-done" data-emp="1134 - BOTAFOGO EASYWAY" data-status="card-done" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1134</span>
       <strong>Botafogo Easyway</strong>
       <span class="unid-badge">APTO 306</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #12318</span>
@@ -1486,12 +1512,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1138</span>
       <strong>Amapi</strong>
       <span class="unid-badge">053 (I15)</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #14494</span>
@@ -1542,12 +1569,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1138</span>
       <strong>Amapi</strong>
       <span class="unid-badge">225 ( H24)</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #14187</span>
@@ -1598,12 +1626,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="541 - MAISON DU SOLEIL" data-status="card-ok" data-resp="karoliny">
+<div class="card card-ok" data-emp="541 - MAISON DU SOLEIL" data-status="card-ok" data-resp="karoliny" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0541</span>
       <strong>Maison Du Soleil</strong>
       <span class="unid-badge">APTO 307</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #13666</span>
@@ -1654,12 +1683,13 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="775 - SPAZIO VITA" data-status="card-ok" data-resp="giulia nunes">
+<div class="card card-ok" data-emp="775 - SPAZIO VITA" data-status="card-ok" data-resp="giulia nunes" data-tipo="parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0775</span>
       <strong>Spazio Vita</strong>
       <span class="unid-badge">APTO 208</span>
+      <span class="tipo-badge tipo-parcelado">📋 Parcelado</span>
     </div>
     <div class="card-meta">
       <span class="acordo-num">Acordo #14236</span>
@@ -1724,11 +1754,19 @@
 
 <script>
 let currentFilter = 'all';
-let currentResp = 'all';
+let currentResp   = 'all';
+let currentTipo   = 'all';
+
+function setTipo(tipo, btn) {
+  currentTipo = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
 
 function setFilter(filter, btn) {
   currentFilter = filter;
-  document.querySelectorAll('.filter-btn:not(.resp-btn)').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.filter-btn:not(.resp-btn):not(.tipo-btn)').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   filterCards();
 }
@@ -1748,11 +1786,12 @@ function setResp(resp, btn) {
 function filterCards() {
   const q = document.getElementById('search').value.toLowerCase();
   document.querySelectorAll('.card').forEach(card => {
+    const matchTipo   = currentTipo === 'all' || card.dataset.tipo === currentTipo;
     const matchFilter = currentFilter === 'all' || card.classList.contains(currentFilter);
-    const matchResp = currentResp === 'all' || card.dataset.resp === currentResp.toLowerCase();
+    const matchResp   = currentResp === 'all' || card.dataset.resp === currentResp.toLowerCase();
     const matchSearch = !q || card.dataset.emp.toLowerCase().includes(q) ||
                         card.textContent.toLowerCase().includes(q);
-    card.style.display = (matchFilter && matchResp && matchSearch) ? '' : 'none';
+    card.style.display = (matchTipo && matchFilter && matchResp && matchSearch) ? '' : 'none';
   });
 }
 
@@ -1806,11 +1845,11 @@ document.addEventListener('keydown', function(e) {
     <div class="extrato-header">
       <div>
         <h2>📋 Extrato de Alterações — CDMP</h2>
-        <span>105 boletos · 105 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
+        <span>105 boletos · 0 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
       </div>
       <button class="extrato-close" onclick="closeExtrato()">✕</button>
     </div>
-    <div class="extrato-body"><table class="extrato-table"><thead><tr><th>Vencimento</th><th>Condomínio</th><th>Unidade</th><th>Responsável</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody><tr><td>15/02/2027</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">15/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/01/2027</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">14/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">13/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/11/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">12/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/10/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">11/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/09/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">10/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/08/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">9/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/07/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/07/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">10/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/07/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/06/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/06/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/06/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">9/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/06/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/06/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/05/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/05/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/05/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/05/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/05/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">8/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/05/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/05/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/04/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/04/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/04/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/04/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/04/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">7/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/04/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/04/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 428,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/03/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 428,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/03/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/5</td><td style="text-align:right;font-family:monospace">R$ 113,96</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/15</td><td style="text-align:right;font-family:monospace">R$ 36,00</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/03/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 850,65</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 94,56</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/03/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 179,89</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/03/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 59,42</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/03/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/10</td><td style="text-align:right;font-family:monospace">R$ 638,12</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/03/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/8</td><td style="text-align:right;font-family:monospace">R$ 441,43</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/03/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 52,16</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/02/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">6/6</td><td style="text-align:right;font-family:monospace">R$ 405,95</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/02/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/02/2026</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>19/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>19/02/2026</td><td><strong>Spazio Vita</strong></td><td>APTO 208</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/5</td><td style="text-align:right;font-family:monospace">R$ 569,79</td><td>19/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/02/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>18/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/02/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>18/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/15</td><td style="text-align:right;font-family:monospace">R$ 435,34</td><td>13/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 3</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 378,23</td><td>11/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/02/2026</td><td><strong>Maison Du Soleil</strong></td><td>APTO 307</td><td style="color:var(--muted)">KAROLINY</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 719,55</td><td>10/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 767,49</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Golden Hills</strong></td><td>APTO 106</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 237,67</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/02/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 767,49</td><td>09/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/02/2026</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 3.846,31</td><td>06/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/02/2026</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 2.249,76</td><td>04/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/02/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 4</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 312,94</td><td>02/02/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">5/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>26/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Custom Residencias</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 516,99</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/01/2026</td><td><strong>Custom</strong></td><td>APTO 101</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 516,99</td><td>20/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>14/01/2026</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>14/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>13/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/01/2026</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/15</td><td style="text-align:right;font-family:monospace">R$ 52,30</td><td>13/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/01/2026</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>06/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>05/01/2026</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>05/01/2026</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>31/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 2.249,76</td><td>31/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/12/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">4/4</td><td style="text-align:right;font-family:monospace">R$ 348,58</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/12/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>23/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/12/2025</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 3.846,31</td><td>23/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/12/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>16/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/3</td><td style="text-align:right;font-family:monospace">R$ 872,67</td><td>16/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>15/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>15/12/2025</td><td><strong>Spazio Del Mare Ii</strong></td><td>CASA 2</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/15</td><td style="text-align:right;font-family:monospace">R$ 52,29</td><td>15/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>12/12/2025</td><td><strong>Parnasus</strong></td><td>APTO 404</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 604,35</td><td>12/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>09/12/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>09/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>08/12/2025</td><td><strong>Via Apia</strong></td><td>APTO 201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 1.151,65</td><td>08/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>02/12/2025</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/8</td><td style="text-align:right;font-family:monospace">R$ 1.194,66</td><td>02/12/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/11/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>26/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>26/11/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">3/4</td><td style="text-align:right;font-family:monospace">R$ 547,38</td><td>26/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/11/2025</td><td><strong>Botafogo Easyway</strong></td><td>APTO 306</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 2.590,97</td><td>25/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/11/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 59,05</td><td>—</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/11/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/5</td><td style="text-align:right;font-family:monospace">R$ 4.715,80</td><td>18/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>18/11/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/3</td><td style="text-align:right;font-family:monospace">R$ 872,67</td><td>18/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>11/11/2025</td><td><strong>Mar De Coral</strong></td><td>APTO 904</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 2.647,65</td><td>11/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/11/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 844,09</td><td>10/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>06/11/2025</td><td><strong>Via Apia</strong></td><td>APTO 201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 911,26</td><td>06/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>05/11/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/10</td><td style="text-align:right;font-family:monospace">R$ 1.559,85</td><td>05/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>04/11/2025</td><td><strong>Catorze De Julho</strong></td><td>APTO 905</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/8</td><td style="text-align:right;font-family:monospace">R$ -52,50</td><td>04/11/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/6</td><td style="text-align:right;font-family:monospace">R$ 570,61</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/4</td><td style="text-align:right;font-family:monospace">R$ 547,38</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>28/10/2025</td><td><strong>Solar Da Vila</strong></td><td>APTO 408</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">2/2</td><td style="text-align:right;font-family:monospace">R$ 1.098,51</td><td>28/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/10/2025</td><td><strong>Waterways West</strong></td><td>APTO 706</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/5</td><td style="text-align:right;font-family:monospace">R$ 1.943,93</td><td>20/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>20/10/2025</td><td><strong>Sollar Recreio</strong></td><td>APTO 204</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 354,28</td><td>20/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>16/10/2025</td><td><strong>Parnasus</strong></td><td>APTO 702</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/3</td><td style="text-align:right;font-family:monospace">R$ 587,85</td><td>16/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>13/10/2025</td><td><strong>Mar De Coral</strong></td><td>APTO 904</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 2.095,01</td><td>13/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>10/10/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0201</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 461,91</td><td>10/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>07/10/2025</td><td><strong>Villa Constanza</strong></td><td>APTO 0202</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/10</td><td style="text-align:right;font-family:monospace">R$ 141,81</td><td>07/10/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/09/2025</td><td><strong>Pacaembu</strong></td><td>APTO 0108</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/6</td><td style="text-align:right;font-family:monospace">R$ 153,26</td><td>25/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>25/09/2025</td><td><strong>Moradas Do Mar</strong></td><td>CASA 1</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/4</td><td style="text-align:right;font-family:monospace">R$ 299,55</td><td>25/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr><tr><td>23/09/2025</td><td><strong>Solar Da Vila</strong></td><td>APTO 408</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 869,22</td><td>23/09/2025</td><td><span class="ex-badge ex-novo">🆕 Novo</span></td></tr></tbody></table></div>
+    <div class="extrato-body"><table class="extrato-table"><thead><tr><th>Vencimento</th><th>Condomínio</th><th>Unidade</th><th>Responsável</th><th>Tipo</th><th style="text-align:center">Parcela</th><th style="text-align:right">Valor</th><th>Pagamento</th><th>Status</th></tr></thead><tbody><tr><td>23/09/2025</td><td><strong>Solar Da Vila</strong></td><td>APTO 408</td><td style="color:var(--muted)">GIULIA NUNES</td><td style="text-align:center"><span class="tipo-badge tipo-parcelado">📋 Parcelado</span></td><td style="text-align:center">1/2</td><td style="text-align:right;font-family:monospace">R$ 869,22</td><td>23/09/2025</td><td><span class="ex-badge ex-pago">✓ Pago</span></td></tr></tbody></table></div>
     <div class="extrato-footer">
       <div class="ex-legend">
         <span class="ex-leg"><span class="ex-badge ex-novo">🆕 Novo</span> apareceu nesta execução</span>
