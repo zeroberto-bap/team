@@ -108,6 +108,7 @@
   .vcto-ok     { background: rgba(29,78,216,.07);  color: #1e4fc7;  border: 1px solid rgba(29,78,216,.22); }
   .vcto-vencido{ background: rgba(220,38,38,.08);  color: #b91c1c;  border: 1px solid rgba(220,38,38,.28); }
   .boleto-none { font-size: 11px; color: var(--muted); font-style: italic; }
+  .badge-nao-localizado { background: rgba(245,158,11,.12); color: #92400e; border: 1px solid rgba(245,158,11,.3); padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
 
   /* Card footer */
   .card-footer { padding: 7px 16px; background: var(--surface2); display: flex; gap: 18px; flex-wrap: wrap; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); }
@@ -223,7 +224,7 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="btn-extrato" onclick="document.getElementById('extrato-overlay').classList.add('open')">📋 Extrato de Alterações</button>
-    <div class="updated">Atualizado: 25/02/2026 15:07</div>
+    <div class="updated">Atualizado: 25/02/2026 15:20</div>
   </div>
 </div>
 
@@ -1239,8 +1240,8 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
+      <div class="badges-wrap"><span class="badge-nao-localizado">⚠ Unidade não localizada na API</span></div>
+      <span class="prog-label">—</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
@@ -1410,8 +1411,8 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
+      <div class="badges-wrap"><span class="badge-nao-localizado">⚠ Unidade não localizada na API</span></div>
+      <span class="prog-label">—</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
@@ -1524,8 +1525,8 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
+      <div class="badges-wrap"><span class="badge-nao-localizado">⚠ Unidade não localizada na API</span></div>
+      <span class="prog-label">—</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
@@ -1581,8 +1582,8 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"></div>
-      <span class="prog-label">0/0</span>
+      <div class="badges-wrap"><span class="badge-nao-localizado">⚠ Unidade não localizada na API</span></div>
+      <span class="prog-label">—</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:0%"></div></div>
     <div class="boletos-row">
@@ -1840,7 +1841,7 @@ document.addEventListener('keydown', function(e) {
     <div class="extrato-header">
       <div>
         <h2>📋 Extrato de Alterações — CDMP</h2>
-        <span>141 boletos · 2 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
+        <span>141 boletos · 0 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
       </div>
       <button class="extrato-close" onclick="closeExtrato()">✕</button>
     </div>
