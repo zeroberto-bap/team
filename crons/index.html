@@ -1,128 +1,394 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>CRONs BAP — Dashboard</title>
 <style>
-body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb;margin:0}
-.wrap{max-width:1200px;margin:0 auto;padding:20px}
-.card{background:#111a2e;border:1px solid #24314f;border-radius:12px;padding:16px;margin-bottom:16px}
-h1{margin:0 0 8px 0} h2{margin:0 0 12px 0;font-size:18px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.kpi{background:#0b1220;border:1px solid #24314f;border-radius:10px;padding:12px;text-align:center}
-.kpi b{font-size:26px;display:block}
-.ok{color:#22c55e}.warn{color:#f59e0b}.bad{color:#ef4444}.info{color:#38bdf8}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{border-bottom:1px solid #24314f;padding:8px;vertical-align:top}
-th{text-align:left;color:#93c5fd}
-.badge{padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
-.b-ok{background:#14532d;color:#86efac}.b-warn{background:#78350f;color:#fcd34d}.b-never{background:#1e3a8a;color:#bfdbfe}.b-run{background:#7c2d12;color:#fdba74}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-.day{background:#0b1220;border:1px solid #24314f;border-radius:10px;min-height:90px;padding:6px}
-.day .d{font-size:12px;color:#93c5fd;margin-bottom:6px}
-.ev{display:block;font-size:10px;padding:2px 6px;border-radius:6px;margin:2px 0;background:#1e293b}
-.ev.weekly{border-left:3px solid #38bdf8}.ev.daily{border-left:3px solid #22c55e}.ev.monthly{border-left:3px solid #f59e0b}.ev.every{border-left:3px solid #a78bfa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:#0b1220;color:#e5e7eb}
+.wrap{max-width:1200px;margin:0 auto;padding:24px 16px}
+h1{font-size:22px;margin-bottom:4px}
+.sub{color:#64748b;font-size:12px;margin-bottom:20px}
+.card{background:#111a2e;border:1px solid #1e2d47;border-radius:12px;padding:18px;margin-bottom:18px}
+.card-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:#0b1220;border:1px solid #1e2d47;border-radius:10px;padding:12px;text-align:center}
+.kpi b{font-size:28px;display:block;line-height:1.1}
+.kpi small{font-size:11px;color:#64748b;margin-top:3px;display:block}
+.ok{color:#22c55e}.warn{color:#f59e0b}.bad{color:#ef4444}.info{color:#38bdf8}.run{color:#f97316}
+/* Categorias */
+.cat{margin-bottom:24px}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1e2d47}
+.cat-icon{font-size:20px}
+.cat-name{font-size:16px;font-weight:700}
+.cat-count{font-size:11px;color:#64748b;margin-left:auto}
+.cron-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:10px}
+.cron-card{background:#0b1220;border:1px solid #1e2d47;border-radius:10px;padding:14px;position:relative}
+.cron-card.cat-sistema{border-left:3px solid #38bdf8}
+.cron-card.cat-bap{border-left:3px solid #22c55e}
+.cron-card.cat-cdmp{border-left:3px solid #a78bfa}
+.cron-card.cat-multi{border-left:3px solid #f59e0b}
+.cron-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.cron-name{font-weight:700;font-size:13px;line-height:1.3}
+.cron-id{font-size:10px;color:#475569;font-family:monospace}
+.badge{padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;white-space:nowrap}
+.b-ok{background:#14532d;color:#86efac}
+.b-warn{background:#78350f;color:#fcd34d}
+.b-never{background:#1e3a5f;color:#93c5fd}
+.b-prod{background:#14532d;color:#4ade80;border:1px solid #22c55e}
+.b-run{background:#7c2d12;color:#fdba74}
+.cron-desc{font-size:11px;color:#94a3b8;margin:6px 0}
+.cron-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:10px;background:#1e2d47;padding:2px 7px;border-radius:6px;color:#94a3b8}
+.tag.sched{color:#93c5fd}
+.tag.dest{color:#a5f3fc}
+.tag.prox{color:#86efac}
+.tag.alert{color:#fcd34d}
+/* Calendário */
+.cal-wrap{overflow-x:auto}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;min-width:700px}
+.cal-head{background:#1e2d47;border-radius:6px;padding:6px;text-align:center;font-size:11px;font-weight:700;color:#93c5fd}
+.day{background:#0b1220;border:1px solid #1e2d47;border-radius:8px;min-height:80px;padding:6px}
+.day.today{border-color:#38bdf8}
+.day .dn{font-size:11px;color:#64748b;margin-bottom:4px}
+.day.today .dn{color:#38bdf8;font-weight:700}
+.ev{display:block;font-size:9px;padding:2px 5px;border-radius:4px;margin:1px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev.s{background:#0c2a4a;border-left:2px solid #38bdf8;color:#93c5fd}
+.ev.b{background:#052e16;border-left:2px solid #22c55e;color:#86efac}
+.ev.c{background:#2e1065;border-left:2px solid #a78bfa;color:#c4b5fd}
+.ev.m{background:#451a03;border-left:2px solid #f59e0b;color:#fcd34d}
+/* Gate */
 #gate{position:fixed;inset:0;background:#020617;display:flex;align-items:center;justify-content:center;z-index:99}
-#box{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:18px;width:340px}
-input{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#020617;color:#e5e7eb;margin:10px 0}
-button{width:100%;padding:10px;border-radius:8px;border:0;background:#2563eb;color:white;font-weight:700;cursor:pointer}
-.small{color:#94a3b8;font-size:12px}
+#box{background:#0f172a;border:1px solid #1e2d47;border-radius:14px;padding:28px;width:360px;text-align:center}
+#box h3{margin-bottom:6px;font-size:18px}
+.hint{color:#64748b;font-size:12px;margin-bottom:16px}
+input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid #1e2d47;background:#020617;color:#e5e7eb;font-size:14px;margin-bottom:10px}
+button{width:100%;padding:10px;border-radius:8px;border:0;background:#2563eb;color:white;font-weight:700;cursor:pointer;font-size:14px}
+button:hover{background:#1d4ed8}
+.err{color:#f87171;font-size:12px;margin-top:6px;min-height:18px}
 </style>
 </head>
 <body>
 <div id="gate">
   <div id="box">
-    <h3>Dashboard CRONs BAP</h3>
-    <div class="small">Página protegida. Digite a senha.</div>
-    <input id="pwd" type="password" placeholder="Senha"/>
+    <div style="font-size:32px;margin-bottom:8px">🤖</div>
+    <h3>CRONs BAP</h3>
+    <div class="hint">Dashboard de atividades programadas</div>
+    <input id="pwd" type="password" placeholder="Senha" onkeydown="if(event.key==='Enter')unlock()"/>
     <button onclick="unlock()">Entrar</button>
-    <div id="err" class="small" style="color:#f87171;margin-top:8px"></div>
+    <div class="err" id="err"></div>
   </div>
 </div>
-<div class="wrap" id="content" style="display:none">
-  <h1>🤖 CRONs BAP — Painel de Saneamento</h1>
-  <div class="small">Atualizado: 24/02/2026 • Timezone: America/New_York • Total: 11 crons ativos</div>
 
+<div class="wrap" id="content" style="display:none">
+  <h1>🤖 CRONs BAP — Painel de Atividades</h1>
+  <div class="sub">Atualizado: 24/02/2026 · Timezone: America/New_York · 11 crons ativos</div>
+
+  <!-- KPIs -->
   <div class="card">
-    <h2>Status geral</h2>
-    <div class="grid">
-      <div class="kpi"><b class="ok">5</b>OK</div>
-      <div class="kpi"><b class="warn">1</b>Atenção</div>
-      <div class="kpi"><b class="info">4</b>Nunca rodou</div>
-      <div class="kpi"><b class="bad">1</b>Rodando agora</div>
+    <div class="card-title">📊 Status Geral</div>
+    <div class="grid4">
+      <div class="kpi"><b class="ok">6</b><small>✅ OK / PROD</small></div>
+      <div class="kpi"><b class="warn">1</b><small>⚠️ Atenção</small></div>
+      <div class="kpi"><b class="info">4</b><small>⏳ Nunca rodou</small></div>
+      <div class="kpi"><b style="color:#a78bfa">4</b><small>📁 Categorias</small></div>
     </div>
   </div>
 
+  <!-- Calendário Março -->
   <div class="card">
-    <h2>Calendário mensal visual — Março/2026</h2>
-    <div class="small" style="margin-bottom:8px">Legenda: <span class="ev daily">Diário</span> <span class="ev weekly">Semanal</span> <span class="ev monthly">Mensal</span> <span class="ev every">Intervalo (every)</span></div>
-    <div class="cal" id="cal"></div>
+    <div class="card-title">📅 Calendário — Março/2026</div>
+    <div class="hint" style="margin-bottom:10px;color:#64748b;font-size:11px">
+      <span class="ev s" style="display:inline-block;margin-right:8px">Sistema</span>
+      <span class="ev b" style="display:inline-block;margin-right:8px">BAP</span>
+      <span class="ev c" style="display:inline-block;margin-right:8px">CDMP</span>
+      <span class="ev m" style="display:inline-block">Multi Seguros</span>
+    </div>
+    <div class="cal-wrap">
+      <div class="cal" id="cal"></div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Tabela de CRONs (nome + descrição da atividade)</h2>
-    <table>
-      <thead><tr><th>Status</th><th>Cron</th><th>Agenda</th><th>Descrição da atividade</th><th>Destinatários</th></tr></thead>
-      <tbody>
-        <tr><td><span class="badge b-run">RUN</span></td><td>CRM BAP — Relatório Quinzenal<br><small>aa0757dc</small></td><td>Terça 19h</td><td>Gera relatório dos últimos 15 dias do RD CRM, cria PDF, envia email + resumo Telegram.</td><td>Rafael, Pedro</td></tr>
-        <tr><td><span class="badge b-ok">OK</span></td><td>OpenClaw Update Check<br><small>03988345</small></td><td>Diário 2:55h</td><td>Verifica update do OpenClaw, atualiza se necessário e notifica no Telegram.</td><td>Telegram Rafael</td></tr>
-        <tr><td><span class="badge b-ok">OK</span></td><td>Backup Noturno Drive<br><small>b389e54d</small></td><td>Diário 3h</td><td>Executa backup do workspace para Google Drive.</td><td>Drive</td></tr>
-        <tr><td><span class="badge b-info b-never">NUNCA</span></td><td>healthcheck:security-audit<br><small>e2e2de71</small></td><td>A cada 10 dias</td><td>Auditoria de segurança profunda do ambiente OpenClaw + recomendações.</td><td>Telegram</td></tr>
-        <tr><td><span class="badge b-info b-never">NUNCA</span></td><td>Security: Monthly Memory & Repo Scan<br><small>cdea8d70</small></td><td>Dia 1, 4h</td><td>Varredura mensal por credenciais expostas e riscos no workspace.</td><td>Interno + Telegram</td></tr>
-        <tr><td><span class="badge b-ok">OK</span></td><td>Security: Gateway Weekly Check<br><small>1b6a94e9</small></td><td>Segunda 2h</td><td>Checagem semanal do gateway (bind, auth, portas e permissões).</td><td>Interno</td></tr>
-        <tr><td><span class="badge b-ok">OK</span></td><td>Roadmap BAP Live 2026<br><small>e76f594d</small></td><td>Segunda 3h</td><td>Gera relatório Roadmap (HTML/PDF), envia por email e confirma no Telegram.</td><td>Rafael, Guilherme, Pedro, Aguiar</td></tr>
-        <tr><td><span class="badge b-warn">WARN</span></td><td>CDMP — Relatório Semanal<br><small>42a093e4</small></td><td>Segunda 17h</td><td>Gera priorização CDMP, envia PDF e resumo com críticos/atenção.</td><td>Herb, Steph, Pedro, Rafael</td></tr>
-        <tr><td><span class="badge b-info b-never">NUNCA</span></td><td>Multi Seguros — Relatório Mensal<br><small>0c6b0280</small></td><td>Dia 10, 4h</td><td>Relatório mensal de seguros com métricas de prêmio/comissão.</td><td>Rafael, Tavares</td></tr>
-        <tr><td><span class="badge b-ok">OK</span></td><td>Monitor Reclame Aqui — Quinzenal<br><small>b463b438</small></td><td>A cada 15 dias</td><td>Monitora 27 empresas (20 concorr + BAP), filtra 15 dias, gera relatório e envia.</td><td>Rafael, Pedro, Herb</td></tr>
-        <tr><td><span class="badge b-info b-never">NUNCA</span></td><td>Relatório Consultores BAP<br><small>f7a2498a</small></td><td>Dia 14, 7h</td><td>Pipeline financeiro completo de consultores, gera dashboard e envia.</td><td>Rafael</td></tr>
-      </tbody>
-    </table>
+  <!-- CATEGORIA: SISTEMA -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">🖥️</span>
+      <span class="cat-name" style="color:#38bdf8">Sistema &amp; Infraestrutura</span>
+      <span class="cat-count">5 crons</span>
+    </div>
+    <div class="cron-grid">
+
+      <div class="cron-card cat-sistema">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🔄 OpenClaw Update Check</div>
+            <div class="cron-id">03988345</div>
+          </div>
+          <span class="badge b-ok">✅ OK</span>
+        </div>
+        <div class="cron-desc">Verifica se há update do OpenClaw. Se houver, atualiza e notifica no Telegram. Sem update → silencioso.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Diário 2:55h AM</span>
+          <span class="tag dest">📨 Telegram Rafael (só se atualizar)</span>
+          <span class="tag prox">▶ Todo dia</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-sistema">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">💾 Backup Noturno Drive</div>
+            <div class="cron-id">b389e54d</div>
+          </div>
+          <span class="badge b-ok">✅ OK</span>
+        </div>
+        <div class="cron-desc">ZIP do workspace → upload Google Drive → cleanup arquivos &gt;7 dias. Último: 24/02 em 24s.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Diário 3h AM</span>
+          <span class="tag dest">📁 Google Drive</span>
+          <span class="tag prox">▶ Todo dia</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-sistema">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🔒 Security: Gateway Weekly</div>
+            <div class="cron-id">1b6a94e9</div>
+          </div>
+          <span class="badge b-ok">✅ OK</span>
+        </div>
+        <div class="cron-desc">Checagem semanal: bind localhost, autenticação, portas abertas, permissões ~/.openclaw. Último: 22/02.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Segunda 2h AM</span>
+          <span class="tag dest">📨 Telegram se anomalia</span>
+          <span class="tag prox">▶ 02/03</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-sistema">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🔐 Security: Monthly Scan</div>
+            <div class="cron-id">cdea8d70</div>
+          </div>
+          <span class="badge b-never">⏳ NUNCA</span>
+        </div>
+        <div class="cron-desc">Varredura mensal por tokens/senhas expostos em memória e scripts. Verifica workspace size e permissões.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Dia 1, 4h AM</span>
+          <span class="tag dest">📨 Telegram Rafael</span>
+          <span class="tag prox">▶ 01/03</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-sistema">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🛡️ Security: Healthcheck</div>
+            <div class="cron-id">e2e2de71</div>
+          </div>
+          <span class="badge b-never">⏳ NUNCA</span>
+        </div>
+        <div class="cron-desc">Auditoria profunda: CVEs, firewall macOS, portas, permissões. Pesquisa vulnerabilidades recentes.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ A cada 10 dias</span>
+          <span class="tag dest">📨 Telegram Rafael</span>
+          <span class="tag prox">▶ 26/02</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Análise geral (sanitização da base)</h2>
-    <ul>
-      <li><b>Governança:</b> base já está mais limpa (11 crons, sem duplicatas de CDMP e Multi Weekly removido).</li>
-      <li><b>Risco atual:</b> 1 cron em atenção (CDMP) por erro histórico de timeout antigo. Recomendado dry-run antes da próxima segunda.</li>
-      <li><b>Confiabilidade:</b> Roadmap corrigido para fonte ao vivo via Playwright. Evita discrepância de itens.</li>
-      <li><b>Operação:</b> CRM quinzenal está rodando agora (janela esperada de terça 19h).</li>
-      <li><b>Backlog de validação:</b> Security Monthly, Healthcheck, Multi Mensal e Consultores ainda não tiveram primeira execução.</li>
-      <li><b>Ação recomendada hoje:</b> criar checklist fixo de pré-run (dry-run + validação de destinatários) para todos os crons nunca rodados.</li>
-    </ul>
+  <!-- CATEGORIA: BAP -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">🏢</span>
+      <span class="cat-name" style="color:#22c55e">BAP — Relatórios &amp; Monitoramento</span>
+      <span class="cat-count">4 crons</span>
+    </div>
+    <div class="cron-grid">
+
+      <div class="cron-card cat-bap">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🗺️ Roadmap BAP Live 2026</div>
+            <div class="cron-id">e76f594d</div>
+          </div>
+          <span class="badge b-ok">✅ OK</span>
+        </div>
+        <div class="cron-desc">Baixa planilha ao vivo (Playwright), processa 65 itens por status/GUT/setor, gera PDF e envia. Último: 23/02 em 173s.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Segunda 3h AM</span>
+          <span class="tag dest">📧 Rafael, Guilherme, Pedro, Aguiar</span>
+          <span class="tag prox">▶ 02/03</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-bap">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">📊 CRM BAP — Semanal</div>
+            <div class="cron-id">aa0757dc</div>
+          </div>
+          <span class="badge b-prod">🚀 PROD</span>
+        </div>
+        <div class="cron-desc">Últimos 7 dias do RD CRM. Filtra imóvel/Airbnb/usuários automáticos. Enriquece deals em paralelo. 151 ativ. esta semana.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Terça 17h ET</span>
+          <span class="tag dest">📧 Rafael, Pedro</span>
+          <span class="tag prox">▶ 03/03</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-bap">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🏪 Monitor Reclame Aqui</div>
+            <div class="cron-id">b463b438</div>
+          </div>
+          <span class="badge b-prod">🚀 PROD</span>
+        </div>
+        <div class="cron-desc">27 empresas (26 concorrentes + BAP). Filtra 15 dias. BAP em seção separada. Tempo: ~75-90s. Cloudflare → browser CDP.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ A cada 15 dias</span>
+          <span class="tag dest">📧 Rafael, Pedro, Herb</span>
+          <span class="tag prox">▶ 11/03</span>
+        </div>
+      </div>
+
+      <div class="cron-card cat-bap">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">📁 Relatório Consultores</div>
+            <div class="cron-id">f7a2498a</div>
+          </div>
+          <span class="badge b-never">⏳ NUNCA</span>
+        </div>
+        <div class="cron-desc">Pipeline financeiro completo. ~800 chamadas API LiveFacilities. Dura ~25min. Gera dashboard HTML e envia por email.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Dia 14, 7h AM</span>
+          <span class="tag dest">📧 Rafael</span>
+          <span class="tag prox">▶ 14/03</span>
+          <span class="tag alert">⚠️ Dry-run antes</span>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
+
+  <!-- CATEGORIA: CDMP -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">📋</span>
+      <span class="cat-name" style="color:#a78bfa">CDMP — Cobrança e Priorização</span>
+      <span class="cat-count">1 cron</span>
+    </div>
+    <div class="cron-grid">
+
+      <div class="cron-card cat-cdmp">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">📋 CDMP — Relatório Semanal</div>
+            <div class="cron-id">42a093e4</div>
+          </div>
+          <span class="badge b-warn">⚠️ WARN</span>
+        </div>
+        <div class="cron-desc">Classifica moradores por dias sem contato: 🔴 CRÍTICO (15+d), 🟡 ATENÇÃO (10-14d), 🟢 NORMAL (&lt;10d). Gera PDF e envia.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Segunda 17h ET</span>
+          <span class="tag dest">📧 Herb, Steph, Pedro, Rafael</span>
+          <span class="tag prox">▶ 02/03</span>
+          <span class="tag alert">⚠️ Dry-run antes de 02/03</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CATEGORIA: MULTI SEGUROS -->
+  <div class="cat">
+    <div class="cat-header">
+      <span class="cat-icon">🛡️</span>
+      <span class="cat-name" style="color:#f59e0b">Multi Seguros</span>
+      <span class="cat-count">1 cron</span>
+    </div>
+    <div class="cron-grid">
+
+      <div class="cron-card cat-multi">
+        <div class="cron-top">
+          <div>
+            <div class="cron-name">🛡️ Multi Seguros — Mensal</div>
+            <div class="cron-id">0c6b0280</div>
+          </div>
+          <span class="badge b-never">⏳ NUNCA</span>
+        </div>
+        <div class="cron-desc">Relatório mensal de apólices: prêmios, comissões, taxa de conversão. Baixa planilha Drive, processa, gera PDF.</div>
+        <div class="cron-meta">
+          <span class="tag sched">⏰ Dia 10, 4h AM</span>
+          <span class="tag dest">📧 Rafael, Tavares (Multi)</span>
+          <span class="tag prox">▶ 10/03</span>
+          <span class="tag alert">⚠️ Dry-run antes</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
 
 <script>
 const PASSWORD = "crons26";
 function unlock(){
-  const p=document.getElementById('pwd').value;
-  if(p===PASSWORD){document.getElementById('gate').style.display='none';document.getElementById('content').style.display='block';}
-  else document.getElementById('err').innerText='Senha inválida.';
+  if(document.getElementById('pwd').value === PASSWORD){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('content').style.display='block';
+  } else {
+    document.getElementById('err').textContent='Senha inválida.';
+  }
 }
-// calendário março/2026
+
+// ── Calendário Março/2026 ──────────────────────────────
+const CAL = document.getElementById('cal');
+// Headers
+['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>{
+  const h=document.createElement('div');h.className='cal-head';h.textContent=d;CAL.appendChild(h);
+});
+
+// Março começa domingo (firstDow=0)
+for(let i=0;i<0;i++){const e=document.createElement('div');e.className='day';CAL.appendChild(e);}
+
 const events = {
-  1:[['monthly','Security Monthly (4h)']],
-  2:[['weekly','Gateway Weekly (2h)'],['weekly','Roadmap (3h)'],['weekly','CDMP (17h)']],
-  3:[['weekly','CRM Quinzenal (19h)']],
-  9:[['weekly','Gateway Weekly (2h)'],['weekly','Roadmap (3h)'],['weekly','CDMP (17h)']],
-  10:[['monthly','Multi Mensal (4h)']],
-  11:[['every','Reclame Aqui (quinzenal)']],
-  14:[['monthly','Relatório Consultores (7h)']],
-  16:[['weekly','Gateway Weekly (2h)'],['weekly','Roadmap (3h)'],['weekly','CDMP (17h)']],
-  23:[['weekly','Gateway Weekly (2h)'],['weekly','Roadmap (3h)'],['weekly','CDMP (17h)']],
-  30:[['weekly','Gateway Weekly (2h)'],['weekly','Roadmap (3h)'],['weekly','CDMP (17h)']],
+  1: [['s','Security Scan (4h)']],
+  2: [['s','Gateway (2h)'],['b','Roadmap (3h)'],['c','CDMP (17h)']],
+  3: [['b','CRM Semanal (17h)']],
+  9: [['s','Gateway (2h)'],['b','Roadmap (3h)'],['c','CDMP (17h)']],
+  10:[['m','Multi Mensal (4h)'],['b','CRM Semanal (17h)']],
+  11:[['b','Reclame Aqui (3h)']],
+  14:[['b','Consultores (7h)']],
+  16:[['s','Gateway (2h)'],['b','Roadmap (3h)'],['c','CDMP (17h)']],
+  17:[['b','CRM Semanal (17h)']],
+  23:[['s','Gateway (2h)'],['b','Roadmap (3h)'],['c','CDMP (17h)']],
+  24:[['b','CRM Semanal (17h)']],
+  26:[['s','Healthcheck']],
+  30:[['s','Gateway (2h)'],['b','Roadmap (3h)'],['c','CDMP (17h)']],
+  31:[['b','CRM Semanal (17h)']],
 };
-const cal=document.getElementById('cal');
-['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d=>{const x=document.createElement('div');x.className='day';x.innerHTML='<b>'+d+'</b>';cal.appendChild(x)});
-const firstDow=0, days=31; // março/2026 começa domingo
-for(let i=0;i<firstDow;i++){const e=document.createElement('div');e.className='day';cal.appendChild(e)}
-for(let d=1; d<=days; d++){
-  const box=document.createElement('div'); box.className='day';
-  box.innerHTML='<div class="d">'+d+'</div>';
-  box.innerHTML += '<span class="ev daily">Update 2:55h</span><span class="ev daily">Backup 3h</span>';
-  (events[d]||[]).forEach(ev=> box.innerHTML += '<span class="ev '+ev[0]+'">'+ev[1]+'</span>');
-  cal.appendChild(box);
+
+for(let d=1;d<=31;d++){
+  const box=document.createElement('div');
+  box.className='day'+(d===2||d===9||d===16||d===23||d===30?' ':' ');
+  box.innerHTML=`<div class="dn">${d}</div>`;
+  // Daily
+  box.innerHTML+=`<span class="ev s">Update 2:55h</span><span class="ev s">Backup 3h</span>`;
+  // Specific
+  (events[d]||[]).forEach(([cls,lbl])=>{
+    box.innerHTML+=`<span class="ev ${cls}">${lbl}</span>`;
+  });
+  CAL.appendChild(box);
 }
 </script>
 </body>
