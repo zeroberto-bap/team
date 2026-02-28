@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>FOGE DO CASAMENTO! 💍</title>
+<style>
+  body { background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Courier New', monospace; color: #fff; }
+  h1 { color: #ff4499; font-size: 28px; margin-bottom: 5px; text-shadow: 0 0 10px #ff4499; }
+  #subtitle { color: #aaa; font-size: 13px; margin-bottom: 10px; }
+  canvas { border: 3px solid #ff4499; box-shadow: 0 0 20px #ff449966; background: #000; }
+  #hud { display: flex; gap: 40px; margin-top: 8px; font-size: 16px; }
+  #msg { font-size: 22px; color: #ffcc00; margin-top: 8px; min-height: 30px; text-align: center; }
+  #controls { color: #666; font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+<h1>💍 FOGE DO CASAMENTO! 💍</h1>
+<div id="subtitle">Megan quer casar. Você não.</div>
+<canvas id="c" width="560" height="560"></canvas>
+<div id="hud">
+  <span>❤️ VIDAS: <span id="lives">3</span></span>
+  <span>🍺 SCORE: <span id="score">0</span></span>
+  <span>💀 FASE: <span id="level">1</span></span>
+</div>
+<div id="msg" id="msg"></div>
+<div id="controls">← ↑ → ↓ para mover | ENTER para começar</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 560, H = 560;
+const TILE = 40;
+const COLS = W / TILE; // 14
+const ROWS = H / TILE; // 14
+
+// ---- MAZE LAYOUT ---- (1=wall, 0=dot, 2=empty, 3=power pellet)
+const baseMaze = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,0,0,0,0,0,1,1,0,0,0,0,0,1],
+  [1,0,1,1,0,0,0,0,0,0,1,1,0,1],
+  [1,3,1,1,0,1,1,1,1,0,1,1,3,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,0,1,1,2,2,1,1,0,1,0,1],
+  [1,0,1,0,1,2,2,2,2,1,0,1,0,1],
+  [1,0,1,0,1,2,2,2,2,1,0,1,0,1],
+  [1,0,1,0,1,1,2,2,1,1,0,1,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,3,1,1,0,1,1,1,1,0,1,1,3,1],
+  [1,0,1,1,0,0,0,0,0,0,1,1,0,1],
+  [1,0,0,0,0,0,1,1,0,0,0,0,0,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+];
+
+let maze, dots, player, megan, score, lives, gameState, level, powerTimer, msgTimeout;
+
+const messages_caught = [
+  "SIM MINHA AMOR!! 💍💒",
+  "VOCÊ É MEU AGORA! 👰",
+  "JÁ MARQUEI A IGREJA! ⛪",
+  "MINHA MÃE VAI ADORAR! 😍",
+  "COMPREI O VESTIDO! 👗",
+];
+const messages_power = [
+  "LONGE DE MIM! 🏃💨",
+  "NÃO HOJE MEGAN!",
+  "SOU LIVRE!! 🎉",
+  "SOLTEIRO PRA SEMPRE! 🍺",
+];
+
+function initGame() {
+  maze = baseMaze.map(r => [...r]);
+  dots = 0;
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++) if(maze[r][c]===0||maze[r][c]===3) dots++;
+  player = { col: 1, row: 1, x: 1*TILE+TILE/2, y: 1*TILE+TILE/2, dx:0, dy:0, powered:false };
+  megan = { col: 7, row: 6, x: 7*TILE+TILE/2, y: 6*TILE+TILE/2, frightened:false, dir:{dx:1,dy:0}, moveTimer:0 };
+  powerTimer = 0;
+  gameState = 'playing';
+  document.getElementById('msg').textContent = '';
+}
+
+function resetPositions() {
+  player.col=1; player.row=1; player.x=1*TILE+TILE/2; player.y=1*TILE+TILE/2;
+  player.dx=0; player.dy=0; player.powered=false;
+  megan.col=7; megan.row=6; megan.x=7*TILE+TILE/2; megan.y=6*TILE+TILE/2;
+  megan.frightened=false; powerTimer=0;
+}
+
+function showMsg(txt, color='#ffcc00') {
+  const el = document.getElementById('msg');
+  el.textContent = txt;
+  el.style.color = color;
+  clearTimeout(msgTimeout);
+  msgTimeout = setTimeout(()=>el.textContent='',2500);
+}
+
+// ---- DRAW FUNCTIONS ----
+function drawWall(x,y) {
+  ctx.fillStyle = '#1a1aff';
+  ctx.fillRect(x,y,TILE,TILE);
+  ctx.strokeStyle = '#4444ff';
+  ctx.strokeRect(x+2,y+2,TILE-4,TILE-4);
+}
+
+function drawDot(cx,cy) {
+  ctx.fillStyle = '#ffcc99';
+  ctx.beginPath();
+  ctx.arc(cx,cy,3,0,Math.PI*2);
+  ctx.fill();
+}
+
+function drawPellet(cx,cy,t) {
+  const s = 1 + 0.3*Math.sin(t*0.1);
+  ctx.fillStyle = '#ff4499';
+  ctx.beginPath();
+  ctx.arc(cx,cy,7*s,0,Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.font = '10px serif';
+  ctx.fillText('💍',cx-7,cy+4);
+}
+
+// Draw the guy — round face, dark curly hair, beard, big smile
+function drawGuy(x, y, powered, t) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  // Blink when powered
+  if(powered && Math.floor(t/6)%2===0) {
+    ctx.globalAlpha = 0.7;
+  }
+
+  // Neck
+  ctx.fillStyle = '#FDBCB4';
+  ctx.fillRect(-6, 12, 12, 10);
+
+  // Face
+  ctx.fillStyle = '#FDBCB4';
+  ctx.beginPath();
+  ctx.arc(0, 0, 18, 0, Math.PI*2);
+  ctx.fill();
+  // Face shadow sides
+  ctx.fillStyle = '#F0A090';
+  ctx.beginPath();
+  ctx.arc(-14, 2, 6, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(14, 2, 6, 0, Math.PI*2);
+  ctx.fill();
+
+  // Dark curly hair
+  ctx.fillStyle = '#1a0a00';
+  for(let i=-3;i<=3;i++) {
+    ctx.beginPath();
+    ctx.arc(i*5, -16, 7+Math.sin(i)*1.5, 0, Math.PI*2);
+    ctx.fill();
+  }
+  // Side hair
+  ctx.beginPath();
+  ctx.arc(-18, -6, 6, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(18, -6, 6, 0, Math.PI*2);
+  ctx.fill();
+
+  // Eyes
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(-6, -4, 5, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(6, -4, 5, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#2a1a00';
+  ctx.beginPath(); ctx.arc(-6, -4, 3, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(6, -4, 3, 0, Math.PI*2); ctx.fill();
+  // Eye shine
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(-5, -5, 1.2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(7, -5, 1.2, 0, Math.PI*2); ctx.fill();
+
+  // Big smile
+  ctx.strokeStyle = '#8B2020';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(0, 4, 10, 0.2, Math.PI-0.2);
+  ctx.stroke();
+  // Teeth
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(-8, 5, 16, 5);
+  ctx.strokeStyle = '#ddd';
+  ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(-3,5); ctx.lineTo(-3,10); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(3,5); ctx.lineTo(3,10); ctx.stroke();
+
+  // Beard (dark, full)
+  ctx.fillStyle = '#1a0a00';
+  ctx.beginPath();
+  ctx.arc(0, 12, 12, 0.1, Math.PI-0.1);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(-12, 6, 7, 0.5, Math.PI*1.5);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(12, 6, 7, Math.PI*1.5, 2.5);
+  ctx.fill();
+  // Mustache
+  ctx.fillStyle = '#2a1000';
+  ctx.beginPath();
+  ctx.ellipse(-4, 8, 6, 4, -0.3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(4, 8, 6, 4, 0.3, 0, Math.PI*2);
+  ctx.fill();
+
+  // Shirt collar (blue, like in the photo)
+  ctx.fillStyle = '#1a3a8f';
+  ctx.beginPath();
+  ctx.moveTo(-12,16); ctx.lineTo(-18,28); ctx.lineTo(18,28); ctx.lineTo(12,16);
+  ctx.closePath(); ctx.fill();
+
+  // Running legs (animated)
+  const legSwing = Math.sin(t*0.3)*12;
+  ctx.strokeStyle = '#1a3a8f';
+  ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.moveTo(-4,20); ctx.lineTo(-4+legSwing,32); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(4,20); ctx.lineTo(4-legSwing,32); ctx.stroke();
+
+  ctx.restore();
+}
+
+// Draw Megan — girl with veil, wedding dress, holding a ring
+function drawMegan(x, y, frightened, t) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  if(frightened) {
+    // When powered: Megan looks scared
+    ctx.globalAlpha = 0.6;
+    ctx.fillStyle = '#aaaaff';
+    ctx.beginPath(); ctx.arc(0,0,18,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 18px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('😱', -9, 8);
+    ctx.font = '11px Courier';
+    ctx.fillStyle = '#ff0';
+    ctx.fillText('NOOO!', 0, -22);
+    ctx.restore();
+    return;
+  }
+
+  // Dress (white)
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.moveTo(-14,14); ctx.lineTo(-20,30); ctx.lineTo(20,30); ctx.lineTo(14,14);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = '#ffaacc';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Body
+  ctx.fillStyle = '#FFD0E0';
+  ctx.fillRect(-10, 0, 20, 16);
+
+  // Face
+  ctx.fillStyle = '#FFD0C0';
+  ctx.beginPath();
+  ctx.arc(0, -6, 14, 0, Math.PI*2);
+  ctx.fill();
+
+  // Hair (blonde/brown)
+  ctx.fillStyle = '#CC8800';
+  ctx.beginPath(); ctx.arc(0,-16,10,0,Math.PI*2); ctx.fill();
+  ctx.fillRect(-14,-14,6,14);
+  ctx.fillRect(8,-14,6,14);
+
+  // Veil
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.beginPath();
+  ctx.arc(0,-16,13,Math.PI,2*Math.PI);
+  ctx.fill();
+  ctx.strokeStyle = '#ffaacc';
+  ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(-13,-16); ctx.lineTo(-15,10); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(13,-16); ctx.lineTo(15,10); ctx.stroke();
+
+  // Flower on veil
+  ctx.fillStyle = '#ff6699';
+  ctx.beginPath(); ctx.arc(0,-28,5,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#ffff00';
+  ctx.beginPath(); ctx.arc(0,-28,2,0,Math.PI*2); ctx.fill();
+
+  // Eyes (hearts)
+  ctx.fillStyle = '#ff3377';
+  ctx.font = '10px serif';
+  ctx.fillText('♥',- 8,-8);
+  ctx.fillText('♥', 2,-8);
+
+  // Smile
+  ctx.strokeStyle = '#cc3366';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(0,-2,6,0.3,Math.PI-0.3); ctx.stroke();
+
+  // Ring (held up)
+  const ringBob = Math.sin(t*0.2)*3;
+  ctx.strokeStyle = '#ffcc00';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(20, -10+ringBob, 7, 0, Math.PI*2); ctx.stroke();
+  ctx.fillStyle = '#00ffff';
+  ctx.beginPath(); ctx.arc(20, -10+ringBob-7, 4, 0, Math.PI*2); ctx.fill();
+
+  // Running legs
+  const legSwing = Math.sin(t*0.3)*10;
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(-4,28); ctx.lineTo(-4+legSwing,38); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(4,28); ctx.lineTo(4-legSwing,38); ctx.stroke();
+
+  // Label
+  ctx.fillStyle = '#ff4499';
+  ctx.font = 'bold 10px Courier New';
+  ctx.textAlign = 'center';
+  ctx.fillText('MEGAN 💒', 0, -34);
+
+  ctx.restore();
+}
+
+// ---- MOVEMENT ----
+const keys = {};
+document.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if(e.key === 'Enter' && gameState !== 'playing') {
+    if(gameState === 'gameover') { lives=3; score=0; level=1; document.getElementById('lives').textContent=3; document.getElementById('score').textContent=0; document.getElementById('level').textContent=1; }
+    initGame();
+    gameState = 'playing';
+  }
+  e.preventDefault();
+});
+document.addEventListener('keyup', e => keys[e.key] = false);
+
+function canMove(col, row) {
+  if(col<0||col>=COLS||row<0||row>=ROWS) return false;
+  return maze[row][col] !== 1;
+}
+
+let t = 0;
+let meganMoveDelay = 30; // frames per tile
+
+function update() {
+  if(gameState !== 'playing') return;
+  t++;
+
+  // Player input
+  let ndx = player.dx, ndy = player.dy;
+  if(keys['ArrowLeft'])  { ndx=-1; ndy=0; }
+  if(keys['ArrowRight']) { ndx=1;  ndy=0; }
+  if(keys['ArrowUp'])    { ndx=0;  ndy=-1; }
+  if(keys['ArrowDown'])  { ndx=0;  ndy=1; }
+
+  // Snap-based movement
+  const speed = 2;
+  const px = player.x + ndx*speed;
+  const py = player.y + ndy*speed;
+  const pcol = Math.round((px - TILE/2) / TILE);
+  const prow = Math.round((py - TILE/2) / TILE);
+  if(canMove(pcol, prow)) {
+    player.dx = ndx; player.dy = ndy;
+  }
+  const nx = player.x + player.dx*speed;
+  const ny = player.y + player.dy*speed;
+  const nc = Math.round((nx - TILE/2) / TILE);
+  const nr = Math.round((ny - TILE/2) / TILE);
+  if(canMove(nc, nr)) {
+    player.x = nx; player.y = ny;
+    player.col = Math.floor(player.x/TILE);
+    player.row = Math.floor(player.y/TILE);
+  }
+
+  // Tunnel wrap
+  if(player.x < 0) player.x = W;
+  if(player.x > W) player.x = 0;
+
+  // Eat dots
+  const cr = Math.round((player.y - TILE/2) / TILE);
+  const cc = Math.round((player.x - TILE/2) / TILE);
+  if(cr>=0&&cr<ROWS&&cc>=0&&cc<COLS) {
+    if(maze[cr][cc]===0) { maze[cr][cc]=2; score+=10; dots--; document.getElementById('score').textContent=score; }
+    if(maze[cr][cc]===3) {
+      maze[cr][cc]=2; score+=50; dots--;
+      player.powered = true; megan.frightened = true;
+      powerTimer = 300;
+      document.getElementById('score').textContent=score;
+      showMsg(messages_power[Math.floor(Math.random()*messages_power.length)], '#00ff88');
+    }
+  }
+
+  // Power timer
+  if(player.powered) {
+    powerTimer--;
+    if(powerTimer<=0) { player.powered=false; megan.frightened=false; }
+  }
+
+  // Megan AI — basic chase
+  megan.moveTimer++;
+  const delay = megan.frightened ? meganMoveDelay*2 : Math.max(10, meganMoveDelay - (level-1)*4);
+  if(megan.moveTimer >= delay) {
+    megan.moveTimer = 0;
+    const mc = Math.round((megan.x - TILE/2) / TILE);
+    const mr = Math.round((megan.y - TILE/2) / TILE);
+    megan.col = mc; megan.row = mr;
+    const pc2 = Math.round((player.x - TILE/2) / TILE);
+    const pr2 = Math.round((player.y - TILE/2) / TILE);
+
+    const dirs = [{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+    let best = null, bestDist = Infinity;
+
+    for(const d of dirs) {
+      const nc2 = mc+d.dx, nr2 = mr+d.dy;
+      if(!canMove(nc2,nr2)) continue;
+      if(d.dx===-megan.dir.dx && d.dy===-megan.dir.dy) continue; // no 180
+      const dist = megan.frightened
+        ? (pc2-nc2)**2+(pr2-nr2)**2  // flee: maximize distance... actually just random
+        : (pc2-nc2)**2+(pr2-nr2)**2;
+      if(megan.frightened) {
+        // random direction when frightened
+        if(Math.random()<0.5) { best=d; break; }
+      } else {
+        if(dist < bestDist) { bestDist=dist; best=d; }
+      }
+    }
+    if(best) {
+      megan.dir = best;
+      megan.x = (mc+best.dx)*TILE+TILE/2;
+      megan.y = (mr+best.dy)*TILE+TILE/2;
+    }
+  }
+
+  // Collision player <-> megan
+  const dx = player.x - megan.x, dy = player.y - megan.y;
+  const dist = Math.sqrt(dx*dx+dy*dy);
+  if(dist < 22) {
+    if(player.powered) {
+      // Catch Megan
+      score += 200;
+      document.getElementById('score').textContent=score;
+      megan.frightened = false; player.powered = false; powerTimer=0;
+      resetPositions();
+      megan.x = 7*TILE+TILE/2; megan.y = 6*TILE+TILE/2;
+      showMsg('PEGUEI A MEGAN! +200 🏃💨', '#00ff88');
+    } else {
+      // Caught by Megan
+      lives--;
+      document.getElementById('lives').textContent=lives;
+      showMsg(messages_caught[Math.floor(Math.random()*messages_caught.length)], '#ff4499');
+      resetPositions();
+      if(lives<=0) {
+        gameState = 'gameover';
+        showMsg('CASADO!! GAME OVER 💍👰 [ENTER]', '#ff0000');
+      }
+    }
+  }
+
+  // Level complete
+  if(dots<=0) {
+    level++;
+    document.getElementById('level').textContent=level;
+    showMsg('SOBREVIVEU! PRÓXIMA FASE... 🏃', '#ffcc00');
+    setTimeout(()=>{ initGame(); },2000);
+    gameState='transition';
+  }
+}
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#000';
+  ctx.fillRect(0,0,W,H);
+
+  // Draw maze
+  for(let r=0;r<ROWS;r++) {
+    for(let c=0;c<COLS;c++) {
+      const x=c*TILE, y=r*TILE, cx=x+TILE/2, cy=y+TILE/2;
+      if(maze[r][c]===1) drawWall(x,y);
+      else if(maze[r][c]===0) drawDot(cx,cy);
+      else if(maze[r][c]===3) drawPellet(cx,cy,t);
+    }
+  }
+
+  // Draw player
+  drawGuy(player.x, player.y, player.powered, t);
+
+  // Draw Megan
+  drawMegan(megan.x, megan.y, megan.frightened, t);
+
+  // Overlay states
+  if(gameState==='start'||gameState==='gameover') {
+    ctx.fillStyle='rgba(0,0,0,0.7)';
+    ctx.fillRect(0,0,W,H);
+    ctx.textAlign='center';
+    if(gameState==='gameover') {
+      ctx.fillStyle='#ff4499';
+      ctx.font='bold 40px Courier New';
+      ctx.fillText('CASAMENTO!! 💍', W/2, H/2-30);
+      ctx.fillStyle='#fff';
+      ctx.font='20px Courier New';
+      ctx.fillText('Pontos: '+score, W/2, H/2+10);
+      ctx.fillStyle='#ffcc00';
+      ctx.font='16px Courier New';
+      ctx.fillText('[ENTER] para tentar escapar de novo', W/2, H/2+50);
+    } else {
+      ctx.fillStyle='#ff4499';
+      ctx.font='bold 30px Courier New';
+      ctx.fillText('FOGE DO CASAMENTO!', W/2, H/2-40);
+      ctx.fillStyle='#fff';
+      ctx.font='16px Courier New';
+      ctx.fillText('Pegue as cervejas 🍺', W/2, H/2);
+      ctx.fillText('Evite a Megan 💍', W/2, H/2+25);
+      ctx.fillText('Power pellet 💍 = TURBO!', W/2, H/2+50);
+      ctx.fillStyle='#ffcc00';
+      ctx.fillText('[ENTER] para começar', W/2, H/2+90);
+    }
+  }
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// Init
+lives = 3; score = 0; level = 1;
+gameState = 'start';
+initGame();
+gameState = 'start';
+loop();
+</script>
+</body>
+</html>
