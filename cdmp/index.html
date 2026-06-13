@@ -225,21 +225,28 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px">
     <button class="btn-extrato" onclick="document.getElementById('extrato-overlay').classList.add('open')">📋 Extrato de Alterações</button>
-    <div class="updated">Atualizado: 12/06/2026 00:35</div>
+    <div class="updated">Atualizado: 13/06/2026 00:34</div>
   </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="n">41</div><div class="l">Total</div></div>
+  <div class="stat"><div class="n">42</div><div class="l">Total</div></div>
 
-  <div class="stat green"><div class="n">26</div><div class="l">Concluídos</div></div>
-  <div class="stat yellow"><div class="n">13</div><div class="l">Em Aberto</div></div>
-  <div class="stat red"><div class="n">2</div><div class="l">Vencidos</div></div>
+  <div class="stat green"><div class="n">27</div><div class="l">Concluídos</div></div>
+  <div class="stat yellow"><div class="n">12</div><div class="l">Em Aberto</div></div>
+  <div class="stat red"><div class="n">3</div><div class="l">Vencidos</div></div>
   <div class="stat purple"><div class="n">0</div><div class="l">Jurídico</div></div>
-  <div class="stat"><div class="n">R$ 336,509</div><div class="l">Valor Total</div></div>
+  <div class="stat"><div class="n">R$ 343,448</div><div class="l">Valor Total</div></div>
 </div>
 
 
+<div class="update-banner" id="update-banner">
+  <div class="update-header">
+    <span>🔔 Últimas atualizações (desde 12/06 00:35)</span>
+    <button class="update-close" onclick="document.getElementById('update-banner').style.display='none'">✕</button>
+  </div>
+  <ul class="update-list"><li>🆕 Novo acordo: Viaduto — APTO 501 (6 parcelas)</li></ul>
+</div>
 
 <div class="filters">
   <input class="search-box" type="text" id="search" placeholder="Buscar condomínio ou unidade..." onkeyup="filterCards()">
@@ -835,7 +842,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="0420 - PARNASUS" data-status="card-ok" data-resp="karoliny" data-tipo="acordo_parcelado">
+<div class="card card-done" data-emp="0420 - PARNASUS" data-status="card-done" data-resp="karoliny" data-tipo="acordo_parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">0420</span>
@@ -853,18 +860,18 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 30/03/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 30/04/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 12/06/2026">3</span></div>
-      <span class="prog-label">2/3</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 30/03/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 30/04/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 12/06/2026">3</span></div>
+      <span class="prog-label">3/3</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-ok" style="width:66%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-done" style="width:100%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-tag vcto-ok">Vcto 12/06/2026 · R$ 1.996,67</span></div>
+      <div class="boletos-wrap"><span class="boleto-none">Sem boletos em aberto</span></div>
     </div>
   </div>
   <div class="card-footer">
     <span>Total acordo: <strong>R$ 5.911,71</strong></span>
-    <span>Valor/parcela: <strong>R$ 1.996,67</strong></span>
+    <span>Valor/parcela: <strong>R$ 1.970,57</strong></span>
     <span>Período cotas: 12/2025 a 02/2026</span>
     <span class="ver-mais">clique para análise ↑</span>
   </div>
@@ -875,21 +882,21 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 5.911,71</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 3.915,04</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 1.996,67</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">66%</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (3 parcelas)</span><span class="fin-val green">R$ 5.911,71</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val green">R$ 0,00</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">100%</span></div>
       </div>
     </div>
   </div>
   <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>30/03/2026</td><td class="tr mono">R$ 1.957,52</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/03/2026</span></td></tr><tr><td class="tc">#2</td><td>30/04/2026</td><td class="tr mono">R$ 1.957,52</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 30/04/2026</span></td></tr><tr><td class="tc">#3</td><td>12/06/2026</td><td class="tr mono">R$ 1.996,67</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>30/03/2026</td><td class="tr mono">R$ 1.957,52</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 26/03/2026</span></td></tr><tr><td class="tc">#2</td><td>30/04/2026</td><td class="tr mono">R$ 1.957,52</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 30/04/2026</span></td></tr><tr><td class="tc">#3</td><td>12/06/2026</td><td class="tr mono">R$ 1.996,67</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/06/2026</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
     <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td>12/06/2026</td><td class="tr mono">R$ 1.996,67</td><td class="hist">ACORDO 15266 PARCELA 3</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
+    <tbody><tr><td colspan="4" class="empty-row">Nenhum boleto em aberto encontrado na API</td></tr></tbody>
   </table>
 </div></div>
 </div>
@@ -1058,12 +1065,70 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (3 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>29/05/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/06/2026</span></td></tr><tr><td class="tc">#2</td><td>10/06/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-vencido">! Vencido (2d)</span></td></tr><tr><td class="tc">#3</td><td>10/07/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>29/05/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 01/06/2026</span></td></tr><tr><td class="tc">#2</td><td>10/06/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-vencido">! Vencido (3d)</span></td></tr><tr><td class="tc">#3</td><td>10/07/2026</td><td class="tr mono">R$ 1.067,65</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
     <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
     <tbody><tr><td>10/06/2026</td><td class="tr mono">R$ 1.067,65</td><td class="hist">ACORDO 17692 PARCELA 2</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>10/07/2026</td><td class="tr mono">R$ 1.067,65</td><td class="hist">ACORDO 17692 PARCELA 3</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
+  </table>
+</div></div>
+</div>
+<div class="card card-ok" data-emp="0496 - VIADUTO" data-status="card-ok" data-resp="karoliny" data-tipo="acordo_parcelado">
+  <div class="card-header clickable" onclick="toggleCard(this)">
+    <div class="card-title">
+      <span class="cd-badge">0496</span>
+      <strong>Viaduto</strong>
+      <span class="bloco-badge">Bloco -</span>
+      <span class="unid-badge">APTO 501</span>
+      <span class="tipo-badge tipo-parcelado">📋 Acordo Parcelado</span>
+    </div>
+    <div class="card-meta">
+      <span class="acordo-num">Acordo #17609</span>
+      <span class="resp-badge">KAROLINY</span>
+      <span class="expand-icon">▼</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="parcelas-row">
+      <span class="row-label">Parcelas</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 28/05/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 15/06/2026">2</span><span class="parc-badge p-pendente" title="Parcela 3 — Pendente · Vcto: 10/07/2026">3</span><span class="parc-badge p-pendente" title="Parcela 4 — Pendente · Vcto: 10/08/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 10/09/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 10/10/2026">6</span></div>
+      <span class="prog-label">2/6</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:33%"></div></div>
+    <div class="boletos-row">
+      <span class="row-label">Boletos abertos</span>
+      <div class="boletos-wrap"><span class="boleto-tag vcto-ok">Vcto 10/07/2026 · R$ 1.156,57</span><span class="boleto-tag vcto-ok">Vcto 10/08/2026 · R$ 1.156,57</span><span class="boleto-tag vcto-ok">Vcto 10/09/2026 · R$ 1.156,57</span><span class="boleto-tag vcto-ok">Vcto 10/10/2026 · R$ 1.156,57</span></div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <span>Total acordo: <strong>R$ 6.939,42</strong></span>
+    <span>Valor/parcela: <strong>R$ 1.156,57</strong></span>
+    <span>Período cotas: 12/2025 a 04/2026</span>
+    <span class="ver-mais">clique para análise ↑</span>
+  </div>
+  <div class="card-analytics">
+<div class="analytics-section">
+  <div class="analytics-cols">
+    <div class="analytics-col">
+      <div class="analytics-title">Resumo Financeiro</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 6.939,42</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (2 parcelas)</span><span class="fin-val green">R$ 2.313,14</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 4.626,28</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">33%</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="analytics-title" style="margin-top:14px">Parcelas (6 registros)</div>
+  <table class="an-table">
+    <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
+    <tbody><tr><td class="tc">#1</td><td>28/05/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 27/05/2026</span></td></tr><tr><td class="tc">#2</td><td>15/06/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/06/2026</span></td></tr><tr><td class="tc">#3</td><td>10/07/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#4</td><td>10/08/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#5</td><td>10/09/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>10/10/2026</td><td class="tr mono">R$ 1.156,57</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+  </table>
+  <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
+  <table class="an-table">
+    <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
+    <tbody><tr><td>10/07/2026</td><td class="tr mono">R$ 1.156,57</td><td class="hist">ACORDO 17609 PARCELA 3</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>10/08/2026</td><td class="tr mono">R$ 1.156,57</td><td class="hist">ACORDO 17609 PARCELA 4</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>10/09/2026</td><td class="tr mono">R$ 1.156,57</td><td class="hist">ACORDO 17609 PARCELA 5</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>10/10/2026</td><td class="tr mono">R$ 1.156,57</td><td class="hist">ACORDO 17609 PARCELA 6</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
   </table>
 </div></div>
 </div>
@@ -1143,13 +1208,13 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 12/12/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 12/01/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 12/02/2026">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 12/03/2026">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 12/04/2026">5</span><span class="parc-badge p-pago" title="Parcela 6 — Pago em 12/05/2026">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: 12/06/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 12/07/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 12/08/2026">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: 12/09/2026">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: 12/10/2026">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: 12/11/2026">12</span><span class="parc-badge p-pendente" title="Parcela 13 — Pendente · Vcto: 12/12/2026">13</span><span class="parc-badge p-pendente" title="Parcela 14 — Pendente · Vcto: 12/01/2027">14</span><span class="parc-badge p-pendente" title="Parcela 15 — Pendente · Vcto: 12/02/2027">15</span></div>
-      <span class="prog-label">6/15</span>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 12/12/2025">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 12/01/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 12/02/2026">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 12/03/2026">4</span><span class="parc-badge p-pago" title="Parcela 5 — Pago em 12/04/2026">5</span><span class="parc-badge p-pago" title="Parcela 6 — Pago em 12/05/2026">6</span><span class="parc-badge p-pago" title="Parcela 7 — Pago em 12/06/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 12/07/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 12/08/2026">9</span><span class="parc-badge p-pendente" title="Parcela 10 — Pendente · Vcto: 12/09/2026">10</span><span class="parc-badge p-pendente" title="Parcela 11 — Pendente · Vcto: 12/10/2026">11</span><span class="parc-badge p-pendente" title="Parcela 12 — Pendente · Vcto: 12/11/2026">12</span><span class="parc-badge p-pendente" title="Parcela 13 — Pendente · Vcto: 12/12/2026">13</span><span class="parc-badge p-pendente" title="Parcela 14 — Pendente · Vcto: 12/01/2027">14</span><span class="parc-badge p-pendente" title="Parcela 15 — Pendente · Vcto: 12/02/2027">15</span></div>
+      <span class="prog-label">7/15</span>
     </div>
-    <div class="progress-bar"><div class="progress-fill prog-low" style="width:40%"></div></div>
+    <div class="progress-bar"><div class="progress-fill prog-low" style="width:46%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-tag vcto-ok">Vcto 12/01/2027 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/02/2027 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/06/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/07/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/08/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/09/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/10/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/11/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/12/2026 · R$ 607,78</span></div>
+      <div class="boletos-wrap"><span class="boleto-tag vcto-ok">Vcto 12/01/2027 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/02/2027 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/07/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/08/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/09/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/10/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/11/2026 · R$ 607,78</span><span class="boleto-tag vcto-ok">Vcto 12/12/2026 · R$ 607,78</span></div>
     </div>
   </div>
   <div class="card-footer">
@@ -1165,21 +1230,21 @@
       <div class="analytics-title">Resumo Financeiro</div>
       <div class="fin-grid">
         <div class="fin-item"><span class="fin-label">Total acordado</span><span class="fin-val">R$ 9.116,70</span></div>
-        <div class="fin-item"><span class="fin-label">Pago (6 parcelas)</span><span class="fin-val green">R$ 3.646,68</span></div>
-        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 5.470,02</span></div>
-        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">40%</span></div>
+        <div class="fin-item"><span class="fin-label">Pago (7 parcelas)</span><span class="fin-val green">R$ 4.254,46</span></div>
+        <div class="fin-item"><span class="fin-label">Saldo pendente</span><span class="fin-val red">R$ 4.862,24</span></div>
+        <div class="fin-item"><span class="fin-label">Progresso</span><span class="fin-val">46%</span></div>
       </div>
     </div>
   </div>
   <div class="analytics-title" style="margin-top:14px">Parcelas (15 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>12/12/2025</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/12/2025</span></td></tr><tr><td class="tc">#2</td><td>12/01/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr><tr><td class="tc">#3</td><td>12/02/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/02/2026</span></td></tr><tr><td class="tc">#4</td><td>12/03/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/03/2026</span></td></tr><tr><td class="tc">#5</td><td>12/04/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/04/2026</span></td></tr><tr><td class="tc">#6</td><td>12/05/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/05/2026</span></td></tr><tr><td class="tc">#7</td><td>12/06/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>12/07/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>12/08/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>12/09/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>12/10/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>12/11/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#13</td><td>12/12/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#14</td><td>12/01/2027</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#15</td><td>12/02/2027</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>12/12/2025</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/12/2025</span></td></tr><tr><td class="tc">#2</td><td>12/01/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/01/2026</span></td></tr><tr><td class="tc">#3</td><td>12/02/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/02/2026</span></td></tr><tr><td class="tc">#4</td><td>12/03/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/03/2026</span></td></tr><tr><td class="tc">#5</td><td>12/04/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/04/2026</span></td></tr><tr><td class="tc">#6</td><td>12/05/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/05/2026</span></td></tr><tr><td class="tc">#7</td><td>12/06/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/06/2026</span></td></tr><tr><td class="tc">#8</td><td>12/07/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>12/08/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#10</td><td>12/09/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#11</td><td>12/10/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#12</td><td>12/11/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#13</td><td>12/12/2026</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#14</td><td>12/01/2027</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#15</td><td>12/02/2027</td><td class="tr mono">R$ 607,78</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
     <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td>12/06/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 7</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/07/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 8</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/08/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 9</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/09/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 10</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/10/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 11</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/11/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 12</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/12/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 13</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/01/2027</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 14</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/02/2027</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 15</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
+    <tbody><tr><td>12/07/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 8</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/08/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 9</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/09/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 10</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/10/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 11</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/11/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 12</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/12/2026</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 13</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/01/2027</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 14</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/02/2027</td><td class="tr mono">R$ 607,78</td><td class="hist">ACORDO 12875 PARCELA 15</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
   </table>
 </div></div>
 </div>
@@ -1638,7 +1703,7 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (4 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>17/01/2025</td><td class="tr mono">R$ 1.410,64</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 17/01/2025</span></td></tr><tr><td class="tc">#2</td><td>13/02/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (484d)</span></td></tr><tr><td class="tc">#3</td><td>13/03/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (456d)</span></td></tr><tr><td class="tc">#4</td><td>13/04/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (425d)</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>17/01/2025</td><td class="tr mono">R$ 1.410,64</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 17/01/2025</span></td></tr><tr><td class="tc">#2</td><td>13/02/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (485d)</span></td></tr><tr><td class="tc">#3</td><td>13/03/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (457d)</span></td></tr><tr><td class="tc">#4</td><td>13/04/2025</td><td class="tr mono">R$ 1.817,37</td><td><span class="st-badge st-vencido">! Vencido (426d)</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
@@ -2343,7 +2408,7 @@
   </table>
 </div></div>
 </div>
-<div class="card card-ok" data-emp="1138 - AMAPI" data-status="card-ok" data-resp="karoliny" data-tipo="acordo_parcelado">
+<div class="card card-vencido" data-emp="1138 - AMAPI" data-status="card-vencido" data-resp="karoliny" data-tipo="acordo_parcelado">
   <div class="card-header clickable" onclick="toggleCard(this)">
     <div class="card-title">
       <span class="cd-badge">1138</span>
@@ -2361,13 +2426,13 @@
   <div class="card-body">
     <div class="parcelas-row">
       <span class="row-label">Parcelas</span>
-      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 12/02/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 12/03/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 13/04/2026">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 15/05/2026">4</span><span class="parc-badge p-pendente" title="Parcela 5 — Pendente · Vcto: 12/06/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 13/07/2026">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: 12/08/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 14/09/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 12/10/2026">9</span></div>
+      <div class="badges-wrap"><span class="parc-badge p-pago" title="Parcela 1 — Pago em 12/02/2026">1</span><span class="parc-badge p-pago" title="Parcela 2 — Pago em 12/03/2026">2</span><span class="parc-badge p-pago" title="Parcela 3 — Pago em 13/04/2026">3</span><span class="parc-badge p-pago" title="Parcela 4 — Pago em 15/05/2026">4</span><span class="parc-badge p-vencido" title="Parcela 5 — VENCIDO em 12/06/2026">5</span><span class="parc-badge p-pendente" title="Parcela 6 — Pendente · Vcto: 13/07/2026">6</span><span class="parc-badge p-pendente" title="Parcela 7 — Pendente · Vcto: 12/08/2026">7</span><span class="parc-badge p-pendente" title="Parcela 8 — Pendente · Vcto: 14/09/2026">8</span><span class="parc-badge p-pendente" title="Parcela 9 — Pendente · Vcto: 12/10/2026">9</span></div>
       <span class="prog-label">4/9</span>
     </div>
     <div class="progress-bar"><div class="progress-fill prog-low" style="width:44%"></div></div>
     <div class="boletos-row">
       <span class="row-label">Boletos abertos</span>
-      <div class="boletos-wrap"><span class="boleto-tag vcto-ok">Vcto 12/06/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 12/08/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 12/10/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 13/07/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 14/09/2026 · R$ 4.395,63</span></div>
+      <div class="boletos-wrap"><span class="boleto-tag vcto-vencido">Vcto 12/06/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 12/08/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 12/10/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 13/07/2026 · R$ 4.395,63</span><span class="boleto-tag vcto-ok">Vcto 14/09/2026 · R$ 4.395,63</span></div>
     </div>
   </div>
   <div class="card-footer">
@@ -2392,12 +2457,12 @@
   <div class="analytics-title" style="margin-top:14px">Parcelas (9 registros)</div>
   <table class="an-table">
     <thead><tr><th>Nº</th><th>Vencimento / Pagamento</th><th>Valor</th><th>Status</th></tr></thead>
-    <tbody><tr><td class="tc">#1</td><td>12/02/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/02/2026</span></td></tr><tr><td class="tc">#2</td><td>12/03/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/03/2026</span></td></tr><tr><td class="tc">#3</td><td>13/04/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/04/2026</span></td></tr><tr><td class="tc">#4</td><td>15/05/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/05/2026</span></td></tr><tr><td class="tc">#5</td><td>12/06/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#6</td><td>13/07/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>12/08/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>14/09/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>12/10/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
+    <tbody><tr><td class="tc">#1</td><td>12/02/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/02/2026</span></td></tr><tr><td class="tc">#2</td><td>12/03/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 12/03/2026</span></td></tr><tr><td class="tc">#3</td><td>13/04/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 13/04/2026</span></td></tr><tr><td class="tc">#4</td><td>15/05/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pago">✓ Pago</span> <span style="color:var(--muted);font-size:10px">Pago 15/05/2026</span></td></tr><tr><td class="tc">#5</td><td>12/06/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-vencido">! Vencido (1d)</span></td></tr><tr><td class="tc">#6</td><td>13/07/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#7</td><td>12/08/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#8</td><td>14/09/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr><tr><td class="tc">#9</td><td>12/10/2026</td><td class="tr mono">R$ 4.395,63</td><td><span class="st-badge st-pendente">○ Pendente</span></td></tr></tbody>
   </table>
   <div class="analytics-title" style="margin-top:14px">Boletos em aberto · API LiveFacilities</div>
   <table class="an-table">
     <thead><tr><th>Vencimento</th><th>Valor</th><th>Histórico</th><th>Status</th></tr></thead>
-    <tbody><tr><td>12/06/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 5</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>13/07/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 6</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/08/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 7</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>14/09/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 8</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/10/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 9</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
+    <tbody><tr><td>12/06/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 5</td><td><span class="st-badge st-vencido">Vencido</span></td></tr><tr><td>13/07/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 6</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/08/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 7</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>14/09/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 8</td><td><span class="st-badge st-pendente">A vencer</span></td></tr><tr><td>12/10/2026</td><td class="tr mono">R$ 4.395,63</td><td class="hist">ACORDO 14187 PARCELA 9</td><td><span class="st-badge st-pendente">A vencer</span></td></tr></tbody>
   </table>
 </div></div>
 </div>
@@ -2642,7 +2707,7 @@
   <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div> Jurídico</div>
   <div class="leg-item"><div class="leg-dot" style="background:var(--muted)"></div> Futuro</div>
   <div style="flex:1"></div>
-  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 12/06/2026</span>
+  <span style="font-size:11px;color:var(--muted)">Zeroberto · BAP · 13/06/2026</span>
 </div>
 
 <script>
@@ -2738,7 +2803,7 @@ document.addEventListener('keydown', function(e) {
     <div class="extrato-header">
       <div>
         <h2>📋 Extrato de Alterações — CDMP</h2>
-        <span>230 boletos · 0 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
+        <span>236 boletos · 6 novo(s) · 0 recém pago(s) · últimos 30 dias</span>
       </div>
       <button class="extrato-close" onclick="closeExtrato()">✕</button>
     </div>
